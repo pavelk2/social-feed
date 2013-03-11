@@ -1,0 +1,34 @@
+<html>
+    <head>
+        <link href="http://twitter.github.com/bootstrap/assets/css/bootstrap.css" rel="stylesheet">
+        <link href="social-feed/css/style.css" rel="stylesheet" type="text/css">
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script src="social-feed//js/function.js"></script>
+        <style>
+            .credits{text-align:center;padding:20px;}
+            
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h4>Social-feed</h4>
+            <div class="social-feed-container">
+            </div>
+            <h6 class="credits muted"><a href="https://github.com/pavelk2/social-feed" target="_blank">Social-feed</a> jquery plugin, developed by <a target="_blank" href="http://kucherbaev.com">Pavel Kucherbaev</a></h6>
+        </div>
+        <script>
+            $('.social-feed-container').socialfeed({
+                fb_username:'pavel.kucherbaev',
+                fb_limit:2,
+                vk_username:36603,
+                vk_limit:2,
+                tw_limit:2,
+                tw_username:'pavelk2',
+                length:140
+            });
+        </script>
+
+
+    </body>
+
+</html>
