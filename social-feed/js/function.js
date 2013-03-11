@@ -1,7 +1,7 @@
 (function($){  
     $.fn.socialfeed = function(options) {  
         var defaults = {  
-            plugin_folder:'social-feed',
+            plugin_folder:'social-feed',// a folder in which the plugin is located
             //Vkontakte
             vk_limit:3,
             //vk_username:"vk_username",/ID of a Vkontakte page which stream will be shown  
@@ -15,7 +15,6 @@
             length: 500//maximm length of post message shown
         };   
         //---------------------------------------------------------------------------------
-        var regex = /(<([^>]+)>)/ig;
         var options = $.extend(defaults, options);  
         container = $(this); 
         container.css('display','inline-block');
@@ -24,7 +23,8 @@
         return getAllData();
         //---------------------------------------------------------------------------------
         function getAllData(){
-            if (options.fb_username!=undefined)    
+            if (options.fb_username!=undefined)  
+                //Facebook requires an access_token for fetching the feed.
                 $.get(options.plugin_folder+'/php/get_access_token.php',function(data){
                     getFacebookData(data);
                 });  
@@ -74,21 +74,22 @@
             
         }
         function getVkontakteData(){
-            var element;
+            var regex = /(<([^>]+)>)/ig;
             var vk_json='https://api.vk.com/method/wall.get?owner_id='+options.vk_username+'&filter=owner&count='+options.vk_limit+'&callback=?';
             var vk_user_json='https://api.vk.com/method/users.get?fields=first_name,%20last_name,%20screen_name,%20photo&uid=';
             var vk_group_json='https://api.vk.com/method/groups.getById?fields=first_name,%20last_name,%20screen_name,%20photo&gid=';
             $.get(vk_json,function(json){
                 var i=0;
                 $.each(json.response, function(){ 
-                   
                     if (this != parseInt(this)){
+                        var element;
                         element=this;
                         var post=[];
                         post['dt_create']=new Date(element.date*1000);
                         post['description']='';
                         post['message']=element.text.replace(regex,"");
                         post['social-network']='vk';
+                        //if the post is created by user
                         if (element.from_id>0){
                             vk_user_json+=element.from_id+'&callback=?';
                             $.get(vk_user_json,function(user_json){
@@ -98,6 +99,7 @@
                                 post['link']='http://vk.com/'+user_json.response[0].screen_name+'?w=wall'+user_json.response[0].uid+'_'+element.id+'%2Fall';
                                 render(post); 
                             },'json');
+                        //if the post is created by group    
                         }else{
                             vk_group_json+=(-1)*element.from_id+'&callback=?';
                             $.get(vk_group_json,function(user_json){
@@ -139,17 +141,16 @@
         //Render functions
         //---------------------------------------------------------------------------------
         function render(data){
-            
-            var li='<div class="media social-feed-element" dt_create="'+data['dt_create']+'">\n\
+            var template='<div class="media social-feed-element" dt_create="'+data['dt_create']+'">\n\
  <a class="pull-left" href="' + data['author_link'] + '" target="_blank">\n\
 <img class="media-object" src="'+data['author_picture']+'">\n\
                 </a>\n\
                 <div class="media-body">\n\
-                <p><img class="social-network-icon" src="'+options.plugin_folder+'/img/'+data['social-network']+'-icon-24.png">'+data['author_name']+'<a href="'+data['link']+'" target="_blank" class="read-button"><span class="label label-info">open </span></a></p>\n\
+                <p><img class="social-network-icon" title="posted by '+data['social-network']+'" src="'+options.plugin_folder+'/img/'+data['social-network']+'-icon-24.png" />'+data['author_name']+'<a href="'+data['link']+'" target="_blank" class="read-button"><span class="label label-info">open </span></a></p>\n\
                 <div>\n\
-                '+replaceText(short_text(data['message']+' '+data['description']))+' \n\
+                '+wrapLinks(short_text(data['message']+' '+data['description']))+' \n\
                 </div></div></div>';
-            placeRow(li,data);      
+            placeRow(template,data);      
         }
         function placeRow(li,data){
             if ($(container).children().length==0){
@@ -180,18 +181,17 @@
         //---------------------------------------------------------------------------------
         //utility functions
         //---------------------------------------------------------------------------------
-        function wrap( str ) {
+        function wrapTemplate( str ) {
             return '<a target="_blank" href="' + str + '">' + str + '<\/a>';
         }
-        function replaceText(string) {
-            return string.replace(/\bhttp[^ ]+/ig, wrap);
+        function wrapLinks(string) {
+            return string.replace(/\bhttp[^ ]+/ig, wrapTemplate);
         }
         function convertDate(string){
     
             var date = new Date(
                 string.replace(/^\w+ (\w+) (\d+) ([\d:]+) \+0000 (\d+)$/,
                     "$1 $2 $4 $3 UTC"));
-    
             return date;
         }
         function short_text(string){
