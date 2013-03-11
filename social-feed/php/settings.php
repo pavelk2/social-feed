@@ -3,6 +3,6 @@
 //Please put here credentials of your Facebook App
 //https://developers.facebook.com/apps
 //------------------------------------------------
-$app_id = "387110428038909";
-$app_secret = "2e59b3f91c84d4cdbf7e2fa9e85bb653";
+$app_id = "YOUR_APP_ID";
+$app_secret = "YOUR_APP_SECRED";
 ?>
