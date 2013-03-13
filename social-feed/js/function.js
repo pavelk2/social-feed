@@ -1,39 +1,49 @@
 (function($){  
-    $.fn.socialfeed = function(options) {  
-        var defaults = {  
-            plugin_folder:'social-feed',// a folder in which the plugin is located
-            //Vkontakte
-            vk_limit:3,
-            //vk_username:"vk_username",/ID of a Vkontakte page which stream will be shown  
-            //Twitter
-            tw_limit: 3,  //Maximum amount of posts showed
-            //tw_username: "tw_username ",//ID of a Facebook page which stream will be shown  
-            //Facebook
-            fb_limit: 3,  //Maximum amount of posts showed
-            //fb_username: "fb_username",//ID of a Facebook page which stream will be shown
-            //General
-            length: 500//maximm length of post message shown
-        };   
+    $.fn.socialfeed = function(options)
+    {
+        var defaults = {
+            plugin_folder: 'social-feed', // a folder in which the plugin is located
+            // VK.com
+            vk_limit: 3,
+            //vk_username: "vk_username", /ID of a VK page which stream will be shown  
+            // Twitter
+            tw_limit: 3, // Maximum amount of posts showed
+            //tw_username: "tw_username", // ID of a Facebook page which stream will be shown  
+            // Facebook
+            fb_limit: 3, //Maximum amount of posts showed
+            //fb_username: "fb_username", // ID of a Facebook page which stream will be shown
+            // General
+            length: 500 // maximum length of post message shown
+        };
         //---------------------------------------------------------------------------------
         var options = $.extend(defaults, options);  
         container = $(this); 
-        container.css('display','inline-block');
+        container.css('display', 'inline-block');
         //---------------------------------------------------------------------------------
-        //Initiate function
+        // Initiate function
         return getAllData();
         //---------------------------------------------------------------------------------
-        function getAllData(){
-            if (options.fb_username!=undefined)  
+        /*
+        getAllData
+        [void getAllData(void)]
+        input: void - description here
+        output: void - description here
+        This function performs consequent data loading from all of the sources by calling corresponding functions
+        */
+        function getAllData()
+        {
+            if (options.fb_username != undefined) {
                 //Facebook requires an access_token for fetching the feed.
-                $.get(options.plugin_folder+'/php/get_access_token.php',function(data){
+                $.get(options.plugin_folder + '/php/get_access_token.php', function(data) {
                     getFacebookData(data);
-                });  
-            if (options.tw_username!=undefined){
+                });
+            }
+            if (options.tw_username != undefined) {
                 getTwitterData();
-            }    
-            if (options.vk_username!=undefined){
+            }
+            if (options.vk_username != undefined) {
                 getVkontakteData();
-            }    
+            }
         }
         function getFacebookData(access_token){
             var element;
