@@ -30,8 +30,7 @@
         output: void - description here
         This function performs consequent data loading from all of the sources by calling corresponding functions
         */
-        function getAllData()
-        {
+        function getAllData(){
             if (options.fb_username != undefined) {
                 //Facebook requires an access_token for fetching the feed.
                 $.get(options.plugin_folder + '/php/get_access_token.php', function(data) {
@@ -45,19 +44,17 @@
                 getVkontakteData();
             }
         }
-        function getFacebookData(access_token)
-        {
+        function getFacebookData(access_token){
             var element;
-            var limit='&limit='+options.fb_limit;
-            var query_extention='&access_token='+access_token+'&callback=?';
+            var limit='limit='+options.fb_limit;
+            var query_extention='&access_token='+access_token+'';
             var fb_graph='https://graph.facebook.com/';
-            var feed_json=fb_graph+options.fb_username+'/feed/?'+limit+query_extention; 
+            var feed_json=fb_graph+options.fb_username+'/feed?'+limit+query_extention; 
             $.get(feed_json,function(json){
                 $.each(json.data,function(){
                     element=this;
                     var text,url;
                     var post=[];
-                   
                     if (element.message!=undefined || element.story!=undefined){
                         if (element.message!=undefined)
                             text=element.message;
@@ -84,8 +81,7 @@
             },'json');
             
         }
-        function getVkontakteData()
-        {
+        function getVkontakteData(){
             var regex = /(<([^>]+)>)/ig;
             var vk_json='https://api.vk.com/method/wall.get?owner_id='+options.vk_username+'&filter=owner&count='+options.vk_limit+'&callback=?';
             var vk_user_json='https://api.vk.com/method/users.get?fields=first_name,%20last_name,%20screen_name,%20photo&uid=';
@@ -128,8 +124,7 @@
                   
             },'json');
         }
-        function getTwitterData()
-        {
+        function getTwitterData(){
             var element;
             var tw_json='http://api.twitter.com/1/statuses/user_timeline.json?include_entities=true&include_rts=true&screen_name='+options.tw_username+'&count='+options.tw_limit+'&callback=?';
             $.get(tw_json,function(json){
@@ -153,8 +148,7 @@
         //---------------------------------------------------------------------------------
         //Render functions
         //---------------------------------------------------------------------------------
-        function render(data)
-        {
+        function render(data){
             var template='<div class="media social-feed-element" dt_create="'+data['dt_create']+'">\n\
  <a class="pull-left" href="' + data['author_link'] + '" target="_blank">\n\
 <img class="media-object" src="'+data['author_picture']+'">\n\
@@ -166,8 +160,7 @@
                 </div></div></div>';
             placeRow(template,data);      
         }
-        function placeRow(li,data)
-        {
+        function placeRow(li,data){
             if ($(container).children().length==0){
                 $(container).append(li);  
             }else{
@@ -196,24 +189,20 @@
         //---------------------------------------------------------------------------------
         //utility functions
         //---------------------------------------------------------------------------------
-        function wrapTemplate( str ) 
-        {
+        function wrapTemplate( str ){
             return '<a target="_blank" href="' + str + '">' + str + '<\/a>';
         }
-        function wrapLinks(string) 
-        {
+        function wrapLinks(string){
             return string.replace(/\bhttp[^ ]+/ig, wrapTemplate);
         }
-        function convertDate(string)
-        {
+        function convertDate(string){
     
             var date = new Date(
                 string.replace(/^\w+ (\w+) (\d+) ([\d:]+) \+0000 (\d+)$/,
                     "$1 $2 $4 $3 UTC"));
             return date;
         }
-        function short_text(string)
-        {
+        function short_text(string){
             if (string.length>options.length)
                 return jQuery.trim(string).substring(0, options.length)+'...';
             else
