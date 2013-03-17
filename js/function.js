@@ -3,15 +3,15 @@
     $.fn.socialfeed = function(options)
     {
         var defaults = {
-            plugin_folder: '', // a folder in which the plugin is located
+            plugin_folder: '', // a folder in which the plugin is located (with slash in the end)
             // VK.com
-            vk_limit: 3,
+            vk_limit: 3, // amount of vkontakte posts to show
             //vk_username: "vk_username", // ID of a VK page which stream will be shown  
             // Twitter
-            tw_limit: 3, // Maximum amount of posts showed
+            tw_limit: 3, // amount of twitter posts to show
             //tw_username: "tw_username", // ID of a Facebook page which stream will be shown  
             // Facebook
-            fb_limit: 3, //Maximum amount of posts showed
+            fb_limit: 3, // amount of facebook posts to show
             //fb_username: "fb_username", // ID of a Facebook page which stream will be shown
             // General
             cookies: false, //if true then twitter results will be saved in cookies, to fetch them if 150 requests/hour is over.
@@ -72,7 +72,7 @@
                         if (element.description!=undefined)
                             post.description=element.description;
                         post.social_network='fb';
-                        render(post);
+                        getTemplate(post);
                     }
                 });
             },'json');
@@ -101,7 +101,7 @@
                                 post.author_picture=user_json.response[0].photo;
                                 post.author_link='http://vk.com/'+user_json.response[0].screen_name;
                                 post.link='http://vk.com/'+user_json.response[0].screen_name+'?w=wall'+user_json.response[0].uid+'_'+element.id+'%2Fall';
-                                render(post); 
+                                getTemplate(post); 
                             },'json');
                         //if the post is created by group    
                         }else{
@@ -111,7 +111,7 @@
                                 post.author_picture=user_json.response[0].photo;
                                 post.author_link='http://vk.com/'+user_json.response[0].screen_name;
                                 post.link='http://vk.com/'+user_json.response[0].screen_name+'?w=wall-'+user_json.response[0].gid+'_'+element.id;
-                                render(post);
+                                getTemplate(post);
                                    
                             },'json');
                         }      
@@ -142,7 +142,7 @@
                         post.link='http://twitter.com/'+element.user.screen_name+'/status/'+element.id_str;
                         if (options.cookies)
                             $.cookie('social-feed-twitter'+i,JSON.stringify(post));
-                        render(post);                    
+                        getTemplate(post);                    
                     });
                 }, 
                 error:function(e){
@@ -152,7 +152,7 @@
                         for (i=0;i<options.tw_limit && $.cookie('social-feed-twitter'+i)!=null ;i++){
                             var data=JSON.parse($.cookie('social-feed-twitter'+i));
                             data.dt_create=convertDate(data.dt_create);
-                            render(data);
+                            getTemplate(data);
                         }            
                     }
                 }
@@ -161,17 +161,17 @@
         //---------------------------------------------------------------------------------
         //Render functions
         //---------------------------------------------------------------------------------
-        function render(data){
+        function getTemplate(data){
             var content=data;
            
             content.time_ago=timeAgo(data.dt_create);
             content.text=escapeHtml(wrapLinks(shorten(data.message+' '+data.description)));
             content.social_icon=options.plugin_folder+'img/'+data.social_network+'-icon-24.png';
             $.post(options.plugin_folder+'php/template.php',content ,function(template){
-                placeRow(template,data);      
+                placeTemplate(template,data);      
             });
         }
-        function placeRow(template,data){
+        function placeTemplate(template,data){
             if ($(container).children().length==0){
                 $(container).append(template);  
             }else{
@@ -201,11 +201,11 @@
         //---------------------------------------------------------------------------------
         //Utility functions
         //---------------------------------------------------------------------------------
-        function wrapTemplate(string){
+        function wrapLinkTemplate(string){
             return '<a target="_blank" href="' + string + '">' + string + '<\/a>';
         }
         function wrapLinks(string){
-            return string.replace(/\bhttp[^ ]+/ig, wrapTemplate);
+            return string.replace(/\bhttp[^ ]+/ig, wrapLinkTemplate);
         }
         function convertDate(string){
             string = string.replace('+0000','Z');
@@ -233,8 +233,7 @@
                 return string;
         }
         function dateToSeconds(time){
-            return (new Date - time) / 1000;
-            
+            return (new Date - time) / 1000;    
         }
         function stripHTML(string){
             if (typeof string==="undefined" || string===null)
@@ -304,7 +303,6 @@
                 }
             return seconds;
         }
-
     //---------------------------------------------------------------------------------
     };  
    
