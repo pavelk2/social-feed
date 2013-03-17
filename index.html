@@ -1,34 +1,45 @@
 <html>
     <head>
-        <link href="http://twitter.github.com/bootstrap/assets/css/bootstrap.css" rel="stylesheet">
-        <link href="social-feed/css/style.css" rel="stylesheet" type="text/css">
+        <link href="css/style.css" rel="stylesheet" type="text/css">
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-        <script src="social-feed/js/function.js"></script>
+        <script src="js/json2.js"></script>
+        <script src="js/jquery.cookie.js"></script>
+        <script src="js/function.js"></script>
         <style>
-            .credits{text-align:center;padding:20px;}
-
+            /*This style is needed only for the plugin demo page. Do not use it in your projects*/
+            .credits{text-align:center;padding:20px;margin-top:10px;font-size:12px;}
+            body{ font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+                  font-size: 14px;
+                  line-height: 20px;
+                  color: #333333;
+                  background-color: #ffffff;
+                  text-align:center;
+            }
+            a{color: #0088cc;text-decoration: none;}
+            a:hover,a:focus {color: #005580;text-decoration: underline;}
+            .muted {color: #999999;}
+            .container {display:inline-block;width:600px;}
         </style>
     </head>
     <body>
         <div class="container">
-            <h4>Social-feed</h4>
+            <h3 class="muted">social - feed</h3>
             <div class="social-feed-container">
             </div>
             <h6 class="credits muted"><a href="https://github.com/pavelk2/social-feed" target="_blank">Social-feed</a> jquery plugin, developed by <a target="_blank" href="http://kucherbaev.com">Pavel Kucherbaev</a></h6>
         </div>
         <script>
             $('.social-feed-container').socialfeed({
-                fb_username:'pavel.kucherbaev',
+                fb_username:'barack.obama',
                 fb_limit:2,
-                vk_username:36603,
+                vk_username:1,
                 vk_limit:2,
                 tw_limit:2,
-                tw_username:'pavelk2',
-                length:140
+                tw_username:'jack',
+                length:140,
+                cookies:true
             });
         </script>
-
-
     </body>
 
 </html>
