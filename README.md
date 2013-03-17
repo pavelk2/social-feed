@@ -11,7 +11,7 @@ Currently supports: <a href="http://facebook.com">Facebook</a>, <a href="http://
 <h4>Getting started</h4>
 Connect:
 <pre>
-<link href="css/style.css" rel="stylesheet" type="text/css">
+        <link href="css/style.css" rel="stylesheet" type="text/css">
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
         <!-- if you don't want to caсhe Twitter posts in cookies, you can skip next two libraries -->
         <script src="js/json2.js"></script>
