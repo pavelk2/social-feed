@@ -2,7 +2,7 @@ Social-feed
 ===========
 A jQuery plugin which shows a user feed from the most popular social networks.<br/> 
 Currently supports: <a href="http://facebook.com">Facebook</a>, <a href="http://twitter.com">Twitter</a>, <a href="http://vk.com">VK</a>
-<h4><a href="http://gitbox.ru/Social-feed">Online demo is here</a><h4>
+<h4><a href="http://gitbox.ru/Social-feed" target="_blank">Online demo is here</a><h4>
 
 <img src="https://dl.dropbox.com/u/15063198/GitHub/plugins/social-feed.png" />
 
