@@ -48,28 +48,22 @@
             $.get(feed_json,function(json){
                 $.each(json.data,function(){
                     var element = this,
-                      text,
-                      url,
                       post = {};
                     if (element.message != undefined || element.story != undefined){
+                        var text = element.story;,
+                          url = 'http://facebook.com/' + element.from.id
                         if (element.message != undefined)
-                            text = element.message;
-                        else
-                            text = element.story;
+                            text = element.message;                            
                         if (element.link!=undefined)
-                            url = element.link;
-                        else
-                            url = 'http://facebook.com/' + element.from.id;
+                            url = element.link;                            
                         post.dt_create = dateToSeconds(convertDate(element.created_time));
                         post.author_link = 'http://facebook.com/' + element.from.id;
                         post.author_picture = fb_graph + element.from.id + '/picture';
                         post.post_url = url;
                         post.author_name = element.from.name;
                         post.message = text;
-                        post.description = '';
+                        post.description = (element.description != undefined) ? element.description : '';
                         post.link = url;
-                        if (element.description != undefined)
-                            post.description = element.description;
                         post.social_network = 'fb';
                         getTemplate(post);
                     }
@@ -159,8 +153,7 @@
         //Render functions
         //---------------------------------------------------------------------------------
         function getTemplate(data){
-            var content = data;
-           
+            var content = data;           
             content.time_ago = timeAgo(data.dt_create);
             content.text = escapeHtml(wrapLinks(shorten(data.message + ' ' + data.description)));
             content.social_icon = options.plugin_folder + 'img/' + data.social_network + '-icon-24.png';
@@ -169,26 +162,28 @@
             });
         }
         function placeTemplate(template,data){
-            if (container.children().length == 0){
-                container.append(template);  
+            if ($(container).children().length == 0){
+                $(container).append(template);  
             }else{
                 var i = 0,
-                  insert_index = -1;
-                    
-                $.each(container.children(), function(){
+                  insert_index = -1;                    
+                $.each($(container).children(), function(){
                     if ($(this).attr('dt_create') > data.dt_create){
                         insert_index = i;
                         return false;
                     }
                     i++;
                 });
-                container.append(template);
+                $(container).append(template);
                 if (insert_index >= 0){
                     insert_index++;
-                    var before = container.children('div:nth-child('+insert_index+')'),
-                      current = container.children('div:last-child');
+                    var before = $(container).children('div:nth-child('+insert_index+')'),
+                      current = $(container).children('div:last-child');
                     $(current).insertBefore(before);  
-                }             
+                }
+                else{
+                }
+                
             }
         }
         //---------------------------------------------------------------------------------
