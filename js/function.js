@@ -50,7 +50,7 @@
                     var element = this,
                       post = {};
                     if (element.message != undefined || element.story != undefined){
-                        var text = element.story;,
+                        var text = element.story,
                           url = 'http://facebook.com/' + element.from.id
                         if (element.message != undefined)
                             text = element.message;                            
@@ -76,7 +76,6 @@
               vk_user_json = 'https://api.vk.com/method/users.get?fields=first_name,%20last_name,%20screen_name,%20photo&uid=',
               vk_group_json = 'https://api.vk.com/method/groups.getById?fields=first_name,%20last_name,%20screen_name,%20photo&gid=';
             $.get(vk_json,function(json){
-               
                 $.each(json.response, function(){ 
                     if (this != parseInt(this)){
                         var element = this,
