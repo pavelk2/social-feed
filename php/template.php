@@ -1,5 +1,5 @@
 <?php $p = $_POST; ?>
-<div class="media social-feed-element" dt_create="<?php echo $p['dt_create']; ?>">
+<div class="social-feed-element" dt_create="<?php echo $p['dt_create']; ?>">
     <a class="pull-left" href="<?php echo $p['author_link']; ?>" target="_blank">
         <img class="media-object" src="<?php echo $p['author_picture']; ?>">
     </a>
@@ -11,7 +11,9 @@
             </a>
         </p>
         <div>
-            <?php echo htmlspecialchars_decode($p['text']); ?>
+            <p class="social-feed-text">
+                <?php echo htmlspecialchars_decode($p['text']); ?>
+            </p>
         </div>
     </div>
 </div>

@@ -18,7 +18,7 @@
             length: 500 // maximum length of post message shown
         };
         //---------------------------------------------------------------------------------
-        var options = $.extend(defaults, options);  
+        var options = $.extend(defaults, options),  
         container = $(this); 
         container.empty().css('display', 'inline-block');
         //---------------------------------------------------------------------------------
@@ -41,36 +41,36 @@
             }
         }
         function getFacebookData(access_token){
-            var element;
-            var limit='limit='+options.fb_limit;
-            var query_extention='&access_token='+access_token+'';
-            var fb_graph='https://graph.facebook.com/';
-            var feed_json=fb_graph+options.fb_username+'/feed?'+limit+query_extention; 
+            var limit = 'limit=' + options.fb_limit,
+              query_extention = '&access_token=' + access_token + '',
+              fb_graph = 'https://graph.facebook.com/',
+              feed_json = fb_graph + options.fb_username + '/feed?' + limit + query_extention; 
             $.get(feed_json,function(json){
                 $.each(json.data,function(){
-                    element=this;
-                    var text,url;
-                    var post={};
-                    if (element.message!=undefined || element.story!=undefined){
-                        if (element.message!=undefined)
-                            text=element.message;
+                    var element = this,
+                      text,
+                      url,
+                      post = {};
+                    if (element.message != undefined || element.story != undefined){
+                        if (element.message != undefined)
+                            text = element.message;
                         else
-                            text=element.story;
+                            text = element.story;
                         if (element.link!=undefined)
-                            url=element.link;
+                            url = element.link;
                         else
-                            url='http://facebook.com/'+element.from.id;
-                        post.dt_create=dateToSeconds(convertDate(element.created_time));
-                        post.author_link='http://facebook.com/'+element.from.id;
-                        post.author_picture=fb_graph+element.from.id+'/picture';
-                        post.post_url=url;
-                        post.author_name=element.from.name;
-                        post.message=text;
-                        post.description='';
-                        post.link=url;
-                        if (element.description!=undefined)
-                            post.description=element.description;
-                        post.social_network='fb';
+                            url = 'http://facebook.com/' + element.from.id;
+                        post.dt_create = dateToSeconds(convertDate(element.created_time));
+                        post.author_link = 'http://facebook.com/' + element.from.id;
+                        post.author_picture = fb_graph + element.from.id + '/picture';
+                        post.post_url = rl;
+                        post.author_name = element.from.name;
+                        post.message = text;
+                        post.description = '';
+                        post.link = url;
+                        if (element.description != undefined)
+                            post.description = element.description;
+                        post.social_network = 'fb';
                         getTemplate(post);
                     }
                 });
@@ -78,38 +78,37 @@
             
         }
         function getVkontakteData(){
-            var vk_json='https://api.vk.com/method/wall.get?owner_id='+options.vk_username+'&filter=owner&count='+options.vk_limit+'&callback=?';
-            var vk_user_json='https://api.vk.com/method/users.get?fields=first_name,%20last_name,%20screen_name,%20photo&uid=';
-            var vk_group_json='https://api.vk.com/method/groups.getById?fields=first_name,%20last_name,%20screen_name,%20photo&gid=';
+            var vk_json = 'https://api.vk.com/method/wall.get?owner_id='+options.vk_username+'&filter=owner&count='+options.vk_limit+'&callback=?',
+              vk_user_json = 'https://api.vk.com/method/users.get?fields=first_name,%20last_name,%20screen_name,%20photo&uid=',
+              vk_group_json = 'https://api.vk.com/method/groups.getById?fields=first_name,%20last_name,%20screen_name,%20photo&gid=';
             $.get(vk_json,function(json){
                
                 $.each(json.response, function(){ 
                     if (this != parseInt(this)){
-                        var element;
-                        element=this;
-                        var post={};
-                        post.dt_create=dateToSeconds(new Date(element.date*1000));
-                        post.description=' ';
-                        post.message=stripHTML(element.text);
+                        var element = this,
+                          post = {};
+                        post.dt_create = ateToSeconds(new Date(element.date*1000));
+                        post.description = ' ';
+                        post.message = stripHTML(element.text);
                         post.social_network='vk';
                         //if the post is created by user
-                        if (element.from_id>0){
-                            vk_user_json+=element.from_id+'&callback=?';
+                        if (element.from_id > 0){
+                            vk_user_json += element.from_id + '&callback=?';
                             $.get(vk_user_json,function(user_json){
-                                post.author_name=user_json.response[0].first_name+' '+user_json.response[0].last_name;
-                                post.author_picture=user_json.response[0].photo;
-                                post.author_link='http://vk.com/'+user_json.response[0].screen_name;
-                                post.link='http://vk.com/'+user_json.response[0].screen_name+'?w=wall'+user_json.response[0].uid+'_'+element.id+'%2Fall';
+                                post.author_name = user_json.response[0].first_name + ' ' + user_json.response[0].last_name;
+                                post.author_picture = user_json.response[0].photo;
+                                post.author_link = 'http://vk.com/' + user_json.response[0].screen_name;
+                                post.link = 'http://vk.com/' + user_json.response[0].screen_name + '?w=wall' + user_json.response[0].uid + '_' + element.id + '%2Fall';
                                 getTemplate(post); 
                             },'json');
                         //if the post is created by group    
                         }else{
-                            vk_group_json+=(-1)*element.from_id+'&callback=?';
+                            vk_group_json += (-1) * element.from_id + '&callback=?';
                             $.get(vk_group_json,function(user_json){
-                                post.author_name=user_json.response[0].name;
-                                post.author_picture=user_json.response[0].photo;
-                                post.author_link='http://vk.com/'+user_json.response[0].screen_name;
-                                post.link='http://vk.com/'+user_json.response[0].screen_name+'?w=wall-'+user_json.response[0].gid+'_'+element.id;
+                                post.author_name = user_json.response[0].name;
+                                post.author_picture = user_json.response[0].photo;
+                                post.author_link = 'http://vk.com/' + user_json.response[0].screen_name;
+                                post.link = 'http://vk.com/' + user_json.response[0].screen_name + '?w=wall-' + user_json.response[0].gid  + '_' + element.id;
                                 getTemplate(post);
                                    
                             },'json');
@@ -119,38 +118,37 @@
                   
             },'json');
         }
+
         function getTwitterData(){
-            var element;     
-            var tw_json='http://api.twitter.com/1/statuses/user_timeline.json?include_entities=true&include_rts=true&screen_name='+options.tw_username+'&count='+options.tw_limit+'&callback=?';
+            var tw_json = 'http://api.twitter.com/1/statuses/user_timeline.json?include_entities=true&include_rts=true&screen_name=' + options.tw_username + '&count=' + options.tw_limit + '&callback=?';
             $.ajax({
                 url:tw_json,
                 dataType:'json',
                 timeout:1000,
                 success:function(json){
                     $.each(json, function(i) { 
-                        var post={};
-                        element=this;
-                        post.dt_create=dateToSeconds(convertDate(fixTwitterDate(element.created_at)));
-                        post.author_link='http://twitter.com/'+element.user.screen_name;
-                        post.author_picture=element.user.profile_image_url;
-                        post.post_url='http://twitter.com/'+element.user.screen_name+'/status/'+element.id_str;
-                        post.author_name=element.user.name;
-                        post.message=element.text;
-                        post.description='';
-                        post.social_network='tw';
-                        post.link='http://twitter.com/'+element.user.screen_name+'/status/'+element.id_str;
+                        var post = {},
+                          element = this;
+                        post.dt_create = dateToSeconds(convertDate(fixTwitterDate(element.created_at)));
+                        post.author_link = 'http://twitter.com/'+element.user.screen_name;
+                        post.author_picture = element.user.profile_image_url;
+                        post.post_url = post.author_link + '/status/' + element.id_str;
+                        post.author_name = element.user.name;
+                        post.message = element.text;
+                        post.description = '';
+                        post.social_network = 'tw';
+                        post.link = 'http://twitter.com/' + element.user.screen_name + '/status/' + element.id_str;
                         if (options.cookies)
-                            $.cookie('social-feed-twitter'+i,JSON.stringify(post));
+                            $.cookie('social-feed-twitter' + i,JSON.stringify(post));
                         getTemplate(post);                    
                     });
                 }, 
                 error:function(e){
                     if (options.cookies){
-                        var i;
                         //if can not fetch data from Twitter (because of the 150 responses / hour limit) get them from cookies
-                        for (i=0;i<options.tw_limit && $.cookie('social-feed-twitter'+i)!=null ;i++){
-                            var data=JSON.parse($.cookie('social-feed-twitter'+i));
-                            data.dt_create=convertDate(data.dt_create);
+                        for (var i = 0, limit = options.tw_limit; i < limit && $.cookie('social-feed-twitter' + i) != null; i++){
+                            var data = JSON.parse($.cookie('social-feed-twitter' + i));
+                            data.dt_create = convertDate(data.dt_create);
                             getTemplate(data);
                         }            
                     }
@@ -161,38 +159,38 @@
         //Render functions
         //---------------------------------------------------------------------------------
         function getTemplate(data){
-            var content=data;
+            var content = data;
            
-            content.time_ago=timeAgo(data.dt_create);
-            content.text=escapeHtml(wrapLinks(shorten(data.message+' '+data.description)));
-            content.social_icon=options.plugin_folder+'img/'+data.social_network+'-icon-24.png';
-            $.post(options.plugin_folder+'php/template.php',content ,function(template){
+            content.time_ago = timeAgo(data.dt_create);
+            content.text = escapeHtml(wrapLinks(shorten(data.message + ' ' + data.description)));
+            content.social_icon = options.plugin_folder + 'img/' + data.social_network + '-icon-24.png';
+            $.post(options.plugin_folder + 'php/template.php', content,function(template){
                 placeTemplate(template,data);      
             });
         }
         function placeTemplate(template,data){
-            if ($(container).children().length==0){
+            if ($(container).children().length == 0){
                 $(container).append(template);  
             }else{
-                var i=0;
-                var insert_index=-1;
+                var i = 0,
+                  insert_index = -1,
+                  container = $(container);
                     
-                $.each($(container).children(), function(){ 
-                    if ($(this).attr('dt_create')>data.dt_create){
-                        insert_index=i;
+                $.each(container.children(), function(){
+                    if ($(this).attr('dt_create') > data.dt_create){
+                        insert_index = i;
                         return false;
                     }
                     i++;
                 });
-                $(container).append(template); 
-                if (insert_index>=0){
+                container.append(template);
+                if (insert_index >= 0){
                     insert_index++;
-                    var before=$(container).children('div:nth-child('+insert_index+')');
-                    var current=$(container).children('div:last-child');
+                    var before = container.children('div:nth-child('+insert_index+')'),
+                      current = container.children('div:last-child');
                     $(current).insertBefore(before);  
                 }
                 else{
-                    
                 }
                 
             }
@@ -207,20 +205,20 @@
             return string.replace(/\bhttp[^ ]+/ig, wrapLinkTemplate);
         }
         function convertDate(string){
-            string = string.replace('+0000','Z');
-            var time = ('' + string).replace(/-/g,"/").replace(/[TZ]/g," ").replace(/^\s\s*/, '').replace(/\s\s*$/, '');
-            if(time.substr(time.length-4,1)==".") time =time.substr(0,time.length-4);
+            string = string.replace('+0000', 'Z');
+            var time = ('' + string).replace(/-/g, "/").replace(/[TZ]/g, " ").replace(/^\s\s*/, '').replace(/\s\s*$/, '');
+            if(time.substr(time.length - 4, 1) == ".") time = time.substr(0,time.length - 4);
             return new Date(time);
         }
         function shorten(string){
-            string=$.trim(string);
+            string = $.trim(string);
             if (string.length > options.length)
             {
-                var cut=string.substring(0,options.length);
-                var link_start_position=cut.lastIndexOf('http');
-                if (link_start_position>0){
-                    var link_end_position=string.indexOf(' ',link_start_position);
-                    if (link_end_position>options.length && string!=string.substring(0,link_end_position))
+                var cut = string.substring(0, options.length),
+                  link_start_position = cut.lastIndexOf('http');
+                if (link_start_position > 0){
+                    var link_end_position = string.indexOf(' ',link_start_position);
+                    if (link_end_position > options.length && string != string.substring(0,link_end_position))
                         return string.substring(0,link_end_position) + " ..";
                     else
                         return string;
@@ -235,7 +233,7 @@
             return (new Date - time) / 1000;    
         }
         function stripHTML(string){
-            if (typeof string==="undefined" || string===null)
+            if (typeof string === "undefined" || string === null)
                 return '';
             return string.replace(/(<([^>]+)>)|nbsp;|\s{2,}|/ig,"");
         }
@@ -250,9 +248,9 @@
             .replace(/'/g, "&#039;");
         }
         function fixTwitterDate(created_at) {
-            var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-            var pattern = /\s/;
-            var day_of_week,day,month_pos,month,year,time;
+            var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+              pattern = /\s/,
+              day_of_week,day,month_pos,month,year,time;
             created_at = created_at.split(pattern);
             for (var i = 0; i < created_at.length; i++){
                 day_of_week = created_at[0];
@@ -262,7 +260,7 @@
                 year = created_at[5];
                 time = created_at[3];
             }
-            created_at = year+'-'+month+'-'+day+'T'+time+'Z';
+            created_at = year + '-' + month + '-' + day + 'T' + time + 'Z';
                 
             if(created_at !== undefined)
                 return created_at;
