@@ -1,4 +1,3 @@
-
 (function($){  
     $.fn.socialfeed = function(options)
     {
@@ -9,7 +8,7 @@
             //vk_username: "vk_username", // ID of a VK page which stream will be shown  
             // Twitter
             tw_limit: 3, // amount of twitter posts to show
-            //tw_username: "tw_username", // ID of a Facebook page which stream will be shown  
+            //tw_username: "tw_username", // ID of a twitter page which stream will be shown  
             // Facebook
             fb_limit: 3, // amount of facebook posts to show
             //fb_username: "fb_username", // ID of a Facebook page which stream will be shown
