@@ -2,14 +2,14 @@
     $.fn.socialfeed = function(options)
     {
         var defaults = {
-            plugin_folder: '', // a folder in which the plugin is located (with slash in the end)
+            plugin_folder: '', // a folder in which the plugin is located (with a slash in the end)
             // VK.com
             vk_limit: 3, // amount of vkontakte posts to show
             //vk_username: "vk_username", // ID of a VK page which stream will be shown  
-            // Twitter
+            // Twitter.com
             tw_limit: 3, // amount of twitter posts to show
             //tw_username: "tw_username", // ID of a twitter page which stream will be shown  
-            // Facebook
+            // Facebook.com
             fb_limit: 3, // amount of facebook posts to show
             //fb_username: "fb_username", // ID of a Facebook page which stream will be shown
             // General
@@ -18,7 +18,7 @@
             length: 500 // maximum length of post message shown
         };
         //---------------------------------------------------------------------------------
-        var options = $.extend(defaults, options),  
+        var options = $.extend(defaults, options),
         container = $(this); 
         container.empty().css('display', 'inline-block');
         //---------------------------------------------------------------------------------
@@ -63,7 +63,7 @@
                         post.dt_create = dateToSeconds(convertDate(element.created_time));
                         post.author_link = 'http://facebook.com/' + element.from.id;
                         post.author_picture = fb_graph + element.from.id + '/picture';
-                        post.post_url = rl;
+                        post.post_url = url;
                         post.author_name = element.from.name;
                         post.message = text;
                         post.description = '';
@@ -87,7 +87,7 @@
                     if (this != parseInt(this)){
                         var element = this,
                           post = {};
-                        post.dt_create = ateToSeconds(new Date(element.date*1000));
+                        post.dt_create = dateToSeconds(new Date(element.date*1000));
                         post.description = ' ';
                         post.message = stripHTML(element.text);
                         post.social_network='vk';
@@ -169,12 +169,11 @@
             });
         }
         function placeTemplate(template,data){
-            if ($(container).children().length == 0){
-                $(container).append(template);  
+            if (container.children().length == 0){
+                container.append(template);  
             }else{
                 var i = 0,
-                  insert_index = -1,
-                  container = $(container);
+                  insert_index = -1;
                     
                 $.each(container.children(), function(){
                     if ($(this).attr('dt_create') > data.dt_create){
@@ -189,10 +188,7 @@
                     var before = container.children('div:nth-child('+insert_index+')'),
                       current = container.children('div:last-child');
                     $(current).insertBefore(before);  
-                }
-                else{
-                }
-                
+                }             
             }
         }
         //---------------------------------------------------------------------------------
