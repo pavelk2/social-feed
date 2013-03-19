@@ -41,7 +41,7 @@ If you don't need to show the feed from all supported social networks, put the c
 <br/>
 The Facebook requires an access token in order to get the feed of the user (even if it is public).
 To use Facebook feed, please <a href="https://developers.facebook.com/apps">register an application</a>, generate a token and 
-put it in  <em>fb_token</em>
+put it in  <em>fb_token</em>.<br/>
 <strong>Attention!</strong> A current version of plugin does not fully support IE browser. Please follow the process of solving issues for IE.
 
 
