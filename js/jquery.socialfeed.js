@@ -1,8 +1,29 @@
-(function($){  
+if ( typeof Object.create !== 'function' ) {
+    Object.create = function( obj ) {
+        function F() {};
+        F.prototype = obj;
+        return new F();
+    };
+}
+;(function( $, window, document, undefined ) {
+    /*var socialFeed = {
+    };
+    
+    $.fn.socialfeed = function( options ) {
+               return this.each(function() {
+                       var feed = Object.create( socialFeed );
+                       
+                       feed( options, this );
+
+                       $.data( this, 'socialfeed', feed );
+               });
+       };*/
     $.fn.socialfeed = function(options)
     {
         var defaults = {
             plugin_folder: '', // a folder in which the plugin is located (with a slash in the end)
+            template: 'template.html', // a path to the tamplate file
+            
             // VK.com
             vk_limit: 3, // amount of vkontakte posts to show
             //vk_username: "vk_username", // ID of a VK page which stream will be shown  
@@ -11,6 +32,7 @@
             //tw_username: "tw_username", // ID of a twitter page which stream will be shown  
             // Facebook.com
             fb_limit: 3, // amount of facebook posts to show
+            //fb_token: 'YOUR_FACEBOOK_APPLICATION_ACCESS_TOKEN',
             //fb_username: "fb_username", // ID of a Facebook page which stream will be shown
             // General
             cookies: false, //if true then twitter results will be saved in cookies, to fetch them if 150 requests/hour is over.
@@ -18,8 +40,7 @@
             length: 500 // maximum length of post message shown
         };
         //---------------------------------------------------------------------------------
-        var options = $.extend(defaults, options),
-        container = $(this); 
+        var options = $.extend(defaults, options),container = $(this); 
         container.empty().css('display', 'inline-block');
         //---------------------------------------------------------------------------------
         // Initiate function
@@ -29,9 +50,7 @@
         function getAllData(){
             if (options.fb_username != undefined) {
                 //Facebook requires an access_token for fetching the feed.
-                $.get(options.plugin_folder + 'php/get_access_token.php', function(data) {
-                    getFacebookData(data);
-                });
+                getFacebookData(options.fb_token);
             }
             if (options.tw_username != undefined) {
                 getTwitterData();
@@ -42,21 +61,21 @@
         }
         function getFacebookData(access_token){
             var limit = 'limit=' + options.fb_limit,
-              query_extention = '&access_token=' + access_token + '',
-              fb_graph = 'https://graph.facebook.com/',
-              feed_json = fb_graph + options.fb_username + '/feed?' + limit + query_extention; 
+            query_extention = '&access_token=' + access_token + '&callback=?',
+            fb_graph = 'https://graph.facebook.com/',
+            feed_json = fb_graph + options.fb_username + '/feed?' + limit + query_extention; 
             $.get(feed_json,function(json){
                 $.each(json.data,function(){
                     var element = this,
-                      post = {};
+                    post = {};
                     if (element.message != undefined || element.story != undefined){
                         var text = element.story,
-                          url = 'http://facebook.com/' + element.from.id
+                        url = 'http://facebook.com/' + element.from.id
                         if (element.message != undefined)
                             text = element.message;                            
                         if (element.link!=undefined)
                             url = element.link;                            
-                        post.dt_create = dateToSeconds(convertDate(element.created_time));
+                        post.dt_create = moment(element.created_time);//dateToSeconds(convertDate(element.created_time));
                         post.author_link = 'http://facebook.com/' + element.from.id;
                         post.author_picture = fb_graph + element.from.id + '/picture';
                         post.post_url = url;
@@ -73,14 +92,14 @@
         }
         function getVkontakteData(){
             var vk_json = 'https://api.vk.com/method/wall.get?owner_id='+options.vk_username+'&filter=owner&count='+options.vk_limit+'&callback=?',
-              vk_user_json = 'https://api.vk.com/method/users.get?fields=first_name,%20last_name,%20screen_name,%20photo&uid=',
-              vk_group_json = 'https://api.vk.com/method/groups.getById?fields=first_name,%20last_name,%20screen_name,%20photo&gid=';
+            vk_user_json = 'https://api.vk.com/method/users.get?fields=first_name,%20last_name,%20screen_name,%20photo&uid=',
+            vk_group_json = 'https://api.vk.com/method/groups.getById?fields=first_name,%20last_name,%20screen_name,%20photo&gid=';
             $.get(vk_json,function(json){
                 $.each(json.response, function(){ 
                     if (this != parseInt(this)){
                         var element = this,
-                          post = {};
-                        post.dt_create = dateToSeconds(new Date(element.date*1000));
+                        post = {};
+                        post.dt_create = moment.unix(element.date);//dateToSeconds(new Date(element.date*1000));
                         post.description = ' ';
                         post.message = stripHTML(element.text);
                         post.social_network='vk';
@@ -121,8 +140,8 @@
                 success:function(json){
                     $.each(json, function(i) { 
                         var post = {},
-                          element = this;
-                        post.dt_create = dateToSeconds(convertDate(fixTwitterDate(element.created_at)));
+                        element = this;
+                        post.dt_create = moment(element.created_at);//dateToSeconds(convertDate(fixTwitterDate(element.created_at)));
                         post.author_link = 'http://twitter.com/'+element.user.screen_name;
                         post.author_picture = element.user.profile_image_url;
                         post.post_url = post.author_link + '/status/' + element.id_str;
@@ -141,7 +160,7 @@
                         //if can not fetch data from Twitter (because of the 150 responses / hour limit) get them from cookies
                         for (var i = 0, limit = options.tw_limit; i < limit && $.cookie('social-feed-twitter' + i) != null; i++){
                             var data = JSON.parse($.cookie('social-feed-twitter' + i));
-                            data.dt_create = convertDate(data.dt_create);
+                            data.dt_create = moment(data.dt_create);
                             getTemplate(data);
                         }            
                     }
@@ -153,11 +172,13 @@
         //---------------------------------------------------------------------------------
         function getTemplate(data){
             var content = data;           
-            content.time_ago = timeAgo(data.dt_create);
-            content.text = escapeHtml(wrapLinks(shorten(data.message + ' ' + data.description)));
+            content.time_ago = data.dt_create.fromNow();
+            content.dt_create=content.dt_create.valueOf();
+            content.text = wrapLinks(shorten(data.message + ' ' + data.description),data.social_network);
             content.social_icon = options.plugin_folder + 'img/' + data.social_network + '-icon-24.png';
-            $.post(options.plugin_folder + 'php/template.php', content,function(template){
-                placeTemplate(template,data);      
+            $.get(options.template,function(template){
+                var tempFn = doT.template(template);
+                placeTemplate(tempFn(content),data);      
             });
         }
         function placeTemplate(template,data){
@@ -165,9 +186,9 @@
                 $(container).append(template);  
             }else{
                 var i = 0,
-                  insert_index = -1;                    
+                insert_index = -1;                    
                 $.each($(container).children(), function(){
-                    if ($(this).attr('dt_create') > data.dt_create){
+                    if ($(this).attr('dt_create') < data.dt_create){
                         insert_index = i;
                         return false;
                     }
@@ -177,7 +198,7 @@
                 if (insert_index >= 0){
                     insert_index++;
                     var before = $(container).children('div:nth-child('+insert_index+')'),
-                      current = $(container).children('div:last-child');
+                    current = $(container).children('div:last-child');
                     $(current).insertBefore(before);  
                 }
                 else{
@@ -188,24 +209,33 @@
         //---------------------------------------------------------------------------------
         //Utility functions
         //---------------------------------------------------------------------------------
+        function wrapLinks(string,social_network){
+            string= string.replace(/\bhttp[^ ]+/ig, wrapLinkTemplate);
+            if (social_network=='tw'){
+                string= string.replace(/@([a-z0-9_]+)/i, wrapTwitterUsersTemplate);
+                string= string.replace(/#([a-z0-9_]+)/i, wrapTwitterHashTemplate);
+            }
+            return string;
+        }
         function wrapLinkTemplate(string){
             return '<a target="_blank" href="' + string + '">' + string + '<\/a>';
         }
-        function wrapLinks(string){
-            return string.replace(/\bhttp[^ ]+/ig, wrapLinkTemplate);
+        //---------------------------------------------------------------------------------
+        function wrapTwitterUsersTemplate(string){
+            return '<a target="_blank" href="http://twitter.com/' + string + '" >' + string + '<\/a>';
         }
-        function convertDate(string){
-            string = string.replace('+0000', 'Z');
-            var time = ('' + string).replace(/-/g, "/").replace(/[TZ]/g, " ").replace(/^\s\s*/, '').replace(/\s\s*$/, '');
-            if(time.substr(time.length - 4, 1) == ".") time = time.substr(0,time.length - 4);
-            return new Date(time);
+
+        function wrapTwitterHashTemplate(string){
+            return '<a target="_blank" href="http://twitter.com/search?q=%23' + string.substring(1,string.length) + '" >' + string + '<\/a>';
         }
+        //---------------------------------------------------------------------------------
+        
         function shorten(string){
             string = $.trim(string);
             if (string.length > options.length)
             {
                 var cut = string.substring(0, options.length),
-                  link_start_position = cut.lastIndexOf('http');
+                link_start_position = cut.lastIndexOf('http');
                 if (link_start_position > 0){
                     var link_end_position = string.indexOf(' ',link_start_position);
                     if (link_end_position > options.length && string != string.substring(0,link_end_position))
@@ -215,80 +245,13 @@
                 }else{
                     return cut + "..";
                 } 
-            //return string.substring(0,options.length) + "..";
             }else
                 return string;
-        }
-        function dateToSeconds(time){
-            return (new Date - time) / 1000;    
         }
         function stripHTML(string){
             if (typeof string === "undefined" || string === null)
                 return '';
             return string.replace(/(<([^>]+)>)|nbsp;|\s{2,}|/ig,"");
-        }
-        function escapeHtml(string) {
-            if (typeof string==="undefined" || string===null)
-                return;
-            return string
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#039;");
-        }
-        function fixTwitterDate(created_at) {
-            var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
-              pattern = /\s/,
-              day_of_week,day,month_pos,month,year,time;
-            created_at = created_at.split(pattern);
-            for (var i = 0; i < created_at.length; i++){
-                day_of_week = created_at[0];
-                day = created_at[2];
-                month_pos = created_at[1];
-                month = 0 + months.indexOf(month_pos) + 1; // add 1 because array starts from zero
-                year = created_at[5];
-                time = created_at[3];
-            }
-            created_at = year + '-' + month + '-' + day + 'T' + time + 'Z';
-                
-            if(created_at !== undefined)
-                return created_at;
-        }
-        function timeAgo(seconds){
-            //the function is taken from https://github.com/iatek/jquery-socialist
-            var time_formats = [
-            [60, 'just now', '1'],
-            [120, '1 minute ago', '1 minute from now'],
-            [3600, 'minutes', 60], 
-            [7200, '1 hour ago', '1 hour from now'],
-            [86400, 'hours', 3600], 
-            [172800, 'yesterday', 'tomorrow'], 
-            [604800, 'days', 86400], 
-            [1209600, 'last week', 'next week'], 
-            [2419200, 'weeks', 604800], 
-            [4838400, 'last month', 'next month'], 
-            [29030400, 'months', 2419200], 
-            [58060800, 'last year', 'next year'], 
-            [2903040000, 'years', 29030400], 
-            [5806080000, 'last century', 'next century'], 
-            [58060800000, 'centuries', 2903040000] 
-            ];
-            var token = 'ago', list_choice = 1;
-            if (seconds < 0) {
-                seconds = Math.abs(seconds);
-                token = 'from now';
-                list_choice = 2;
-            }
-            var i = 0, format;
-            while (format = time_formats[i++])
-                if (seconds < format[0]) {
-                    if (typeof format[2] == 'string')
-                        return format[list_choice];
-                    else
-                        return Math.floor(seconds / format[2]) + ' ' + format[1] + ' ' + token;
-                }
-            return seconds;
         }
     //---------------------------------------------------------------------------------
     };  

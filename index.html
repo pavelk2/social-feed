@@ -1,11 +1,9 @@
 <html>
     <head>
-        <link href="css/style.css" rel="stylesheet" type="text/css">
+        <link href="css/jquery.socialfeed.css" rel="stylesheet" type="text/css">
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-        <!-- if you don't want to caсhe Twitter posts in cookies, you can skip next two libraries -->
-        <script src="js/json2.js"></script>
-        <script src="js/jquery.cookie.js"></script>
-        <script src="js/function.js"></script>
+        <script src="js/jquery.socialfeed.utility.js"></script>
+        <script src="js/jquery.socialfeed.js"></script>
         <style>
             /*This style is needed only for the plugin demo page. Do not use it in your projects*/
             .credits{text-align:center;padding:20px;margin-top:10px;font-size:12px;}
@@ -30,15 +28,18 @@
             <h6 class="credits muted"><a href="https://github.com/pavelk2/social-feed" target="_blank">Social-feed</a> jquery plugin, developed by <a target="_blank" href="http://kucherbaev.com">Pavel Kucherbaev</a></h6>
         </div>
         <script>
-            $('.social-feed-container').socialfeed({
-                fb_username:'barack.obama',
-                fb_limit:2,
-                vk_username:1,
-                vk_limit:2,
-                tw_limit:2,
-                tw_username:'jack',
-                length:130,
-                cookies:true
+            $(document).ready(function(){
+                $('.social-feed-container').socialfeed({
+                    fb_username:'barack.obama',
+                    fb_limit:2,
+                    fb_token:'150849908413827|uYDHoXrvPZOLkQ-zRz_XoYdEeYM',
+                    vk_username:1,
+                    vk_limit:2,
+                    tw_limit:2,
+                    tw_username:'jack',
+                    length:130,
+                    cookies:true
+                });
             });
         </script>
     </body>
