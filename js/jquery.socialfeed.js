@@ -5,7 +5,8 @@ if ( typeof Object.create !== 'function' ) {
         return new F();
     };
 }
-;(function( $, window, document, undefined ) {
+;
+(function( $, window, document, undefined ) {
     /*var socialFeed = {
     };
     
@@ -40,7 +41,7 @@ if ( typeof Object.create !== 'function' ) {
             length: 500 // maximum length of post message shown
         };
         //---------------------------------------------------------------------------------
-        var options = $.extend(defaults, options),container = $(this); 
+        var options = $.extend(defaults, options),container = $(this),template; 
         container.empty().css('display', 'inline-block');
         //---------------------------------------------------------------------------------
         // Initiate function
@@ -141,7 +142,7 @@ if ( typeof Object.create !== 'function' ) {
                     $.each(json, function(i) { 
                         var post = {},
                         element = this;
-                        post.dt_create = moment(element.created_at);//dateToSeconds(convertDate(fixTwitterDate(element.created_at)));
+                        post.dt_create = moment(fixTwitterDate(element.created_at));
                         post.author_link = 'http://twitter.com/'+element.user.screen_name;
                         post.author_picture = element.user.profile_image_url;
                         post.post_url = post.author_link + '/status/' + element.id_str;
@@ -176,10 +177,14 @@ if ( typeof Object.create !== 'function' ) {
             content.dt_create=content.dt_create.valueOf();
             content.text = wrapLinks(shorten(data.message + ' ' + data.description),data.social_network);
             content.social_icon = options.plugin_folder + 'img/' + data.social_network + '-icon-24.png';
-            $.get(options.template,function(template){
-                var tempFn = doT.template(template);
-                placeTemplate(tempFn(content),data);      
-            });
+            if (template!=undefined)
+                placeTemplate(template(content),data);  
+            else 
+                $.get(options.template,function(template_html){
+                    template = doT.template(template_html);
+                    placeTemplate(template(content),data);      
+                });
+            
         }
         function placeTemplate(template,data){
             if ($(container).children().length == 0){
@@ -210,10 +215,10 @@ if ( typeof Object.create !== 'function' ) {
         //Utility functions
         //---------------------------------------------------------------------------------
         function wrapLinks(string,social_network){
-            string= string.replace(/\bhttp[^ ]+/ig, wrapLinkTemplate);
+            var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+            string= string.replace(exp, wrapLinkTemplate);
             if (social_network=='tw'){
-                string= string.replace(/@([a-z0-9_]+)/i, wrapTwitterUsersTemplate);
-                string= string.replace(/#([a-z0-9_]+)/i, wrapTwitterHashTemplate);
+                string= string.replace(/(@|#)([a-z0-9_]+)/ig, wrapTwitterTagTemplate);
             }
             return string;
         }
@@ -221,15 +226,15 @@ if ( typeof Object.create !== 'function' ) {
             return '<a target="_blank" href="' + string + '">' + string + '<\/a>';
         }
         //---------------------------------------------------------------------------------
-        function wrapTwitterUsersTemplate(string){
+        function wrapTwitterTagTemplate(string){
             return '<a target="_blank" href="http://twitter.com/' + string + '" >' + string + '<\/a>';
         }
-
-        function wrapTwitterHashTemplate(string){
-            return '<a target="_blank" href="http://twitter.com/search?q=%23' + string.substring(1,string.length) + '" >' + string + '<\/a>';
-        }
         //---------------------------------------------------------------------------------
-        
+        function fixTwitterDate(created_at) {
+            created_at = created_at.replace('+0000','Z');
+            if(created_at !== undefined)
+                return created_at;
+        }
         function shorten(string){
             string = $.trim(string);
             if (string.length > options.length)
