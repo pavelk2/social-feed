@@ -35,6 +35,12 @@ Initialize the social-feed plugin:
                 });
         </script>
         
+When you run the plugin, make sure that you have your <strong>webserver running</strong>, otherwise you can get 
+the next problem:
+<pre>
+        XMLHttpRequest cannot load file://......./Social-feed/template.html. 
+        Origin null is not allowed by Access-Control-Allow-Origin. 
+</pre>
 If you want to change the layout of the feed, you can do it in the <em>template.html</em> file.
 <br/>
 If you don't need to show the feed from all supported social networks, put the credentials only for those you need.
