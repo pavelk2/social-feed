@@ -121,7 +121,6 @@ if ( typeof Object.create !== 'function' ) {
                             }else{
                                 var vk_group_json = vk_group_json_template+(-1) * element.from_id + '&callback=?';
                                 $.get(vk_group_json,function(user_json){
-                                    console.log(user_json);
                                     post.author_name = user_json.response[0].name;
                                     post.author_picture = user_json.response[0].photo;
                                     post.author_link = 'http://vk.com/' + user_json.response[0].screen_name;
@@ -142,7 +141,7 @@ if ( typeof Object.create !== 'function' ) {
                 dataType:'json',
                 timeout:1000,
                 success:function(json){
-                    $.each(json, function(i) { 
+                    $.each(json, function(i) {              
                         var post = {},
                         element = this;
                         post.dt_create = moment(fixTwitterDate(element.created_at));
