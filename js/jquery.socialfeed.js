@@ -27,6 +27,7 @@ if ( typeof Object.create !== 'function' ) {
             
             // VK.com
             vk_limit: 3, // amount of vkontakte posts to show
+            vk_source: 'owner',
             //vk_username: "vk_username", // ID of a VK page which stream will be shown  
             // Twitter.com
             tw_limit: 3, // amount of twitter posts to show
@@ -92,43 +93,45 @@ if ( typeof Object.create !== 'function' ) {
             
         }
         function getVkontakteData(){
-            var vk_json = 'https://api.vk.com/method/wall.get?owner_id='+options.vk_username+'&filter=owner&count='+options.vk_limit+'&callback=?',
-            vk_user_json = 'https://api.vk.com/method/users.get?fields=first_name,%20last_name,%20screen_name,%20photo&uid=',
-            vk_group_json = 'https://api.vk.com/method/groups.getById?fields=first_name,%20last_name,%20screen_name,%20photo&gid=';
+            var vk_json = 'https://api.vk.com/method/wall.get?owner_id='+options.vk_username+'&filter='+options.vk_source+'&count='+options.vk_limit+'&callback=?',
+            vk_user_json_template = 'https://api.vk.com/method/users.get?fields=first_name,%20last_name,%20screen_name,%20photo&uid=',
+            vk_group_json_template = 'https://api.vk.com/method/groups.getById?fields=first_name,%20last_name,%20screen_name,%20photo&gid=';
             $.get(vk_json,function(json){
-                $.each(json.response, function(){ 
-                    if (this != parseInt(this)){
-                        var element = this,
-                        post = {};
-                        post.dt_create = moment.unix(element.date);//dateToSeconds(new Date(element.date*1000));
-                        post.description = ' ';
-                        post.message = stripHTML(element.text);
-                        post.social_network='vk';
-                        //if the post is created by user
-                        if (element.from_id > 0){
-                            vk_user_json += element.from_id + '&callback=?';
-                            $.get(vk_user_json,function(user_json){
-                                post.author_name = user_json.response[0].first_name + ' ' + user_json.response[0].last_name;
-                                post.author_picture = user_json.response[0].photo;
-                                post.author_link = 'http://vk.com/' + user_json.response[0].screen_name;
-                                post.link = 'http://vk.com/' + user_json.response[0].screen_name + '?w=wall' + user_json.response[0].uid + '_' + element.id + '%2Fall';
-                                getTemplate(post); 
-                            },'json');
-                        //if the post is created by group    
-                        }else{
-                            vk_group_json += (-1) * element.from_id + '&callback=?';
-                            $.get(vk_group_json,function(user_json){
-                                post.author_name = user_json.response[0].name;
-                                post.author_picture = user_json.response[0].photo;
-                                post.author_link = 'http://vk.com/' + user_json.response[0].screen_name;
-                                post.link = 'http://vk.com/' + user_json.response[0].screen_name + '?w=wall-' + user_json.response[0].gid  + '_' + element.id;
-                                getTemplate(post);
-                                   
-                            },'json');
-                        }      
-                    }
-                });
-                  
+                var vk_wall_owner =(options.vk_username > 0) ? (vk_user_json_template + options.vk_username + '&callback=?') : (vk_group_json_template+(-1) * options.vk_username + '&callback=?'); 
+                $.get(vk_wall_owner,function(wall_owner){
+                    $.each(json.response, function(){ 
+                        if (this != parseInt(this)){
+                            var element = this,
+                            post = {};
+                            post.dt_create = moment.unix(element.date);//dateToSeconds(new Date(element.date*1000));
+                            post.description = ' ';
+                            post.message = stripHTML(element.text);
+                            post.social_network='vk';
+                            //if the post is created by user
+                            if (element.from_id > 0){
+                                var vk_user_json = vk_user_json_template + element.from_id + '&callback=?';
+                                $.get(vk_user_json,function(user_json){
+                                    post.author_name = user_json.response[0].first_name + ' ' + user_json.response[0].last_name;
+                                    post.author_picture = user_json.response[0].photo;
+                                    post.author_link = 'http://vk.com/' + user_json.response[0].screen_name;
+                                    post.link = 'http://vk.com/' + wall_owner.response[0].screen_name + '?w=wall' + element.to_id + '_' + element.id + '%2Fall';
+                                    getTemplate(post); 
+                                },'json');
+                            //if the post is created by group    
+                            }else{
+                                var vk_group_json = vk_group_json_template+(-1) * element.from_id + '&callback=?';
+                                $.get(vk_group_json,function(user_json){
+                                    console.log(user_json);
+                                    post.author_name = user_json.response[0].name;
+                                    post.author_picture = user_json.response[0].photo;
+                                    post.author_link = 'http://vk.com/' + user_json.response[0].screen_name;
+                                    post.link = 'http://vk.com/' + wall_owner.response[0].screen_name + '?w=wall-' + user_json.response[0].gid  + '_' + element.id;
+                                    getTemplate(post);
+                                },'json');
+                            }      
+                        }
+                    });  
+                },'json');
             },'json');
         }
 
