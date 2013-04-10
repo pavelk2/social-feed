@@ -117,6 +117,8 @@ if ( typeof Object.create !== 'function' ) {
                                         post.attachment='<img class="attachment" src="'+element.attachment.video.image_big+'" />';
                                     if (element.attachment.type=='photo')
                                         post.attachment='<img class="attachment" src="'+element.attachment.photo.src_big+'" />';
+                                     if (element.attachment.type=='link')
+                                        post.attachment='<img class="attachment" src="'+element.attachment.link.image_src+'" />';
                                 }
                             }
                             post.social_network='vk';
