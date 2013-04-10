@@ -11,7 +11,7 @@ you like to have more in the plugin. It will help me to stay focused on the impo
 
 <img src="https://dl.dropbox.com/u/15063198/GitHub/plugins/social-feed.png" />
 <hr>
-With pictures:
+With previews:<br/>
 <img src="https://dl.dropbox.com/u/15063198/GitHub/plugins/social-feed-pic.png" />
 <hr>
 <h4>Getting started</h4>
