@@ -11,6 +11,9 @@ you like to have more in the plugin. It will help me to stay focused on the impo
 
 <img src="https://dl.dropbox.com/u/15063198/GitHub/plugins/social-feed.png" />
 <hr>
+With previews:<br/>
+<img src="https://dl.dropbox.com/u/15063198/GitHub/plugins/social-feed-pic.png" />
+<hr>
 <h4>Getting started</h4>
 Connect css and js:
 
@@ -32,10 +35,12 @@ Initialize the social-feed plugin:
                     fb_token:'YOUR_FACEBOOK_APP_ACCESS_TOKEN',
                     vk_username:1,
                     vk_limit:2,
+                    vk_source: 'all',
                     tw_limit:2,
                     tw_username:'jack',
                     length:130,
-                    cookies:true
+                    cookies:true,
+                    show_media:true
                 });
         </script>
 
