@@ -24,7 +24,7 @@ if ( typeof Object.create !== 'function' ) {
         var defaults = {
             plugin_folder: '', // a folder in which the plugin is located (with a slash in the end)
             template: 'template.html', // a path to the tamplate file
-            
+            show_media: false, //show images of attachments if available
             // VK.com
             vk_limit: 3, // amount of vkontakte posts to show
             vk_source: 'owner',
@@ -76,7 +76,12 @@ if ( typeof Object.create !== 'function' ) {
                         if (element.message != undefined)
                             text = element.message;                            
                         if (element.link!=undefined)
-                            url = element.link;                            
+                            url = element.link;   
+                        if (element.picture){
+                            
+                                post.attachment='<img class="attachment" src="'+element.picture.replace('_s.','_b.')+'" />';
+                        }
+                        
                         post.dt_create = moment(element.created_time);//dateToSeconds(convertDate(element.created_time));
                         post.author_link = 'http://facebook.com/' + element.from.id;
                         post.author_picture = fb_graph + element.from.id + '/picture';
@@ -106,6 +111,14 @@ if ( typeof Object.create !== 'function' ) {
                             post.dt_create = moment.unix(element.date);//dateToSeconds(new Date(element.date*1000));
                             post.description = ' ';
                             post.message = stripHTML(element.text);
+                            if (options.show_media) {
+                                if (element.attachment){
+                                    if (element.attachment.type=='video')
+                                        post.attachment='<img class="attachment" src="'+element.attachment.video.image_big+'" />';
+                                    if (element.attachment.type=='photo')
+                                        post.attachment='<img class="attachment" src="'+element.attachment.photo.src_big+'" />';
+                                }
+                            }
                             post.social_network='vk';
                             //if the post is created by user
                             if (element.from_id > 0){
@@ -174,7 +187,8 @@ if ( typeof Object.create !== 'function' ) {
         //Render functions
         //---------------------------------------------------------------------------------
         function getTemplate(data){
-            var content = data;           
+            var content = data;     
+            content.attachment=(content.attachment==undefined) ? '' : content.attachment;
             content.time_ago = data.dt_create.fromNow();
             content.dt_create=content.dt_create.valueOf();
             content.text = wrapLinks(shorten(data.message + ' ' + data.description),data.social_network);
