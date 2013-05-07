@@ -77,10 +77,12 @@ if ( typeof Object.create !== 'function' ) {
                             text = element.message;                            
                         if (element.link!=undefined)
                             url = element.link;   
-                        if (element.picture){
-                            
-                                post.attachment='<img class="attachment" src="'+element.picture.replace('_s.','_b.')+'" />';
-                        }
+                        if (options.show_media) {
+    						if (element.picture) {
+
+								post.attachment = '<img class="attachment" src="' + element.picture.replace('_s.', '_b.') + '" />';
+							}
+						}
                         
                         post.dt_create = moment(element.created_time);//dateToSeconds(convertDate(element.created_time));
                         post.author_link = 'http://facebook.com/' + element.from.id;
