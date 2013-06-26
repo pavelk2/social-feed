@@ -7,7 +7,7 @@ If you use this plugin, please <a href="mailto:pavel@kucherbaev.com">write me a 
 you like to have more in the plugin. It will help me to stay focused on the important issues and see the global picture!
 <br/><strong>It is not mandatory, but i will really appreciate it!</strong>
 <p>
-<strong>Attention:</strong> After Twitter has prohibided an anonymous fetching of tweets - this function is not supported. Wait an update with a fix.
+<strong>Attention:</strong> After Twitter has prohibided an anonymous fetching of tweets - this function is currently not supported. Wait an update with a fix.
 </p>
 <hr>
 <h4><a href="http://gitbox.ru/Social-feed" target="_blank">Online demo is here</a><h4>
