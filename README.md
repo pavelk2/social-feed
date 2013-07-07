@@ -12,10 +12,10 @@ you like to have more in the plugin. It will help me to stay focused on the impo
 <hr>
 <h4><a href="http://gitbox.ru/Social-feed" target="_blank">Online demo is here</a><h4>
 
-<img src="https://dl.dropbox.com/u/15063198/GitHub/plugins/social-feed.png" />
+<img src="http://habrastorage.org/storage2/bc3/834/e4d/bc3834e4dd952f22b470830d7dc1096c.png" />
 <hr>
 With previews:<br/>
-<img src="https://dl.dropbox.com/u/15063198/GitHub/plugins/social-feed-pic.png" />
+<img src="http://habrastorage.org/storage2/2ee/a85/fcf/2eea85fcf3c76efb328b0b2d9e8df7ad.png" />
 <hr>
 <h4>Getting started</h4>
 Connect css and js:
