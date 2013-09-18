@@ -34,6 +34,7 @@ if ( typeof Object.create !== 'function' ) {
             //tw_username: "tw_username", // ID of a twitter page which stream will be shown  
             // google plus
             google_access_token: 'you token',
+            google_limit: 5,
             //google_user: '110579080484832019745',
             // Facebook.com
             fb_limit: 3, // amount of facebook posts to show
@@ -62,6 +63,9 @@ if ( typeof Object.create !== 'function' ) {
             }
             if (options.vk_username != undefined) {
                 getVkontakteData();
+            }
+            if (options.google_user != undefined){
+                getGoogleplusData();
             }
         }
         function getFacebookData(access_token){
@@ -105,10 +109,10 @@ if ( typeof Object.create !== 'function' ) {
         /**
          * @author foozzi (foozzione@gmail.com)
          * @version 0.1 addon Google Plus for jquery.socialfeed.js
-         * 06.09.13
+         * 18.09.13
          */
         function getGoogleplusData(){
-            var content = 'https://www.googleapis.com/plus/v1/people/' + options.google_user + '/activities/public?key=' + options.google_access_token;
+            var content = 'https://www.googleapis.com/plus/v1/people/' + options.google_user + '/activities/public?key=' + options.google_access_token + '&maxResults=' + options.google_limit;
             $.ajax({
                 url: content,
                 dataType:'json',
@@ -122,19 +126,21 @@ if ( typeof Object.create !== 'function' ) {
                         post.author_picture = element.actor.image.url;
                         post.post_url = element.url;
                         post.author_name = element.actor.displayName;
-                        if(element.verb === 'share'){                                                  
-                            if(element.object.content === ""){                                
-                                $.each(element.object.attachments, function(){
-                                    share = this;                                    
-                                    post.attachment = '<img src="' + share.image.url + '"/>';
-                                })
-                            }                          
+                        if(element.verb === 'share' && element.object.content === ""){                                                                                                          
+                            $.each(element.object.attachments, function(){
+                                share = this;                                    
+                                post.attachment = '<img src="' + share.image.url + '"/>';
+                            });                            
                         }                        
                         post.description = '';
                         if(element.object.content === ''){
                             $.each(element.object.attachments, function(){
-                                other_share = this;
-                                    post.message = other_share.content;
+                                if(this.content !== undefined){
+                                    post.message = this.content;
+                                }
+                                else if(this.displayName !== undefined){
+                                    post.message = this.displayName + '<br />' + this.url;
+                                }                                
                             });                            
                         }
                         else{
