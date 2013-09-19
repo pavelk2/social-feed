@@ -129,14 +129,15 @@ if ( typeof Object.create !== 'function' ) {
                         if(element.verb === 'share' && element.object.content === ""){                                                                                                          
                             $.each(element.object.attachments, function(){
                                 share = this;                                    
-                                post.attachment = '<img src="' + share.image.url + '"/>';
+                                post.attachment = '<img width="50%" src="' + share.image.url + '"/>';                                
                             });                            
                         }                        
                         post.description = '';
+                        post.attachment = '';
                         if(element.object.content === ''){
                             $.each(element.object.attachments, function(){
                                 if(this.content !== undefined){
-                                    post.message = this.content;
+                                    post.message = this.content;                                                                                                           
                                 }
                                 else if(this.displayName !== undefined){
                                     post.message = this.displayName + '<br />' + this.url;
@@ -145,6 +146,23 @@ if ( typeof Object.create !== 'function' ) {
                         }
                         else{
                             post.message = element.object.content;
+                            if(element.verb === 'share'){                                
+                                $.each(element.object.attachments, function(){  
+                                    if(this.thumbnails.length > 1){
+                                        $.each(this.thumbnails, function(){                                                                                                                                      
+                                            post.attachment += '<img src="' + this.image.url + '"/>';                                                                                                                                                                                                                                                       
+                                        });   
+                                    }        
+
+                                });
+                            }
+                            else{
+                                $.each(element.object.attachments, function(){
+                                    if(this.url !== undefined){                                                                           
+                                        post.attachment =  '<img src="' + this.url + '"/>';
+                                    }
+                                });
+                            }                            
                         }
                         post.social_network = 'google';      
                         post.link = element.url;                                          
