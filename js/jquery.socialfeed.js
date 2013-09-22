@@ -128,32 +128,34 @@ if ( typeof Object.create !== 'function' ) {
                         post.author_picture = element.actor.image.url;
                         post.post_url = element.url;
                         post.author_name = element.actor.displayName;
-                        if(element.verb === 'share' && element.object.content === ""){                                                                                                          
-                            $.each(element.object.attachments, function(){
-                                share = this;                                    
-                                post.attachment = '<img width="50%" src="' + share.image.url + '"/>';                                
-                            });                                                          
-                        }          
-                        // it's google plus api magic!                                                                                  
-                        if(element.verb === 'share'){                                                  
-                            $.each(element.object.attachments, function(){  
-                                if(this.thumbnails.length > 1){
-                                    $.each(this.thumbnails, function(){                                                                                                                                      
-                                        post.attachment += '<img src="' + this.image.url + '"/>';                                                                                                                                                                                                                                                       
-                                    });   
-                                }
-                                else{                                    
-                                    post.attachment =  '<img src="' + this.image.url + '"/>';
-                                }        
-                            });
-                        }
-                        else{
-                            if(element.object.attachments !== undefined){
+                        if(options.google_media === true){
+                            if(element.verb === 'share' && element.object.content === ""){                                                                                                          
                                 $.each(element.object.attachments, function(){
-                                    post.attachment = '<img width="50%;" src="' + this.fullImage.url + '"/>';
+                                    share = this;                                    
+                                    post.attachment = '<img width="50%" src="' + share.image.url + '"/>';                                
+                                });                                                          
+                            }          
+                            // it's google plus api magic!                                                                                  
+                            if(element.verb === 'share'){                                                  
+                                $.each(element.object.attachments, function(){  
+                                    if(this.thumbnails.length > 1){
+                                        $.each(this.thumbnails, function(){                                                                                                                                      
+                                            post.attachment += '<img src="' + this.image.url + '"/>';                                                                                                                                                                                                                                                       
+                                        });   
+                                    }
+                                    else{                                    
+                                        post.attachment =  '<img src="' + this.image.url + '"/>';
+                                    }        
                                 });
                             }
-                        }                                                                                          
+                            else{
+                                if(element.object.attachments !== undefined){
+                                    $.each(element.object.attachments, function(){
+                                        post.attachment = '<img width="50%;" src="' + this.fullImage.url + '"/>';
+                                    });
+                                }
+                            }  
+                        }                                                                                                                
                         if(element.object.content === ''){
                             $.each(element.object.attachments, function(){
                                 if(this.content !== undefined){                                    
