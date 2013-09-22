@@ -120,7 +120,9 @@ if ( typeof Object.create !== 'function' ) {
                 success:function(json){     
                     $.each(json.items, function() {              
                         var post = {},
-                        element = this;                                                            
+                        element = this;     
+                        post.attachment = '';      
+                        post.description = '';                                                 
                         post.dt_create = moment(element.published);
                         post.author_link = element.actor.url;
                         post.author_picture = element.actor.image.url;
@@ -130,39 +132,43 @@ if ( typeof Object.create !== 'function' ) {
                             $.each(element.object.attachments, function(){
                                 share = this;                                    
                                 post.attachment = '<img width="50%" src="' + share.image.url + '"/>';                                
-                            });                            
-                        }                        
-                        post.description = '';
-                        post.attachment = '';
+                            });                                                          
+                        }                                                                    
+                        // FIX THIS FUCKING CODE! //
+                        if(element.verb === 'share'){                                                  
+                            $.each(element.object.attachments, function(){  
+                                if(this.thumbnails.length > 1){
+                                    $.each(this.thumbnails, function(){                                                                                                                                      
+                                        post.attachment += '<img src="' + this.image.url + '"/>';                                                                                                                                                                                                                                                       
+                                    });   
+                                }
+                                else{                                    
+                                    post.attachment =  '<img src="' + this.image.url + '"/>';
+                                }        
+                            });
+                        }
+                        else{
+                            if(element.object.attachments !== undefined){
+                                $.each(element.object.attachments, function(){
+                                    post.attachment = '<img width="50%;" src="' + this.fullImage.url + '"/>';
+                                });
+                            }
+                        }
+                                              
+                        
+                        // ^^ FIX THIS CODE! ^^ //
                         if(element.object.content === ''){
                             $.each(element.object.attachments, function(){
-                                if(this.content !== undefined){
+                                if(this.content !== undefined){                                    
                                     post.message = this.content;                                                                                                           
                                 }
-                                else if(this.displayName !== undefined){
+                                else if(this.displayName !== undefined){                                    
                                     post.message = this.displayName + '<br />' + this.url;
                                 }                                
                             });                            
                         }
-                        else{
-                            post.message = element.object.content;
-                            if(element.verb === 'share'){                                
-                                $.each(element.object.attachments, function(){  
-                                    if(this.thumbnails.length > 1){
-                                        $.each(this.thumbnails, function(){                                                                                                                                      
-                                            post.attachment += '<img src="' + this.image.url + '"/>';                                                                                                                                                                                                                                                       
-                                        });   
-                                    }        
-
-                                });
-                            }
-                            else{
-                                $.each(element.object.attachments, function(){
-                                    if(this.url !== undefined){                                                                           
-                                        post.attachment =  '<img src="' + this.url + '"/>';
-                                    }
-                                });
-                            }                            
+                        else{                            
+                            post.message = element.object.content;                                                                               
                         }
                         post.social_network = 'google';      
                         post.link = element.url;                                          
