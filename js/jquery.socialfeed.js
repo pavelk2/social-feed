@@ -133,8 +133,8 @@ if ( typeof Object.create !== 'function' ) {
                                 share = this;                                    
                                 post.attachment = '<img width="50%" src="' + share.image.url + '"/>';                                
                             });                                                          
-                        }                                                                    
-                        // FIX THIS FUCKING CODE! //
+                        }          
+                        // it's google plus api magic!                                                                                  
                         if(element.verb === 'share'){                                                  
                             $.each(element.object.attachments, function(){  
                                 if(this.thumbnails.length > 1){
@@ -153,10 +153,7 @@ if ( typeof Object.create !== 'function' ) {
                                     post.attachment = '<img width="50%;" src="' + this.fullImage.url + '"/>';
                                 });
                             }
-                        }
-                                              
-                        
-                        // ^^ FIX THIS CODE! ^^ //
+                        }                                                                                          
                         if(element.object.content === ''){
                             $.each(element.object.attachments, function(){
                                 if(this.content !== undefined){                                    
