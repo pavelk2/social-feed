@@ -1,7 +1,7 @@
 Social-feed
 ===========
 A jQuery plugin which shows a user feed from the most popular social networks.<br/> 
-Currently supports: <a href="http://facebook.com">Facebook</a>,  <a href="http://vk.com">VK</a>, <a href="http://plus.google.com">Google+</a>, (<a href="http://twitter.com">Twitter</a> is currently not supported)
+Currently supports: <a href="http://facebook.com">Facebook</a>, <a href="http://instagram.com">Instagram</a>, <a href="http://vk.com">VK</a>, <a href="http://plus.google.com">Google+</a>, (<a href="http://twitter.com">Twitter</a> is currently not supported)
 <hr>
 If you use this plugin, please <a href="mailto:pavel@kucherbaev.com">write me a short message</a> with a link to the project where you embed the plugin, and what would 
 you like to have more in the plugin. It will help me to stay focused on the important issues and see the global picture!
@@ -10,7 +10,7 @@ you like to have more in the plugin. It will help me to stay focused on the impo
 <strong>Attention:</strong> After Twitter has prohibided an anonymous fetching of tweets - this function is currently not supported. Wait an update with a fix.
 </p>
 <hr>
-<h4><a href="http://gitbox.ru/Social-feed" target="_blank">Online demo is here</a><h4>
+<h4><a href="http://kucherbaev.com/os/Social-feed" target="_blank">Online demo is here</a><h4>
 
 <img src="http://habrastorage.org/storage2/bc3/834/e4d/bc3834e4dd952f22b470830d7dc1096c.png" />
 <hr>
@@ -33,17 +33,28 @@ Initialize the social-feed plugin:
 
         <script>
         $('.social-feed-container').socialfeed({
-                    fb_username:'barack.obama',
+                    fb_username:'pavel.kucherbaev',
                     fb_limit:2,
-                    fb_token:'YOUR_FACEBOOK_APP_ACCESS_TOKEN',
-                    vk_username:1,
+                    fb_token:'YOUR_FACEBOOK_TOKEN',
+                    
+                    vk_userid:36603,
                     vk_limit:2,
-                    vk_source: 'all',
-                    tw_limit:2,
-                    tw_username:'jack',
+                    vk_source:'all',
+                    
+                    google_access_token: 'YOUR_GOOGLE_PLUS_TOKEN',
+                    google_userid: '114860576370498981824',
+                    google_limit: 2,
+                    google_media: true,
+                    
+                    igm_userid:23686378,
+                    igm_client_id:'YOUR_INSTAGRAM_CLIENT_ID',
+                    igm_limit:2
+                    
+                    /*tw_limit:2,
+                    tw_username:'jack',*/
                     length:130,
-                    cookies:true,
-                    show_media:true
+                    show_media:true,
+                    //cookies:true
                 });
         </script>
 
