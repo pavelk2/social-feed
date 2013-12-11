@@ -35,7 +35,7 @@ if ( typeof Object.create !== 'function' ) {
             // google plus
             google_access_token: 'you token',
             google_limit: 5,
-            //google_user: '110579080484832019745',
+            //google_userid: '110579080484832019745',
             // Facebook.com
             fb_limit: 3, // amount of facebook posts to show
             //fb_token: 'YOUR_FACEBOOK_APPLICATION_ACCESS_TOKEN',
@@ -61,11 +61,14 @@ if ( typeof Object.create !== 'function' ) {
             if (options.tw_username != undefined) {
                 getTwitterData();
             }
-            if (options.vk_username != undefined) {
+            if (options.vk_userid != undefined) {
                 getVkontakteData();
             }
-            if (options.google_user != undefined){
+            if (options.google_userid != undefined){
                 getGoogleplusData();
+            }
+            if (options.igm_userid != undefined){
+                getInstagramData();
             }
         }
         function getFacebookData(access_token){
@@ -86,11 +89,9 @@ if ( typeof Object.create !== 'function' ) {
                             url = element.link;   
                         if (options.show_media) {
     						if (element.picture) {
-
 								post.attachment = '<img class="attachment" src="' + element.picture.replace('_s.', '_b.') + '" />';
 							}
 						}
-                        
                         post.dt_create = moment(element.created_time);//dateToSeconds(convertDate(element.created_time));
                         post.author_link = 'http://facebook.com/' + element.from.id;
                         post.author_picture = fb_graph + element.from.id + '/picture';
@@ -112,7 +113,7 @@ if ( typeof Object.create !== 'function' ) {
          * 18.09.13
          */
         function getGoogleplusData(){
-            var content = 'https://www.googleapis.com/plus/v1/people/' + options.google_user + '/activities/public?key=' + options.google_access_token + '&maxResults=' + options.google_limit;
+            var content = 'https://www.googleapis.com/plus/v1/people/' + options.google_userid + '/activities/public?key=' + options.google_access_token + '&maxResults=' + options.google_limit;
             $.ajax({
                 url: content,
                 dataType:'json',
@@ -151,7 +152,16 @@ if ( typeof Object.create !== 'function' ) {
                             else{
                                 if(element.object.attachments !== undefined){
                                     $.each(element.object.attachments, function(){
-                                        post.attachment = '<img width="50%;" src="' + this.fullImage.url + '"/>';
+                                        var image = '';
+                                        if (this.image){
+                                            image=  this.image.url;
+                                        }else{
+                                            if (this.objectType=='album'){
+                                                if (this.thumbnails.length>0)
+                                                    image=this.thumbnails[0].image.url;
+                                            }
+                                        }
+                                        post.attachment = '<img width="50%;" src="' + image + '"/>';
                                     });
                                 }
                             }  
@@ -177,11 +187,11 @@ if ( typeof Object.create !== 'function' ) {
             })
         }   
         function getVkontakteData(){
-            var vk_json = 'https://api.vk.com/method/wall.get?owner_id='+options.vk_username+'&filter='+options.vk_source+'&count='+options.vk_limit+'&callback=?',
+            var vk_json = 'https://api.vk.com/method/wall.get?owner_id='+options.vk_userid+'&filter='+options.vk_source+'&count='+options.vk_limit+'&callback=?',
             vk_user_json_template = 'https://api.vk.com/method/users.get?fields=first_name,%20last_name,%20screen_name,%20photo&uid=',
             vk_group_json_template = 'https://api.vk.com/method/groups.getById?fields=first_name,%20last_name,%20screen_name,%20photo&gid=';
             $.get(vk_json,function(json){
-                var vk_wall_owner =(options.vk_username > 0) ? (vk_user_json_template + options.vk_username + '&callback=?') : (vk_group_json_template+(-1) * options.vk_username + '&callback=?'); 
+                var vk_wall_owner =(options.vk_userid > 0) ? (vk_user_json_template + options.vk_userid + '&callback=?') : (vk_group_json_template+(-1) * options.vk_userid + '&callback=?'); 
                 $.get(vk_wall_owner,function(wall_owner){
                     $.each(json.response, function(){ 
                         if (this != parseInt(this)){
@@ -227,7 +237,36 @@ if ( typeof Object.create !== 'function' ) {
                 },'json');
             },'json');
         }
+        function getInstagramData() {
+            var feed_json, search = '', limit = 'count=' + options.igm_limit, query_extention = 'client_id=' + options.igm_client_id + '&' + limit + '&callback=?', igm_api = 'https://api.instagram.com/v1/';
+            igm_api = igm_api + 'users/' + options.igm_userid + '/media/recent?';
+            feed_json = igm_api + query_extention;
+            $.ajax({
+                url : feed_json,
+                dataType : 'jsonp',
+                success : function(json) {
+                    $.each(json.data, function() {
+                        var post = {}, element = this;
+                        post.id = element.id;
+                        post.dt_create = moment((element.created_time * 1000));
+                        post.author_link = 'http://instagram.com/' + element.user.username;
+                        post.author_picture = element.user.profile_picture;
+                        post.post_url = element.link;
+                        post.author_name = element.user.full_name;
+                        post.message = element.caption.text;
+                        post.description = '';
+                        post.social_network = 'igm';
+                        post.link = element.link;
+                        if (options.show_media) {
+                            post.attachment = '<img class="attachment" src="' + element.images.standard_resolution.url + '' + '" />';
+                        }
+                        getTemplate(post);
+                    });
 
+                }
+            });
+
+        }
         function getTwitterData(){
             var tw_json = 'http://api.twitter.com/1/statuses/user_timeline.json?include_entities=true&include_rts=true&screen_name=' + options.tw_username + '&count=' + options.tw_limit + '&callback=?';
             $.ajax({
