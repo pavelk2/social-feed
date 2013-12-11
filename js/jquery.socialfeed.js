@@ -32,6 +32,10 @@ if ( typeof Object.create !== 'function' ) {
             // Twitter.com
             tw_limit: 3, // amount of twitter posts to show
             //tw_username: "tw_username", // ID of a twitter page which stream will be shown  
+            // google plus
+            google_access_token: 'you token',
+            google_limit: 5,
+            //google_user: '110579080484832019745',
             // Facebook.com
             fb_limit: 3, // amount of facebook posts to show
             //fb_token: 'YOUR_FACEBOOK_APPLICATION_ACCESS_TOKEN',
@@ -59,6 +63,9 @@ if ( typeof Object.create !== 'function' ) {
             }
             if (options.vk_username != undefined) {
                 getVkontakteData();
+            }
+            if (options.google_user != undefined){
+                getGoogleplusData();
             }
         }
         function getFacebookData(access_token){
@@ -99,6 +106,76 @@ if ( typeof Object.create !== 'function' ) {
             },'json');
             
         }
+        /**
+         * @author foozzi (foozzione@gmail.com)
+         * @version 0.1 addon Google Plus for jquery.socialfeed.js
+         * 18.09.13
+         */
+        function getGoogleplusData(){
+            var content = 'https://www.googleapis.com/plus/v1/people/' + options.google_user + '/activities/public?key=' + options.google_access_token + '&maxResults=' + options.google_limit;
+            $.ajax({
+                url: content,
+                dataType:'json',
+                timeout:1000,
+                success:function(json){     
+                    $.each(json.items, function() {              
+                        var post = {},
+                        element = this;     
+                        post.attachment = '';      
+                        post.description = '';                                                 
+                        post.dt_create = moment(element.published);
+                        post.author_link = element.actor.url;
+                        post.author_picture = element.actor.image.url;
+                        post.post_url = element.url;
+                        post.author_name = element.actor.displayName;
+                        if(options.google_media === true){
+                            if(element.verb === 'share' && element.object.content === ""){                                                                                                          
+                                $.each(element.object.attachments, function(){
+                                    share = this;                                    
+                                    post.attachment = '<img width="50%" src="' + share.image.url + '"/>';                                
+                                });                                                          
+                            }          
+                            // it's google plus api magic!                                                                                  
+                            if(element.verb === 'share'){                                                  
+                                $.each(element.object.attachments, function(){  
+                                    if(this.thumbnails.length > 1){
+                                        $.each(this.thumbnails, function(){                                                                                                                                      
+                                            post.attachment += '<img src="' + this.image.url + '"/>';                                                                                                                                                                                                                                                       
+                                        });   
+                                    }
+                                    else{                                    
+                                        post.attachment =  '<img src="' + this.image.url + '"/>';
+                                    }        
+                                });
+                            }
+                            else{
+                                if(element.object.attachments !== undefined){
+                                    $.each(element.object.attachments, function(){
+                                        post.attachment = '<img width="50%;" src="' + this.fullImage.url + '"/>';
+                                    });
+                                }
+                            }  
+                        }                                                                                                                
+                        if(element.object.content === ''){
+                            $.each(element.object.attachments, function(){
+                                if(this.content !== undefined){                                    
+                                    post.message = this.content;                                                                                                           
+                                }
+                                else if(this.displayName !== undefined){                                    
+                                    post.message = this.displayName + '<br />' + this.url;
+                                }                                
+                            });                            
+                        }
+                        else{                            
+                            post.message = element.object.content;                                                                               
+                        }
+                        post.social_network = 'google';      
+                        post.link = element.url;                                          
+                        getTemplate(post);                    
+                    });
+                }             
+            })
+        }   
         function getVkontakteData(){
             var vk_json = 'https://api.vk.com/method/wall.get?owner_id='+options.vk_username+'&filter='+options.vk_source+'&count='+options.vk_limit+'&callback=?',
             vk_user_json_template = 'https://api.vk.com/method/users.get?fields=first_name,%20last_name,%20screen_name,%20photo&uid=',
@@ -235,10 +312,15 @@ if ( typeof Object.create !== 'function' ) {
         //Utility functions
         //---------------------------------------------------------------------------------
         function wrapLinks(string,social_network){
-            var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
-            string= string.replace(exp, wrapLinkTemplate);
-            if (social_network=='tw'){
-                string= string.replace(/(@|#)([a-z0-9_]+)/ig, wrapTwitterTagTemplate);
+            var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;            
+            if (social_network === 'tw'){
+                string = string.replace(/(@|#)([a-z0-9_]+)/ig, wrapTwitterTagTemplate);
+            }
+            else if(social_network === 'google'){                
+                string = string.replace(/(@|#)([a-z0-9_]+['])/ig, wrapGoogleplusTagTemplate);                       
+            }
+            else{
+                string = string.replace(exp, wrapLinkTemplate);
             }
             return string;
         }
@@ -248,6 +330,10 @@ if ( typeof Object.create !== 'function' ) {
         //---------------------------------------------------------------------------------
         function wrapTwitterTagTemplate(string){
             return '<a target="_blank" href="http://twitter.com/' + string + '" >' + string + '<\/a>';
+        }
+        //---------------------------------------------------------------------------------
+        function wrapGoogleplusTagTemplate(string){
+            return '<a target="_blank" href="https://plus.google.com/s/' + string + '" >' + string + '<\/a>';   
         }
         //---------------------------------------------------------------------------------
         function fixTwitterDate(created_at) {
