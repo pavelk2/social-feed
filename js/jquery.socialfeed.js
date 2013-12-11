@@ -9,7 +9,6 @@ if ( typeof Object.create !== 'function' ) {
 (function( $, window, document, undefined ) {
     /*var socialFeed = {
     };
-    
     $.fn.socialfeed = function( options ) {
                return this.each(function() {
                        var feed = Object.create( socialFeed );
