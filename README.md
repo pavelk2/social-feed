@@ -48,12 +48,12 @@ Initialize the social-feed plugin:
                     
                     igm_userid:23686378,
                     igm_client_id:'YOUR_INSTAGRAM_CLIENT_ID',
-                    igm_limit:2
+                    igm_limit:2,
                     
                     /*tw_limit:2,
                     tw_username:'jack',*/
                     length:130,
-                    show_media:true,
+                    show_media:true
                     //cookies:true
                 });
         </script>
