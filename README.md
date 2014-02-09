@@ -1,11 +1,10 @@
 Social-feed
 ===========
 A jQuery plugin which shows a user feed from the most popular social networks.<br/> 
-Currently supports: <a href="http://facebook.com">Facebook</a>, <a href="http://instagram.com">Instagram</a>, <a href="http://vk.com">VK</a>, <a href="http://plus.google.com">Google+</a>, (<a href="http://twitter.com">Twitter</a> is currently not supported)
+Currently supported: <a href="http://facebook.com">Facebook</a>, <a href="http://instagram.com">Instagram</a>, <a href="http://vk.com">VK</a>, <a href="http://plus.google.com">Google+</a>, (<a href="http://twitter.com">Twitter</a> is currently not supported)
 <hr>
-If you use this plugin, please <a href="mailto:pavel@kucherbaev.com">write me a short message</a> with a link to the project where you embed the plugin, and what would 
-you like to have more in the plugin. It will help me to stay focused on the important issues and see the global picture!
-<br/><strong>It is not mandatory, but i will really appreciate it!</strong>
+If you use this plugin, please <a href="mailto:pavel@kucherbaev.com">write me a short message</a> with a link to the project where you embed the plugin, and some features you want to have implemented here. It will help me to stay focused on the important issues and see the global picture!
+<br/><strong>It is not mandatory, but I really appreciate it!</strong>
 <p>
 <strong>Attention:</strong> After Twitter has prohibided an anonymous fetching of tweets - this function is currently not supported. Wait an update with a fix.
 </p>
@@ -42,7 +41,7 @@ Initialize the social-feed plugin:
                     vk_source:'all',
                     
                     google_access_token: 'YOUR_GOOGLE_PLUS_TOKEN',
-                    google_userid: '114860576370498981824',
+                    google_userid: 'YOUR_GOOGLE_USER_ID',
                     google_limit: 2,
                     google_media: true,
                     
@@ -58,19 +57,15 @@ Initialize the social-feed plugin:
                 });
         </script>
 
-When you run the plugin, make sure that you have your <strong>webserver running</strong>, otherwise you can get 
-the next problem:
-<pre>
-        XMLHttpRequest cannot load file://......./Social-feed/template.html. 
-        Origin null is not allowed by Access-Control-Allow-Origin. 
-</pre>
+When you run the plugin, make sure that you have your <strong>webserver running</strong>
+
 If you want to change the layout of the feed, you can do it in the <em>template.html</em> file.
 <br/>
-If you don't need to show the feed from all supported social networks, put the credentials only for those you need.
+If you don't need to show the feed from all the supported social networks, put the credentials only for those you need.
 <br/>
 The Facebook requires an access token in order to get the feed of the user (even if it is public).
 To use Facebook feed, please <a href="https://developers.facebook.com/apps">register an application</a>, generate a token and 
 put it in  <em>fb_token</em>.<br/>
-<strong>Attention!</strong> A current version of plugin does not fully support IE browser. Please follow the process of solving issues for IE.
+<strong>Attention!</strong> The current version of the plugin does not fully support IE browser. Please follow the process of solving issues for IE.
 
 
