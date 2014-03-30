@@ -17,10 +17,10 @@ if ( typeof Object.create !== 'function' ) {
 
                        $.data( this, 'socialfeed', feed );
                });
-       };*/
-    $.fn.socialfeed = function(options)
-    {
-        var defaults = {
+   };*/
+$.fn.socialfeed = function(options)
+{
+    var defaults = {
             plugin_folder: '', // a folder in which the plugin is located (with a slash in the end)
             template: 'template.html', // a path to the tamplate file
             show_media: false, //show images of attachments if available
@@ -75,7 +75,9 @@ if ( typeof Object.create !== 'function' ) {
             query_extention = '&access_token=' + access_token + '&callback=?',
             fb_graph = 'https://graph.facebook.com/',
             feed_json = fb_graph + options.fb_username + '/feed?' + limit + query_extention; 
+            console.log(feed_json);
             $.get(feed_json,function(json){
+
                 $.each(json.data,function(){
                     var element = this,
                     post = {};
@@ -87,10 +89,10 @@ if ( typeof Object.create !== 'function' ) {
                         if (element.link!=undefined)
                             url = element.link;   
                         if (options.show_media) {
-    						if (element.picture) {
-								post.attachment = '<img class="attachment" src="' + element.picture.replace('_s.', '_b.') + '" />';
-							}
-						}
+                          if (element.picture) {
+                            post.attachment = '<img class="attachment" src="' + element.picture.replace('_s.', '_b.') + '" />';
+                        }
+                    }
                         post.dt_create = moment(element.created_time);//dateToSeconds(convertDate(element.created_time));
                         post.author_link = 'http://facebook.com/' + element.from.id;
                         post.author_picture = fb_graph + element.from.id + '/picture';
@@ -103,15 +105,15 @@ if ( typeof Object.create !== 'function' ) {
                         getTemplate(post);
                     }
                 });
-            },'json');
-            
-        }
+},'json');
+    
+}
         /**
          * @author foozzi (foozzione@gmail.com)
          * @version 0.1 addon Google Plus for jquery.socialfeed.js
          * 18.09.13
          */
-        function getGoogleplusData(){
+         function getGoogleplusData(){
             var content = 'https://www.googleapis.com/plus/v1/people/' + options.google_userid + '/activities/public?key=' + options.google_access_token + '&maxResults=' + options.google_limit;
             $.ajax({
                 url: content,
@@ -147,55 +149,55 @@ if ( typeof Object.create !== 'function' ) {
                                         post.attachment =  '<img src="' + this.image.url + '"/>';
                                     }        
                                 });
-                            }
-                            else{
-                                if(element.object.attachments !== undefined){
-                                    $.each(element.object.attachments, function(){
-                                        var image = '';
-                                        if (this.image){
-                                            image=  this.image.url;
-                                        }else{
-                                            if (this.objectType=='album'){
-                                                if (this.thumbnails.length>0)
-                                                    image=this.thumbnails[0].image.url;
-                                            }
-                                        }
-                                        post.attachment = '<img width="50%;" src="' + image + '"/>';
-                                    });
-                                }
-                            }  
-                        }                                                                                                                
-                        if(element.object.content === ''){
-                            $.each(element.object.attachments, function(){
-                                if(this.content !== undefined){                                    
-                                    post.message = this.content;                                                                                                           
-                                }
-                                else if(this.displayName !== undefined){                                    
-                                    post.message = this.displayName + '<br />' + this.url;
-                                }                                
-                            });                            
-                        }
-                        else{                            
-                            post.message = element.object.content;                                                                               
-                        }
-                        post.social_network = 'google';      
-                        post.link = element.url;                                          
-                        getTemplate(post);                    
-                    });
-                }             
-            })
-        }   
-        function getVkontakteData(){
-            var vk_json = 'https://api.vk.com/method/wall.get?owner_id='+options.vk_userid+'&filter='+options.vk_source+'&count='+options.vk_limit+'&callback=?',
-            vk_user_json_template = 'https://api.vk.com/method/users.get?fields=first_name,%20last_name,%20screen_name,%20photo&uid=',
-            vk_group_json_template = 'https://api.vk.com/method/groups.getById?fields=first_name,%20last_name,%20screen_name,%20photo&gid=';
-            $.get(vk_json,function(json){
-                var vk_wall_owner =(options.vk_userid > 0) ? (vk_user_json_template + options.vk_userid + '&callback=?') : (vk_group_json_template+(-1) * options.vk_userid + '&callback=?'); 
-                $.get(vk_wall_owner,function(wall_owner){
-                    $.each(json.response, function(){ 
-                        if (this != parseInt(this)){
-                            var element = this,
-                            post = {};
+}
+else{
+    if(element.object.attachments !== undefined){
+        $.each(element.object.attachments, function(){
+            var image = '';
+            if (this.image){
+                image=  this.image.url;
+            }else{
+                if (this.objectType=='album'){
+                    if (this.thumbnails.length>0)
+                        image=this.thumbnails[0].image.url;
+                }
+            }
+            post.attachment = '<img width="50%;" src="' + image + '"/>';
+        });
+    }
+}  
+}                                                                                                                
+if(element.object.content === ''){
+    $.each(element.object.attachments, function(){
+        if(this.content !== undefined){                                    
+            post.message = this.content;                                                                                                           
+        }
+        else if(this.displayName !== undefined){                                    
+            post.message = this.displayName + '<br />' + this.url;
+        }                                
+    });                            
+}
+else{                            
+    post.message = element.object.content;                                                                               
+}
+post.social_network = 'google';      
+post.link = element.url;                                          
+getTemplate(post);                    
+});
+}             
+})
+}   
+function getVkontakteData(){
+    var vk_json = 'https://api.vk.com/method/wall.get?owner_id='+options.vk_userid+'&filter='+options.vk_source+'&count='+options.vk_limit+'&callback=?',
+    vk_user_json_template = 'https://api.vk.com/method/users.get?fields=first_name,%20last_name,%20screen_name,%20photo&uid=',
+    vk_group_json_template = 'https://api.vk.com/method/groups.getById?fields=first_name,%20last_name,%20screen_name,%20photo&gid=';
+    $.get(vk_json,function(json){
+        var vk_wall_owner =(options.vk_userid > 0) ? (vk_user_json_template + options.vk_userid + '&callback=?') : (vk_group_json_template+(-1) * options.vk_userid + '&callback=?'); 
+        $.get(vk_wall_owner,function(wall_owner){
+            $.each(json.response, function(){ 
+                if (this != parseInt(this)){
+                    var element = this,
+                    post = {};
                             post.dt_create = moment.unix(element.date);//dateToSeconds(new Date(element.date*1000));
                             post.description = ' ';
                             post.message = stripHTML(element.text);
@@ -205,7 +207,7 @@ if ( typeof Object.create !== 'function' ) {
                                         post.attachment='<img class="attachment" src="'+element.attachment.video.image_big+'" />';
                                     if (element.attachment.type=='photo')
                                         post.attachment='<img class="attachment" src="'+element.attachment.photo.src_big+'" />';
-                                     if (element.attachment.type=='link')
+                                    if (element.attachment.type=='link')
                                         post.attachment='<img class="attachment" src="'+element.attachment.link.image_src+'" />';
                                 }
                             }
@@ -221,77 +223,77 @@ if ( typeof Object.create !== 'function' ) {
                                     getTemplate(post); 
                                 },'json');
                             //if the post is created by group    
-                            }else{
-                                var vk_group_json = vk_group_json_template+(-1) * element.from_id + '&callback=?';
-                                $.get(vk_group_json,function(user_json){
-                                    post.author_name = user_json.response[0].name;
-                                    post.author_picture = user_json.response[0].photo;
-                                    post.author_link = 'http://vk.com/' + user_json.response[0].screen_name;
-                                    post.link = 'http://vk.com/' + wall_owner.response[0].screen_name + '?w=wall-' + user_json.response[0].gid  + '_' + element.id;
-                                    getTemplate(post);
-                                },'json');
-                            }      
-                        }
-                    });  
-                },'json');
-            },'json');
-        }
-        function getInstagramData() {
-            var feed_json, search = '', limit = 'count=' + options.igm_limit, query_extention = 'client_id=' + options.igm_client_id + '&' + limit + '&callback=?', igm_api = 'https://api.instagram.com/v1/';
-            igm_api = igm_api + 'users/' + options.igm_userid + '/media/recent?';
-            feed_json = igm_api + query_extention;
-            $.ajax({
-                url : feed_json,
-                dataType : 'jsonp',
-                success : function(json) {
-                    $.each(json.data, function() {
-                        var post = {}, element = this;
-                        post.id = element.id;
-                        post.dt_create = moment((element.created_time * 1000));
-                        post.author_link = 'http://instagram.com/' + element.user.username;
-                        post.author_picture = element.user.profile_picture;
-                        post.post_url = element.link;
-                        post.author_name = element.user.full_name;
-                        post.message = element.caption.text;
-                        post.description = '';
-                        post.social_network = 'igm';
-                        post.link = element.link;
-                        if (options.show_media) {
-                            post.attachment = '<img class="attachment" src="' + element.images.standard_resolution.url + '' + '" />';
-                        }
-                        getTemplate(post);
-                    });
-
+                        }else{
+                            var vk_group_json = vk_group_json_template+(-1) * element.from_id + '&callback=?';
+                            $.get(vk_group_json,function(user_json){
+                                post.author_name = user_json.response[0].name;
+                                post.author_picture = user_json.response[0].photo;
+                                post.author_link = 'http://vk.com/' + user_json.response[0].screen_name;
+                                post.link = 'http://vk.com/' + wall_owner.response[0].screen_name + '?w=wall-' + user_json.response[0].gid  + '_' + element.id;
+                                getTemplate(post);
+                            },'json');
+                        }      
+                    }
+                });  
+},'json');
+},'json');
+}
+function getInstagramData() {
+    var feed_json, search = '', limit = 'count=' + options.igm_limit, query_extention = 'client_id=' + options.igm_client_id + '&' + limit + '&callback=?', igm_api = 'https://api.instagram.com/v1/';
+    igm_api = igm_api + 'users/' + options.igm_userid + '/media/recent?';
+    feed_json = igm_api + query_extention;
+    $.ajax({
+        url : feed_json,
+        dataType : 'jsonp',
+        success : function(json) {
+            $.each(json.data, function() {
+                var post = {}, element = this;
+                post.id = element.id;
+                post.dt_create = moment((element.created_time * 1000));
+                post.author_link = 'http://instagram.com/' + element.user.username;
+                post.author_picture = element.user.profile_picture;
+                post.post_url = element.link;
+                post.author_name = element.user.full_name;
+                post.message = element.caption.text;
+                post.description = '';
+                post.social_network = 'igm';
+                post.link = element.link;
+                if (options.show_media) {
+                    post.attachment = '<img class="attachment" src="' + element.images.standard_resolution.url + '' + '" />';
                 }
+                getTemplate(post);
             });
 
         }
-        function getTwitterData(){
-            var tw_json = 'http://api.twitter.com/1/statuses/user_timeline.json?include_entities=true&include_rts=true&screen_name=' + options.tw_username + '&count=' + options.tw_limit + '&callback=?';
-            $.ajax({
-                url:tw_json,
-                dataType:'json',
-                timeout:1000,
-                success:function(json){
-                    $.each(json, function(i) {              
-                        var post = {},
-                        element = this;
-                        post.dt_create = moment(fixTwitterDate(element.created_at));
-                        post.author_link = 'http://twitter.com/'+element.user.screen_name;
-                        post.author_picture = element.user.profile_image_url;
-                        post.post_url = post.author_link + '/status/' + element.id_str;
-                        post.author_name = element.user.name;
-                        post.message = element.text;
-                        post.description = '';
-                        post.social_network = 'tw';
-                        post.link = 'http://twitter.com/' + element.user.screen_name + '/status/' + element.id_str;
-                        if (options.cookies)
-                            $.cookie('social-feed-twitter' + i,JSON.stringify(post));
-                        getTemplate(post);                    
-                    });
-                }, 
-                error:function(e){
-                    if (options.cookies){
+    });
+
+}
+function getTwitterData(){
+    var tw_json = 'http://api.twitter.com/1/statuses/user_timeline.json?include_entities=true&include_rts=true&screen_name=' + options.tw_username + '&count=' + options.tw_limit + '&callback=?';
+    $.ajax({
+        url:tw_json,
+        dataType:'json',
+        timeout:1000,
+        success:function(json){
+            $.each(json, function(i) {              
+                var post = {},
+                element = this;
+                post.dt_create = moment(fixTwitterDate(element.created_at));
+                post.author_link = 'http://twitter.com/'+element.user.screen_name;
+                post.author_picture = element.user.profile_image_url;
+                post.post_url = post.author_link + '/status/' + element.id_str;
+                post.author_name = element.user.name;
+                post.message = element.text;
+                post.description = '';
+                post.social_network = 'tw';
+                post.link = 'http://twitter.com/' + element.user.screen_name + '/status/' + element.id_str;
+                if (options.cookies)
+                    $.cookie('social-feed-twitter' + i,JSON.stringify(post));
+                getTemplate(post);                    
+            });
+        }, 
+        error:function(e){
+            if (options.cookies){
                         //if can not fetch data from Twitter (because of the 150 responses / hour limit) get them from cookies
                         for (var i = 0, limit = options.tw_limit; i < limit && $.cookie('social-feed-twitter' + i) != null; i++){
                             var data = JSON.parse($.cookie('social-feed-twitter' + i));
@@ -301,7 +303,7 @@ if ( typeof Object.create !== 'function' ) {
                     }
                 }
             });
-        }
+}
         //---------------------------------------------------------------------------------
         //Render functions
         //---------------------------------------------------------------------------------
@@ -395,7 +397,7 @@ if ( typeof Object.create !== 'function' ) {
                     return cut + "..";
                 } 
             }else
-                return string;
+            return string;
         }
         function stripHTML(string){
             if (typeof string === "undefined" || string === null)
@@ -403,6 +405,6 @@ if ( typeof Object.create !== 'function' ) {
             return string.replace(/(<([^>]+)>)|nbsp;|\s{2,}|/ig,"");
         }
     //---------------------------------------------------------------------------------
-    };  
-   
+};  
+
 })(jQuery); 
