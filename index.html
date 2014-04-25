@@ -1,62 +1,73 @@
 <html>
-    <head>
-        <link href="css/jquery.socialfeed.css" rel="stylesheet" type="text/css">
-        <script src="http://kucherbaev.com/plugins/jquery/jquery-1.7.2.min.js"></script>
-        <script src="js/jquery.socialfeed.utility.js"></script>
-        <script src="js/jquery.socialfeed.js"></script>
-        <style>
-            /*This style is needed only for the plugin demo page. Do not use it in your projects*/
-            .credits{text-align:center;padding:20px;margin-top:10px;font-size:12px;}
-            body{ font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-                  font-size: 14px;
-                  line-height: 20px;
-                  color: #333333;
-                  background-color: #ffffff;
-                  text-align:center;
-            }
-            a{color: #0088cc;text-decoration: none;}
-            a:hover,a:focus {color: #005580;text-decoration: underline;}
-            .muted {color: #999999;}
-            .container {display:inline-block;width:600px;}
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <h3 class="muted">social - feed</h3>
-            <div class="social-feed-container">
-            </div>
-            <h6 class="credits muted"><a href="https://github.com/pavelk2/social-feed" target="_blank">Social-feed</a> jquery plugin, developed by <a target="_blank" href="http://kucherbaev.com">Pavel Kucherbaev</a></h6>
+<head>
+    <link href="css/jquery.socialfeed.css" rel="stylesheet" type="text/css">
+    <style>
+    /*This style is needed only for the plugin demo page. Do not use it in your projects*/
+    .credits{
+        text-align:center;padding:20px;margin-top:10px;font-size:12px;
+    }
+    body{ 
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-size: 14px;
+        line-height: 20px;
+        color: #333333;
+        background-color: #ffffff;
+        text-align:center;
+    }
+    a{color: #0088cc;text-decoration: none;}
+    a:hover,a:focus {color: #005580;text-decoration: underline;}
+    .muted {color: #999999;}
+    .container {display:inline-block;width:600px;}
+    </style>
+</head>
+<body>
+    
+    <div class="container">
+        <h3 class="muted">social - feed</h3>
+        <div class="social-feed-container">
         </div>
-        <script>
-            $(document).ready(function(){
-                $('.social-feed-container').socialfeed({
+        <h6 class="credits muted"><a href="https://github.com/pavelk2/social-feed" target="_blank">Social-feed</a> jquery plugin, developed by <a target="_blank" href="http://kucherbaev.com">Pavel Kucherbaev</a></h6>
+    </div>
+
+    <script src="http://kucherbaev.com/plugins/jquery/jquery-1.7.2.min.js"></script>
+    <script src="js/jquery.socialfeed.utility.js"></script>
+    <script src="js/jquery.socialfeed.js"></script>
+    <script>
+    $(document).ready(function(){
+        $('.social-feed-container').socialfeed({
                     //FACEBOOK--------------------
-                    fb_username:'barack.obama',
-                    fb_limit:2,
-                    fb_token:'YOUR_FACEBOOK_ACCESS_TOKEN', //you can also create an app and put here your 'APP ID|APP SECRET' - it is easier but not safe
-                    //VKONTAKTE--------------------
-                    vk_userid:36603,
-                    vk_limit:2,
-                    vk_source:'all',
-                    //TWITTER----------------------
-                    /*tw_limit:2,
-                    tw_username:'jack',*/
+                    facebook:{
+                        username:'barack.obama',
+                        limit:2,
+                        token:'YOUR_FACEBOOK_ACCESS_TOKEN' //you can also create an app and put  here your 'APP ID|APP SECRET' - it is easier but not safe
+                    },
+                    //VK--------------------
+                    vk:{
+                        userid:36603,
+                        limit:2,
+                        source:'all'
+                    },
                     //GOOGLEPLUS-------------------
-                    google_access_token: 'YOUR_GOOGLE_TOKEN', //AIzaSyA_lDYGTnTiEjhzjvkxX1KZnouhbVQ0QUU
-                    google_userid: '114860576370498981824',
-                    google_limit: 2,
-                    google_media: true,
+                    google:{
+                         access_token: 'YOUR_GOOGLE_PLUS_ACCESS_TOKEN', //AIzaSyA_lDYGTnTiEjhzjvkxX1KZnouhbVQ0QUU
+                         userid: '114860576370498981824',
+                         limit: 2
+                     },
                     //INSTAGRAM---------------------
-                    igm_userid:23686378,
-                    igm_client_id:'YOUR_INSTAGRAM_CLIENT_ID', //2c6d2173ae9d41de905236e6301e5a43
-                    igm_limit:2,
+                    instagram:{
+                        userid:23686378,
+                        client_id:'YOUR_INSTAGRAM_CLIENT_ID', //2c6d2173ae9d41de905236e6301e5a43
+                        limit:2
+                    },
                     //GENERAL SETTINGS--------------
                     length:130,
                     show_media:true,
-                    //cookies:true
+                    callback: function(){
+                        alert(1);
+                    }
                 });
-            });
-        </script>
-    </body>
+});
+</script>
+</body>
 
 </html>
