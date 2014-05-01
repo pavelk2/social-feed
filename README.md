@@ -17,16 +17,30 @@ With previews:<br/>
 <img src="http://habrastorage.org/storage2/2ee/a85/fcf/2eea85fcf3c76efb328b0b2d9e8df7ad.png" />
 <hr>
 <h4>Getting started</h4>
-Connect css and js:
+Connect css:
 
+         <!-- Social-feed css -->
         <link href="css/jquery.socialfeed.css" rel="stylesheet" type="text/css">
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-        <script src="js/jquery.socialfeed.utility.js"></script>
-        <script src="js/jquery.socialfeed.js"></script>
+        <!-- font-awesome for social network icons -->
+        <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 
 Create a container for your feed:
 
         <div class="social-feed-container"></div>
+
+Connect js:
+        <!-- jQuery -->
+        <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    
+        <!-- doT.js for rendering templates and moment.js for showing time ago -->
+        <script src="dependencies/doT.min.js"></script>
+        <script src="dependencies/moment.min.js"></script>
+    
+        <!-- Social-feed js -->
+        <script src="js/jquery.socialfeed.js"></script>
+
+
+
 
 Initialize the social-feed plugin:
 
