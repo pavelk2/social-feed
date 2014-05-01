@@ -19,7 +19,7 @@ With previews:<br/>
 <h4>Getting started</h4>
 Connect css:
 
-         <!-- Social-feed css -->
+        <!-- Social-feed css -->
         <link href="css/jquery.socialfeed.css" rel="stylesheet" type="text/css">
         <!-- font-awesome for social network icons -->
         <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
@@ -29,6 +29,7 @@ Create a container for your feed:
         <div class="social-feed-container"></div>
 
 Connect js:
+
         <!-- jQuery -->
         <script src="http://code.jquery.com/jquery-latest.min.js"></script>
     
@@ -38,9 +39,6 @@ Connect js:
     
         <!-- Social-feed js -->
         <script src="js/jquery.socialfeed.js"></script>
-
-
-
 
 Initialize the social-feed plugin:
 
