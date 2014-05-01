@@ -83,10 +83,6 @@ When you run the plugin, make sure that you have your <strong>webserver running<
 If you want to change the layout of the feed, you can do it in the <em>template.html</em> file.
 <br/>
 If you don't need to show the feed from all the supported social networks, put the credentials only for those you need.
-<br/>
-The Facebook requires an access token in order to get the feed of the user (even if it is public).
-To use Facebook feed, please <a href="https://developers.facebook.com/apps">register an application</a>, <a href="https://developers.facebook.com/tools/explorer/">generate a token</a> and 
-put it in  <em>fb_token</em>.<br/>
 
 <h4>Dependencies:</h4>
 -  http://fontawesome.io/ - for displaying icons of social networks
