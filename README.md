@@ -9,7 +9,7 @@ If you use this plugin, please <a href="mailto:pavel@kucherbaev.com">write me a 
 <strong>Attention:</strong> After Twitter has prohibided an anonymous fetching of tweets - this function is currently not supported. Wait an update with a fix.
 </p>
 <hr>
-<h4><a href="http://kucherbaev.com/os/Social-feed" target="_blank">Online demo is here</a><h4>
+<h4><a href="http://pavelk2.github.io/social-feed/" target="_blank">Online demo is here</a><h4>
 
 <img src="http://habrastorage.org/storage2/bc3/834/e4d/bc3834e4dd952f22b470830d7dc1096c.png" />
 <hr>
