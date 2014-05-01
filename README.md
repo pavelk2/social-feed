@@ -31,29 +31,38 @@ Create a container for your feed:
 Initialize the social-feed plugin:
 
         <script>
-        $('.social-feed-container').socialfeed({
-                    fb_username:'pavel.kucherbaev',
-                    fb_limit:2,
-                    fb_token:'YOUR_FACEBOOK_TOKEN',
-                    
-                    vk_userid:36603,
-                    vk_limit:2,
-                    vk_source:'all',
-                    
-                    google_access_token: 'YOUR_GOOGLE_PLUS_TOKEN',
-                    google_userid: 'YOUR_GOOGLE_USER_ID',
-                    google_limit: 2,
-                    google_media: true,
-                    
-                    igm_userid:23686378,
-                    igm_client_id:'YOUR_INSTAGRAM_CLIENT_ID',
-                    igm_limit:2,
-                    
-                    /*tw_limit:2,
-                    tw_username:'jack',*/
+         $('.social-feed-container').socialfeed({
+                    //FACEBOOK--------------------
+                    facebook:{
+                        username:'barack.obama',
+                        limit:2,
+                        token:'YOUR_FACEBOOK_ACCESS_TOKEN' //you can also create an app https://developers.facebook.com/ and put  here your 'APP ID|APP SECRET' - it is easier but not safe
+                    },
+                    //VK--------------------
+                    vk:{
+                        userid:36603,
+                        limit:2,
+                        source:'all'
+                    },
+                    //GOOGLEPLUS-------------------
+                    google:{
+                         access_token: 'YOUR_GOOGLE_PLUS_ACCESS_TOKEN', // https://console.developers.google.com/
+                         userid: '114860576370498981824',
+                         limit: 2
+                     },
+                    //INSTAGRAM---------------------
+                    instagram:{
+                        userid:23686378,
+                        client_id:'YOUR_INSTAGRAM_CLIENT_ID', //http://instagram.com/developer/
+                        limit:2
+                    },
+                    //GENERAL SETTINGS--------------
                     length:130,
-                    show_media:true
-                    //cookies:true
+                    show_media:true,
+                    // optional callback function (when all posts are collected and rendered)
+                    callback: function(){
+                        console.log('all posts collected');
+                    }
                 });
         </script>
 
@@ -66,6 +75,8 @@ If you don't need to show the feed from all the supported social networks, put t
 The Facebook requires an access token in order to get the feed of the user (even if it is public).
 To use Facebook feed, please <a href="https://developers.facebook.com/apps">register an application</a>, <a href="https://developers.facebook.com/tools/explorer/">generate a token</a> and 
 put it in  <em>fb_token</em>.<br/>
+<h4>Dependencies:</h4>
+    
 <strong>Attention!</strong> The current version of the plugin does not fully support IE browser. Please follow the process of solving issues for IE.
 
 
