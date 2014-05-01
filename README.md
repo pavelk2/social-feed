@@ -75,8 +75,12 @@ If you don't need to show the feed from all the supported social networks, put t
 The Facebook requires an access token in order to get the feed of the user (even if it is public).
 To use Facebook feed, please <a href="https://developers.facebook.com/apps">register an application</a>, <a href="https://developers.facebook.com/tools/explorer/">generate a token</a> and 
 put it in  <em>fb_token</em>.<br/>
+
 <h4>Dependencies:</h4>
-    
+-  http://fontawesome.io/ - for displaying icons of social networks
+-  http://momentjs.com/ - for displaying time ago
+-  http://olado.github.io/doT/ - for rendering templates
+
 <strong>Attention!</strong> The current version of the plugin does not fully support IE browser. Please follow the process of solving issues for IE.
 
 
