@@ -1,6 +1,9 @@
 <html>
 <head>
+    <!-- Social-feed css -->
     <link href="css/jquery.socialfeed.css" rel="stylesheet" type="text/css">
+    <!-- font-awesome for social network icons -->
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
     <style>
     /*This style is needed only for the plugin demo page. Do not use it in your projects*/
     .credits{
@@ -21,17 +24,24 @@
     </style>
 </head>
 <body>
-    
+
     <div class="container">
         <h3 class="muted">social - feed</h3>
         <div class="social-feed-container">
         </div>
         <h6 class="credits muted"><a href="https://github.com/pavelk2/social-feed" target="_blank">Social-feed</a> jquery plugin, developed by <a target="_blank" href="http://kucherbaev.com">Pavel Kucherbaev</a></h6>
     </div>
-
+    
+    <!-- jQuery -->
     <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-    <script src="js/jquery.socialfeed.utility.js"></script>
+    
+    <!-- doT.js for rendering templates and moment.js for showing time ago -->
+    <script src="dependencies/doT.min.js"></script>
+    <script src="dependencies/moment.min.js"></script>
+    
+    <!-- Social-feed js -->
     <script src="js/jquery.socialfeed.js"></script>
+    
     <script>
     $(document).ready(function(){
         $('.social-feed-container').socialfeed({

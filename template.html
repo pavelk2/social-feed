@@ -3,7 +3,9 @@
         <img class="media-object" src="{{=it.author_picture}}">
     </a>
     <div class="media-body">
-        <p><img class="social-network-icon" title="posted by {{=it.social_network}}" src="{{=it.social_icon}}" /><span class="author-title">{{=it.author_name}}</span>
+        <p>
+            <i class="fa fa-{{=it.social_network}}"></i>
+            <span class="author-title">{{=it.author_name}}</span>
             <span class="muted"> - {{=it.time_ago}}</span>  
             <a href="{{=it.link}}" target="_blank" class="read-button">
                 <span class="label label-info">open </span>

@@ -53,11 +53,8 @@ $.fn.socialfeed = function(options)
         }
     }
     function fireCallback(){
-        console.log(loaded);
         var fire = true;
         $.each(Object.keys(loaded),function(){
-            console.log(this);
-            console.log(loaded[this]);
             if (!loaded[this])
                 fire = false;
         });
@@ -94,7 +91,7 @@ $.fn.socialfeed = function(options)
                 post.message = text;
                 post.description = (element.description) ? element.description : '';
                 post.link = url;
-                post.social_network = 'fb';
+                post.social_network = 'facebook';
                 getTemplate(post, json.data[json.data.length-1] == element);
             }
         });
@@ -168,7 +165,7 @@ function getGoogleplusData(){
         else{                            
             post.message = element.object.content;                                                                               
         }
-        post.social_network = 'google';      
+        post.social_network = 'google-plus';      
         post.link = element.url;                                          
         getTemplate(post, json.items[json.items.length-1] == element);                    
     }); 
@@ -249,7 +246,7 @@ function getInstagramData() {
             post.author_name = element.user.full_name;
             post.message = element.caption.text;
             post.description = '';
-            post.social_network = 'igm';
+            post.social_network = 'instagram';
             post.link = element.link;
             if (options.show_media) {
                 post.attachment = '<img class="attachment" src="' + element.images.standard_resolution.url + '' + '" />';
@@ -279,7 +276,7 @@ function getTwitterData(){
             post.author_name = element.user.name;
             post.message = element.text;
             post.description = '';
-            post.social_network = 'tw';
+            post.social_network = 'twitter';
             post.link = 'http://twitter.com/' + element.user.screen_name + '/status/' + element.id_str;
             if (options.cookies)
                 $.cookie('social-feed-twitter' + i,JSON.stringify(post));
@@ -307,7 +304,6 @@ function getTwitterData(){
             content.time_ago = data.dt_create.fromNow();
             content.dt_create=content.dt_create.valueOf();
             content.text = wrapLinks(shorten(data.message + ' ' + data.description),data.social_network);
-            content.social_icon = options.plugin_folder + 'img/' + data.social_network + '-icon-24.png';
             if (template!=undefined)
                 placeTemplate(template(content),data, lastelement);  
             else 
@@ -349,10 +345,10 @@ function getTwitterData(){
         //---------------------------------------------------------------------------------
         function wrapLinks(string,social_network){
             var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;            
-            if (social_network === 'tw'){
+            if (social_network === 'twitter'){
                 string = string.replace(/(@|#)([a-z0-9_]+)/ig, wrapTwitterTagTemplate);
             }
-            else if(social_network === 'google'){                
+            else if(social_network === 'google-plus'){                
                 string = string.replace(/(@|#)([a-z0-9_]+['])/ig, wrapGoogleplusTagTemplate);                       
             }
             else{
