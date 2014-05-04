@@ -37,36 +37,57 @@ $.fn.socialfeed = function(options)
     //This function performs consequent data loading from all of the sources by calling corresponding functions
     function getAllData(){
         if (options.facebook) {
-            getFacebookData();
+            loaded['fb']=0;
+            $.each(options.facebook.accounts,function(){
+                loaded['fb']++;
+                getFacebookData(this);
+            });
+            
         }
         if (options.twitter) {
-            getTwitterData();
+            loaded['tw']=0;
+            $.each(options.twitter.accounts,function(){
+                loaded['tw']++;
+                getTwitterData(this);
+            });
         }
         if (options.vk) {
-            getVKData();
+            loaded['vk']=0;
+            $.each(options.vk.accounts,function(){
+                loaded['vk']++;
+                getVKData(this);
+            });
         }
         if (options.google){
-            getGoogleplusData();
+            loaded['google']=0;
+            $.each(options.google.accounts,function(){
+                loaded['google']++;
+                getGoogleplusData(this);
+            });
         }
         if (options.instagram){
-            getInstagramData();
+            loaded['igm']=0;
+            $.each(options.instagram.accounts,function(){
+                loaded['igm']++;
+                getInstagramData(this);
+            });
+            
         }
     }
     function fireCallback(){
         var fire = true;
         $.each(Object.keys(loaded),function(){
-            if (!loaded[this])
+            if (loaded[this] > 0)
                 fire = false;
         });
         if (fire && options.callback)
             options.callback();
     }
-    function getFacebookData(){
+    function getFacebookData(account){
         var limit = 'limit=' + options.facebook.limit,
         query_extention = '&access_token=' + options.facebook.token + '&callback=?',
         fb_graph = 'https://graph.facebook.com/',
-        feed_json = fb_graph + options.facebook.username + '/feed?' + limit + query_extention; 
-        loaded['fb'] = false;
+        feed_json = fb_graph + account + '/feed?' + limit + query_extention; 
         $.get(feed_json,function(json){
 
            $.each(json.data,function(){
@@ -98,9 +119,8 @@ $.fn.socialfeed = function(options)
 },'json');
 
 }
-function getGoogleplusData(){
-    var content = 'https://www.googleapis.com/plus/v1/people/' + options.google.userid + '/activities/public?key=' + options.google.access_token + '&maxResults=' + options.google.limit;
-    loaded['google'] = false;
+function getGoogleplusData(account){
+    var content = 'https://www.googleapis.com/plus/v1/people/' + account + '/activities/public?key=' + options.google.access_token + '&maxResults=' + options.google.limit;
     $.ajax({
      url : content,
      dataType : 'jsonp',
@@ -172,14 +192,13 @@ function getGoogleplusData(){
 } 
 
 });
-}   
-function getVKData(){
-    var vk_json = 'https://api.vk.com/method/wall.get?owner_id='+options.vk.userid+'&filter='+options.vk.source+'&count='+options.vk.limit+'&callback=?',
+}
+function getVKData(account){
+    var vk_json = 'https://api.vk.com/method/wall.get?owner_id='+account+'&filter='+options.vk.source+'&count='+options.vk.limit+'&callback=?',
     vk_user_json_template = 'https://api.vk.com/method/users.get?fields=first_name,%20last_name,%20screen_name,%20photo&uid=',
     vk_group_json_template = 'https://api.vk.com/method/groups.getById?fields=first_name,%20last_name,%20screen_name,%20photo&gid=';
-    loaded['vk'] = false;
     $.get(vk_json,function(json){
-        var vk_wall_owner =(options.vk.userid > 0) ? (vk_user_json_template + options.vk.userid + '&callback=?') : (vk_group_json_template+(-1) * options.vk.userid + '&callback=?'); 
+        var vk_wall_owner =(account > 0) ? (vk_user_json_template + account + '&callback=?') : (vk_group_json_template+(-1) * account + '&callback=?'); 
         $.get(vk_wall_owner,function(wall_owner){
 
          $.each(json.response, function(){ 
@@ -210,27 +229,26 @@ function getVKData(){
                             post.link = 'http://vk.com/' + wall_owner.response[0].screen_name + '?w=wall' + element.to_id + '_' + element.id + '%2Fall';
                             getTemplate(post, json.response[json.response.length-1] == element); 
                         },'json');
-                    //if the post is created by group    
-                }else{
-                    var vk_group_json = vk_group_json_template+(-1) * element.from_id + '&callback=?';
-                    $.get(vk_group_json,function(user_json){
-                        post.author_name = user_json.response[0].name;
-                        post.author_picture = user_json.response[0].photo;
-                        post.author_link = 'http://vk.com/' + user_json.response[0].screen_name;
-                        post.link = 'http://vk.com/' + wall_owner.response[0].screen_name + '?w=wall-' + user_json.response[0].gid  + '_' + element.id;
-                        getTemplate(post, json.response[json.response.length-1] == element);
-                    },'json');
-                }      
-            }
-        });  
+                        //if the post is created by group    
+                    }else{
+                        var vk_group_json = vk_group_json_template+(-1) * element.from_id + '&callback=?';
+                        $.get(vk_group_json,function(user_json){
+                            post.author_name = user_json.response[0].name;
+                            post.author_picture = user_json.response[0].photo;
+                            post.author_link = 'http://vk.com/' + user_json.response[0].screen_name;
+                            post.link = 'http://vk.com/' + wall_owner.response[0].screen_name + '?w=wall-' + user_json.response[0].gid  + '_' + element.id;
+                            getTemplate(post, json.response[json.response.length-1] == element);
+                        },'json');
+                    }      
+                }
+            });  
 },'json');
 },'json');
 }
-function getInstagramData() {
+function getInstagramData(account) {
     var feed_json, search = '', limit = 'count=' + options.instagram.limit, query_extention = 'client_id=' + options.instagram.client_id + '&' + limit + '&callback=?', igm_api = 'https://api.instagram.com/v1/';
-    igm_api = igm_api + 'users/' + options.instagram.userid + '/media/recent?';
+    igm_api = igm_api + 'users/' + account + '/media/recent?';
     feed_json = igm_api + query_extention;
-    loaded['igm'] = false;
     $.ajax({
         url : feed_json,
         dataType : 'jsonp',
@@ -257,9 +275,8 @@ function getInstagramData() {
    });
 
 }
-function getTwitterData(){
-    var tw_json = 'http://api.twitter.com/1/statuses/user_timeline.json?include_entities=true&include_rts=true&screen_name=' + options.twitter.username + '&count=' + options.tw_limit + '&callback=?';
-    loaded['tw'] = false;
+function getTwitterData(account){
+    var tw_json = 'http://api.twitter.com/1/statuses/user_timeline.json?include_entities=true&include_rts=true&screen_name=' + account + '&count=' + options.tw_limit + '&callback=?';
     $.ajax({
         url:tw_json,
         dataType:'json',
@@ -295,108 +312,104 @@ function getTwitterData(){
                 }
             });
 }
-        //---------------------------------------------------------------------------------
-        //Render functions
-        //---------------------------------------------------------------------------------
-        function getTemplate(data, lastelement){
-            var content = data;     
-            content.attachment=(content.attachment==undefined) ? '' : content.attachment;
-            content.time_ago = data.dt_create.fromNow();
-            content.dt_create=content.dt_create.valueOf();
-            content.text = wrapLinks(shorten(data.message + ' ' + data.description),data.social_network);
-            if (template!=undefined)
-                placeTemplate(template(content),data, lastelement);  
-            else 
-                $.get(options.template,function(template_html){
-                    template = doT.template(template_html);
-                    placeTemplate(template(content),data,lastelement);      
-                });
-            
-        }
-        function placeTemplate(template,data, lastelement){
-            if ($(container).children().length == 0){
-                $(container).append(template);  
-            }else{
-                var i = 0,
-                insert_index = -1;                    
-                $.each($(container).children(), function(){
-                    if ($(this).attr('dt_create') < data.dt_create){
-                        insert_index = i;
-                        return false;
-                    }
-                    i++;
-                });
-                $(container).append(template);
-                if (insert_index >= 0){
-                    insert_index++;
-                    var before = $(container).children('div:nth-child('+insert_index+')'),
-                    current = $(container).children('div:last-child');
-                    $(current).insertBefore(before);  
-                }
-                
+//---------------------------------------------------------------------------------
+//Render functions
+//---------------------------------------------------------------------------------
+function getTemplate(data, lastelement){
+    var content = data;     
+    content.attachment=(content.attachment==undefined) ? '' : content.attachment;
+    content.time_ago = data.dt_create.fromNow();
+    content.dt_create=content.dt_create.valueOf();
+    content.text = wrapLinks(shorten(data.message + ' ' + data.description),data.social_network);
+    if (template!=undefined)
+        placeTemplate(template(content),data, lastelement);  
+    else 
+        $.get(options.template,function(template_html){
+            template = doT.template(template_html);
+            placeTemplate(template(content),data,lastelement);      
+        });
+
+}
+function placeTemplate(template,data, lastelement){
+    if ($(container).children().length == 0){
+        $(container).append(template);  
+    }else{
+        var i = 0,
+        insert_index = -1;                    
+        $.each($(container).children(), function(){
+            if ($(this).attr('dt_create') < data.dt_create){
+                insert_index = i;
+                return false;
             }
-            if (lastelement){
-                loaded[data.social_network] = true;
-                fireCallback();
-            }
+            i++;
+        });
+        $(container).append(template);
+        if (insert_index >= 0){
+            insert_index++;
+            var before = $(container).children('div:nth-child('+insert_index+')'),
+            current = $(container).children('div:last-child');
+            $(current).insertBefore(before);  
         }
-        //---------------------------------------------------------------------------------
-        //Utility functions
-        //---------------------------------------------------------------------------------
-        function wrapLinks(string,social_network){
-            var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;            
-            if (social_network === 'twitter'){
-                string = string.replace(/(@|#)([a-z0-9_]+)/ig, wrapTwitterTagTemplate);
-            }
-            else if(social_network === 'google-plus'){                
-                string = string.replace(/(@|#)([a-z0-9_]+['])/ig, wrapGoogleplusTagTemplate);                       
-            }
-            else{
-                string = string.replace(exp, wrapLinkTemplate);
-            }
-            return string;
-        }
-        function wrapLinkTemplate(string){
-            return '<a target="_blank" href="' + string + '">' + string + '<\/a>';
-        }
-        //---------------------------------------------------------------------------------
-        function wrapTwitterTagTemplate(string){
-            return '<a target="_blank" href="http://twitter.com/' + string + '" >' + string + '<\/a>';
-        }
-        //---------------------------------------------------------------------------------
-        function wrapGoogleplusTagTemplate(string){
-            return '<a target="_blank" href="https://plus.google.com/s/' + string + '" >' + string + '<\/a>';   
-        }
-        //---------------------------------------------------------------------------------
-        function fixTwitterDate(created_at) {
-            created_at = created_at.replace('+0000','Z');
-            if(created_at !== undefined)
-                return created_at;
-        }
-        function shorten(string){
-            string = $.trim(string);
-            if (string.length > options.length)
-            {
-                var cut = string.substring(0, options.length),
-                link_start_position = cut.lastIndexOf('http');
-                if (link_start_position > 0){
-                    var link_end_position = string.indexOf(' ',link_start_position);
-                    if (link_end_position > options.length && string != string.substring(0,link_end_position))
-                        return string.substring(0,link_end_position) + " ..";
-                    else
-                        return string;
-                }else{
-                    return cut + "..";
-                } 
-            }else
-            return string;
-        }
-        function stripHTML(string){
-            if (typeof string === "undefined" || string === null)
-                return '';
-            return string.replace(/(<([^>]+)>)|nbsp;|\s{2,}|/ig,"");
-        }
-    //---------------------------------------------------------------------------------
+
+    }
+    if (lastelement){
+        loaded[data.social_network]--;
+        fireCallback();
+    }
+}
+//---------------------------------------------------------------------------------
+//Utility functions
+//---------------------------------------------------------------------------------
+function wrapLinks(string,social_network){
+    var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;            
+    if (social_network === 'twitter'){
+        string = string.replace(/(@|#)([a-z0-9_]+)/ig, wrapTwitterTagTemplate);
+    }
+    else if(social_network === 'google-plus'){                
+        string = string.replace(/(@|#)([a-z0-9_]+['])/ig, wrapGoogleplusTagTemplate);                       
+    }
+    else{
+        string = string.replace(exp, wrapLinkTemplate);
+    }
+    return string;
+}
+function wrapLinkTemplate(string){
+    return '<a target="_blank" href="' + string + '">' + string + '<\/a>';
+}
+function wrapTwitterTagTemplate(string){
+    return '<a target="_blank" href="http://twitter.com/' + string + '" >' + string + '<\/a>';
+}
+function wrapGoogleplusTagTemplate(string){
+    return '<a target="_blank" href="https://plus.google.com/s/' + string + '" >' + string + '<\/a>';   
+}
+function fixTwitterDate(created_at) {
+    created_at = created_at.replace('+0000','Z');
+    if(created_at !== undefined)
+        return created_at;
+}
+function shorten(string){
+    string = $.trim(string);
+    if (string.length > options.length)
+    {
+        var cut = string.substring(0, options.length),
+        link_start_position = cut.lastIndexOf('http');
+        if (link_start_position > 0){
+            var link_end_position = string.indexOf(' ',link_start_position);
+            if (link_end_position > options.length && string != string.substring(0,link_end_position))
+                return string.substring(0,link_end_position) + " ..";
+            else
+                return string;
+        }else{
+            return cut + "..";
+        } 
+    }else
+    return string;
+}
+function stripHTML(string){
+    if (typeof string === "undefined" || string === null)
+        return '';
+    return string.replace(/(<([^>]+)>)|nbsp;|\s{2,}|/ig,"");
+}
 };  
 
 })(jQuery); 

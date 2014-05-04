@@ -46,34 +46,33 @@ Initialize the social-feed plugin:
          $('.social-feed-container').socialfeed({
                     //FACEBOOK--------------------
                     facebook:{
-                        username:'barack.obama',
+                        accounts:['teslamotors'], //usernames or id
                         limit:2,
-                        token:'YOUR_FACEBOOK_ACCESS_TOKEN' //you can also create an app https://developers.facebook.com/ and put  here your 'APP ID|APP SECRET' - it is easier but not safe
+                        token:'YOUR_FACEBOOK_ACCESS_TOKEN' //you can also create an app and put  here your 'APP ID|APP SECRET' - it is easier but not safe
                     },
                     //VK--------------------
                     vk:{
-                        userid:36603,
+                        accounts:[125936523], //id for users and -id (with minus) for groups 
                         limit:2,
                         source:'all'
                     },
                     //GOOGLEPLUS-------------------
                     google:{
-                         access_token: 'YOUR_GOOGLE_PLUS_ACCESS_TOKEN', // https://console.developers.google.com/
-                         userid: '114860576370498981824',
+                         access_token: 'YOUR_GOOGLE_PLUS_TOKEN',
+                         accounts: ['111435337725041517235','114461178896543099856','+TeslaMotors'],
                          limit: 2
                      },
                     //INSTAGRAM---------------------
                     instagram:{
-                        userid:23686378,
-                        client_id:'YOUR_INSTAGRAM_CLIENT_ID', //http://instagram.com/developer/
+                        accounts:[297604134], //userid
+                        client_id:'YOUR_INSTAGRAM_APP_CLIENT_ID',
                         limit:2
                     },
                     //GENERAL SETTINGS--------------
                     length:130,
                     show_media:true,
-                    // optional callback function (when all posts are collected and rendered)
                     callback: function(){
-                        console.log('all posts collected');
+                        console.log('all posts are collected');
                     }
                 });
         </script>
