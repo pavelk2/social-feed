@@ -8,6 +8,7 @@ If you use this plugin, please <a href="mailto:pavel@kucherbaev.com">write me a 
 <p>
 <strong>Attention:</strong> After Twitter has prohibided an anonymous fetching of tweets - this function is currently not supported. Wait an update with a fix.
 </p>
+<h6>Check out my other projects: <a href="http://kucherbaev.com" target="_blank"> http://kucherbaev.com</a><h6>
 <hr>
 <h1><a href="http://pavelk2.github.io/social-feed/" target="_blank">Demo</a><h1>
 
