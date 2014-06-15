@@ -44,29 +44,29 @@ Connect js:
 Initialize the social-feed plugin:
 
         <script>
-         $('.social-feed-container').socialfeed({
+          $('.social-feed-container').socialfeed({
                     //FACEBOOK--------------------
                     facebook:{
-                        accounts:['teslamotors'], //usernames or id
+                        accounts:['@teslamotors','##teslamotors'],
                         limit:2,
-                        token:'YOUR_FACEBOOK_ACCESS_TOKEN' //you can also create an app and put  here your 'APP ID|APP SECRET' - it is easier but not safe
+                        token:'YOUR_FACEBOOK_TOKEN' //you can also create an app and put  here your 'APP ID|APP SECRET' - it is easier but not safe
                     },
                     //VK--------------------
                     vk:{
-                        accounts:[125936523], //id for users and -id (with minus) for groups 
+                        accounts:['@125936523','#teslamotors'], //id for users and -id (with minus) for groups 
                         limit:2,
                         source:'all'
                     },
                     //GOOGLEPLUS-------------------
                     google:{
-                         access_token: 'YOUR_GOOGLE_PLUS_TOKEN',
-                         accounts: ['111435337725041517235','114461178896543099856','+TeslaMotors'],
+                         access_token: 'YOUR_GOOGLEPLUS_TOKEN',
+                         accounts: ['#teslamotors'],
                          limit: 2
                      },
                     //INSTAGRAM---------------------
                     instagram:{
-                        accounts:[297604134], //userid
-                        client_id:'YOUR_INSTAGRAM_APP_CLIENT_ID',
+                        accounts:['@teslamotors','#teslamotors'],
+                        client_id:'YOUR_INSTAGRAM_CLIENT_ID', 
                         limit:2
                     },
                     //GENERAL SETTINGS--------------
