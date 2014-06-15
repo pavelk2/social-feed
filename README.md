@@ -53,7 +53,7 @@ Initialize the social-feed plugin:
                     },
                     //VK--------------------
                     vk:{
-                        accounts:['@125936523','#teslamotors',''], //id for users and -id (with minus) for groups 
+                        accounts:['@125936523','#teslamotors'], //id for users and -id (with minus) for groups 
                         limit:2,
                         source:'all'
                     },
