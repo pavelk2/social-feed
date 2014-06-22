@@ -82,67 +82,66 @@ $.fn.socialfeed = function(options)
                 loaded['tw']++;
                 getTwitterData(this);
             });
-        }*/
+}*/
+}
+function fireCallback(){
+    var fire = true;
+    $.each(Object.keys(loaded),function(){
+        if (loaded[this] > 0)
+            fire = false;
+    });
+    if (fire && options.callback)
+        options.callback();
+}
+function getFacebookData(account){
+    var request_url, limit = 'limit=' + options.facebook.limit,
+    query_extention = '&access_token=' + options.facebook.token + '&callback=?',
+    fb_graph = 'https://graph.facebook.com/';
+
+    switch (account[0]){
+        case '@':
+        var username = account.substr(1);
+        request_url = fb_graph + username + '/feed?' + limit + query_extention; 
+        request(request_url,getPosts);
+        break;
+        case '#':
+        var hashtag = account.substr(1);
+        request_url = fb_graph+'search?q=%23'+hashtag+'&' + limit + query_extention; 
+        request(request_url,getPosts);
+        break;
+        default:
+        request_url = fb_graph+'search?q='+account+'&' + limit + query_extention; 
+        request(request_url,getPosts);
     }
-    function fireCallback(){
-        var fire = true;
-        $.each(Object.keys(loaded),function(){
-            if (loaded[this] > 0)
-                fire = false;
-        });
-        if (fire && options.callback)
-            options.callback();
-    }
-    function getFacebookData(account){
-        var request_url, limit = 'limit=' + options.facebook.limit,
-        query_extention = '&access_token=' + options.facebook.token + '&callback=?',
-        fb_graph = 'https://graph.facebook.com/';
 
 
-        switch (account[0]){
-            case '@':
-            var username = account.substr(1);
-            request_url = fb_graph + username + '/feed?' + limit + query_extention; 
-            request(request_url,getPosts);
-            break;
-            case '#':
-            var hashtag = account.substr(1);
-            request_url = fb_graph+'search?q=%23'+hashtag+'&' + limit + query_extention; 
-            request(request_url,getPosts);
-            break;
-            default:
-            request_url = fb_graph+'search?q='+account+'&' + limit + query_extention; 
-            request(request_url,getPosts);
-        }
-
-        
-        function getPosts(json){
-            $.each(json.data,function(){
-                var element = this,
-                post = {};
-                if (element.message || element.story){
-                    var text = element.story, url = 'http://facebook.com/' + element.from.id
-                    if (element.message)
-                        text = element.message;                            
-                    if (element.link)
-                        url = element.link;   
-                    if (options.show_media){
-                        if (element.picture){
-                            post.attachment = '<img class="attachment" src="' + element.picture.replace('_s.', '_b.') + '" />';
-                        }
+    function getPosts(json){
+        $.each(json.data,function(){
+            var element = this,
+            post = {};
+            if (element.message || element.story){
+                var text = element.story, url = 'http://facebook.com/' + element.from.id
+                if (element.message)
+                    text = element.message;                            
+                if (element.link)
+                    url = element.link;   
+                if (options.show_media){
+                    if (element.picture){
+                        post.attachment = '<img class="attachment" src="' + element.picture.replace('_s.', '_b.') + '" />';
                     }
-                    post.dt_create = moment(element.created_time);
-                    post.author_link = 'http://facebook.com/' + element.from.id;
-                    post.author_picture = fb_graph + element.from.id + '/picture';
-                    post.post_url = url;
-                    post.author_name = element.from.name;
-                    post.message = text;
-                    post.description = (element.description) ? element.description : '';
-                    post.link = url;
-                    post.social_network = 'facebook';
-                    getTemplate(post, json.data[json.data.length-1] == element);
                 }
-            });
+                post.dt_create = moment(element.created_time);
+                post.author_link = 'http://facebook.com/' + element.from.id;
+                post.author_picture = fb_graph + element.from.id + '/picture';
+                post.post_url = url;
+                post.author_name = element.from.name;
+                post.message = text;
+                post.description = (element.description) ? element.description : '';
+                post.link = url;
+                post.social_network = 'facebook';
+                getTemplate(post, json.data[json.data.length-1] == element);
+            }
+        });
 }
 
 
@@ -423,13 +422,15 @@ function getTemplate(data, lastelement){
 
 }
 function placeTemplate(template,data, lastelement){
+    if ($(container).children('[social-feed-id='+data.id+']').length != 0)
+        return false;
     if ($(container).children().length == 0){
         $(container).append(template);  
     }else{
         var i = 0,
         insert_index = -1;                    
         $.each($(container).children(), function(){
-            if ($(this).attr('dt_create') < data.dt_create){
+            if ($(this).attr('dt-create') < data.dt_create){
                 insert_index = i;
                 return false;
             }
