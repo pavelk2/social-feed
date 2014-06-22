@@ -12,10 +12,8 @@ If you use this plugin, please <a href="mailto:pavel@kucherbaev.com">write me a 
 <hr>
 <h1><a href="http://pavelk2.github.io/social-feed/" target="_blank">Demo</a><h1>
 
-<img src="http://habrastorage.org/storage2/bc3/834/e4d/bc3834e4dd952f22b470830d7dc1096c.png" />
-<hr>
-With previews:<br/>
-<img src="http://habrastorage.org/storage2/2ee/a85/fcf/2eea85fcf3c76efb328b0b2d9e8df7ad.png" />
+<img src="//habrastorage.org/files/98f/b96/332/98fb9633239242dfba7c3dcae26146b2.png"/>
+
 <hr>
 <h4>Getting started</h4>
 Connect css:
