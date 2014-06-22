@@ -9,31 +9,49 @@
     .credits{
         text-align:center;padding:20px;margin-top:10px;font-size:12px;
     }
-    body{ 
-        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-        font-size: 14px;
-        line-height: 20px;
-        color: #333333;
-        background-color: #ffffff;
-        text-align:center;
-    }
-    a{color: #0088cc;text-decoration: none;}
-    a:hover,a:focus {color: #005580;text-decoration: underline;}
-    .muted {color: #999999;}
-    .container {display:inline-block;width:600px;}
-    </style>
+    *{
+       font-weight: 200; 
+   }
+   body{ 
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+
+    line-height: 20px;
+    color: #eee;
+    background-color: #ffffff;
+    text-align:center;
+}
+h1{
+    color:white;
+    font-weight: 100;
+    font-size: 70px;
+}
+a{color: #0088cc;text-decoration: none;}
+a:hover,a:focus {color: #005580;text-decoration: underline;}
+.muted {color: #eee;}
+.container {display:inline-block;width:400px;}
+body{
+    background-color: #777;
+}
+</style>
 </head>
 <body>
+    <a href="https://github.com/pavelk2/social-feed/" target = '_blank'><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/52760788cde945287fbb584134c4cbc2bc36f904/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f77686974655f6666666666662e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png"></a>
 
     <div class="container">
-        <h3 class="muted">social - feed</h3>
-        <iframe src="http://ghbtns.com/github-btn.html?user=pavelk2&amp;repo=social-feed&amp;type=watch&amp;count=true&amp;size=large" allowtransparency="true" frameborder="0" scrolling="0" width="152px" height="30px"></iframe>
-        <iframe src="http://ghbtns.com/github-btn.html?user=pavelk2&amp;repo=social-feed&amp;type=fork&amp;count=true&amp;size=large" allowtransparency="true" frameborder="0" scrolling="0" width="152px" height="30px"></iframe>
+        <h1>SocialFeed.js</h1>
         
-        <h4 class="muted">Tesla Motors</h4>
+        <iframe src="http://ghbtns.com/github-btn.html?user=pavelk2&amp;repo=social-feed&amp;type=watch&amp;count=true&amp;size=large" allowtransparency="true" frameborder="0" scrolling="0" width="152px" height="30px"></iframe>
+        <iframe src="http://ghbtns.com/github-btn.html?user=pavelk2&amp;repo=social-feed&amp;type=fork&amp;count=true&amp;size=large" allowtransparency="true" frameborder="0" scrolling="0" width="152px" height="30px"></iframe>     
+        <h2 class="muted">Tesla Motors</h2>
         <div class="social-feed-container">
         </div>
-        <h6 class="credits muted"><a href="https://github.com/pavelk2/social-feed" target="_blank">Social-feed</a> jquery plugin, developed by <a target="_blank" href="http://kucherbaev.com">Pavel Kucherbaev</a></h6>
+
+    </div>
+    <div class="credits muted">
+        <h6><a href="https://github.com/pavelk2/social-feed" target="_blank">Social-feed</a> jquery plugin, developed by <a target="_blank" href="http://kucherbaev.com">Pavel Kucherbaev</a></h6>
+
+
     </div>
 
     <!-- jQuery -->
@@ -51,7 +69,7 @@
         $('.social-feed-container').socialfeed({
                     //FACEBOOK--------------------
                     facebook:{
-                        accounts:['@teslamotors','#teslamotors'], //usernames or id
+                        accounts:['@crowdcafe.io','#crowdcafe'], //usernames or id
                         limit:2,
                         token:'240696342763428|FgHgjfn7wWMNT15ONHP0tVdWm_k' //you can also create an app and put  here your 'APP ID|APP SECRET' - it is easier but not safe
                     },

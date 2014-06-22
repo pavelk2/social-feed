@@ -127,7 +127,7 @@ function getFacebookData(account){
                     url = element.link;   
                 if (options.show_media){
                     if (element.picture){
-                        post.attachment = '<img class="attachment" src="' + element.picture.replace('_s.', '_b.') + '" />';
+                        post.attachment = '<img class="attachment" src="' + element.picture.replace('_s.', '_n.').replace('130x130', '720x720') + '" />';
                     }
                 }
                 post.id = element.id;
