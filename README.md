@@ -12,7 +12,7 @@ If you use this plugin, please <a href="mailto:pavel@kucherbaev.com">write me a 
 <hr>
 <h1><a href="http://pavelk2.github.io/social-feed/" target="_blank">Demo</a><h1>
 
-<img src="//habrastorage.org/files/98f/b96/332/98fb9633239242dfba7c3dcae26146b2.png"/>
+<img src="http://habrastorage.org/files/98f/b96/332/98fb9633239242dfba7c3dcae26146b2.png"/>
 
 <hr>
 <h4>Getting started</h4>
