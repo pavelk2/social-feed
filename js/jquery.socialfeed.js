@@ -130,6 +130,7 @@ function getFacebookData(account){
                         post.attachment = '<img class="attachment" src="' + element.picture.replace('_s.', '_b.') + '" />';
                     }
                 }
+                post.id = element.id;
                 post.dt_create = moment(element.created_time);
                 post.author_link = 'http://facebook.com/' + element.from.id;
                 post.author_picture = fb_graph + element.from.id + '/picture';
@@ -170,6 +171,7 @@ function getGoogleplusData(account){
         $.each(json.items, function(){          
             var post = {},
             element = this;     
+            post.id = element.id;
             post.attachment = '';      
             post.description = '';                                                 
             post.dt_create = moment(element.published);
@@ -274,6 +276,7 @@ function getVKData(account){
     }
     function showPost(wall_owner, element, json){
         var post = {};
+        post.id = element.id;
         post.dt_create = moment.unix(element.date);
         post.description = ' ';
         post.message = stripHTML(element.text);
