@@ -47,7 +47,7 @@ Initialize the social-feed plugin:
           $('.social-feed-container').socialfeed({
                     //FACEBOOK--------------------
                     facebook:{
-                        accounts:['@teslamotors','##teslamotors'],
+                        accounts:['@teslamotors','#teslamotors'],
                         limit:2,
                         token:'YOUR_FACEBOOK_TOKEN' //you can also create an app and put  here your 'APP ID|APP SECRET' - it is easier but not safe
                     },
