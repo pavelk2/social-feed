@@ -127,7 +127,11 @@ function getFacebookData(account){
                     url = element.link;   
                 if (options.show_media){
                     if (element.picture){
-                        post.attachment = '<img class="attachment" src="' + element.picture.replace('_s.', '_n.').replace('130x130', '720x720') + '" />';
+                        var image_url = element.picture;
+                        if (image_url.indexOf('?') == -1){
+                            image_url = image_url.replace('_s.', '_b.').replace('s130x130', 's720x720')
+                        }
+                        post.attachment = '<img class="attachment" src="' + image_url + '" />';
                     }
                 }
                 post.id = element.id;
@@ -181,63 +185,43 @@ function getGoogleplusData(account){
             post.author_name = element.actor.displayName;
 
             if(options.show_media === true){
-                if(element.verb === 'share' && element.object.content === ""){                                                                                                          
+                console.log(element);
+
+                if(element.object.attachments){
                     $.each(element.object.attachments, function(){
-                        share = this;                                    
-                        post.attachment = '<img class="attachment" src="' + share.image.url + '"/>';                                
-                    });                                                          
-                }          
-                if(element.verb === 'share'){                                                  
-                    $.each(element.object.attachments, function(){  
-                        if(this.thumbnails && this.thumbnails.length > 1){
-                            $.each(this.thumbnails, function(){             
-                                if (this.image)                                                                                                                         
-                                    post.attachment += '<img class="attachment" src="' + this.image.url + '"/>';                                                                                                                                                                                                                                                       
-                            });   
-                        }
-                        else{                       
-                            if (this.image)                       
-                                post.attachment =  '<img class="attachment" src="' + this.image.url + '"/>';
-                        }        
-                    });
-}
-else{
-    if(element.object.attachments !== undefined){
-        $.each(element.object.attachments, function(){
-            var image = '';
-            if (this.image){
-                image=  this.image.url;
-            }else{
-                if (this.objectType=='album'){
-                    if (this.thumbnails && this.thumbnails.length>0)
-                        if (this.thumbnails[0].image)
-                            image=this.thumbnails[0].image.url;
-                    }
+                        var image = '';
+                        if (this.fullImage){
+                            image =  this.fullImage.url;
+                        }else{
+                            if (this.objectType=='album'){
+                                if (this.thumbnails && this.thumbnails.length>0)
+                                    if (this.thumbnails[0].image)
+                                        image=this.thumbnails[0].image.url;
+                                }
+                            }
+                            post.attachment = '<img class="attachment" src="' + image + '"/>';
+                        });
                 }
-                post.attachment = '<img class="attachment" src="' + image + '"/>';
-            });
-    }
-}  
-}
+            }
 
-if(element.object.content === ''){
-    $.each(element.object.attachments, function(){
-        if(this.content !== undefined){                                    
-            post.message = this.content;                                                                                                           
-        }
-        else if(this.displayName !== undefined){                                    
-            post.message = this.displayName + '<br />' + this.url;
-        }                                
-    });                            
-}
-else{                            
-    post.message = element.object.content;                                                                               
-}
-post.social_network = 'google-plus';      
-post.link = element.url;                                          
-getTemplate(post, json.items[json.items.length-1] == element);                    
+            if(element.object.content === ''){
+                $.each(element.object.attachments, function(){
+                    if(this.content !== undefined){                                    
+                        post.message = this.content;                                                                                                           
+                    }
+                    else if(this.displayName !== undefined){                                    
+                        post.message = this.displayName + '<br />' + this.url;
+                    }                                
+                });                            
+            }
+            else{                            
+                post.message = element.object.content;                                                                               
+            }
+            post.social_network = 'google-plus';      
+            post.link = element.url;                                          
+            getTemplate(post, json.items[json.items.length-1] == element);                    
 
-}); 
+        }); 
 } 
 
 }
