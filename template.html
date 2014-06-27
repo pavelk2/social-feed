@@ -1,5 +1,4 @@
 <div class="social-feed-element" dt-create="{{=it.dt_create}}" social-feed-id = "{{=it.id}}">
-
     <div class='content'>
         <a class="pull-left" href="{{=it.author_link}}" target="_blank">
             <img class="media-object" src="{{=it.author_picture}}">
@@ -10,14 +9,11 @@
                 <span class="author-title">{{=it.author_name}}</span>
                 <a href="{{=it.link}}" target="_blank" class="read-button pull-right"><i class="fa fa-external-link"></i></a>
                 <span class="muted pull-right"> {{=it.time_ago}}</span>  
-
             </p>
             <div class='text-wrapper'>
                 <p class="social-feed-text">{{=it.text}}</p>
             </div>
         </div>
     </div>
-    
     {{=it.attachment}}
-
 </div>
