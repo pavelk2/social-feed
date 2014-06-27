@@ -104,6 +104,8 @@
 }
 
 .social-feed-element{
+    transition: 0.25s;
+    -webkit-backface-visibility: hidden;
     margin:-1px;
     margin-top:25px;
     background-color: #fff;
@@ -112,6 +114,9 @@
     font-size: 14px;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     line-height: 16px;
+}
+.social-feed-element:hover{
+    box-shadow: 0 0 40px 0 rgba(10, 10, 10, 0.2);
 }
 
 .social-feed-element .content{
