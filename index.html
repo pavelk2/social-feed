@@ -6,17 +6,25 @@
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
     <style>
     /*This style is needed only for the plugin demo page. Do not use it in your projects*/
-    .credits{
-        text-align:center;padding:20px;margin-top:10px;font-size:12px;
-    }
-    
     body{ 
         font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
         font-size: 14px;
         line-height: 20px;
         color: #eee;
-        background-color: #414141;
         text-align:center;
+
+        background-image: -webkit-gradient(
+            linear,
+            left top,
+            right bottom,
+            color-stop(0.07, #4A4DA1),
+            color-stop(0.86, #8EFAFA)
+            );
+        background-image: -o-linear-gradient(right bottom, #4A4DA1 7%, #8EFAFA 86%);
+        background-image: -moz-linear-gradient(right bottom, #4A4DA1 7%, #8EFAFA 86%);
+        background-image: -webkit-linear-gradient(right bottom, #4A4DA1 7%, #8EFAFA 86%);
+        background-image: -ms-linear-gradient(right bottom, #4A4DA1 7%, #8EFAFA 86%);
+        background-image: linear-gradient(to right bottom, #4A4DA1 7%, #8EFAFA 86%);
     }
     h1{
         font-weight: 100;
@@ -26,14 +34,14 @@
         line-height: 24px;
         font-weight: 100;
     }
-
     a{color: #FFF;}
     a.btn {
         text-decoration: none;
-        border: 1px solid #AAA;
+        border: 1px solid #fff;
         padding: 8px 11px;
         border-radius: 5px;
-
+        transition: 0.25s;
+        -webkit-backface-visibility: hidden;
     }
     a.btn.btn-primary{
         font-weight: 200;
@@ -41,14 +49,15 @@
         padding: 7px 10px;
     }
     a.btn:hover {
+        color:rgba(0, 50, 150, 0.5);
         text-decoration: none;
-        color:#08C;
-        border-color:#08C;
+        background-color:#fff;
     }
     hr{
+        opacity:0.4;
+        border-color: #fff;
         border-bottom: none;
     }
-    a:hover,a:focus {color: #790520;text-decoration: underline;}
     .container {display:inline-block;width:400px;}
     .social-feed-container{width:100%;}
     </style>
@@ -66,10 +75,10 @@
         <iframe src="http://ghbtns.com/github-btn.html?user=pavelk2&amp;repo=social-feed&amp;type=fork&amp;count=true&amp;size=large" allowtransparency="true" frameborder="0" scrolling="0" width="152px" height="30px"></iframe>     
 
         <h2>Tesla Motors</h2>
-        
+
         <div class="social-feed-container">
         </div>
-        
+
 
     </div>
 

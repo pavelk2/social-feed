@@ -56,7 +56,11 @@
 }
 .social-feed-element p.social-feed-text {
     margin: 0;
-    max-height:150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
 }
 
 /* Message styles */
