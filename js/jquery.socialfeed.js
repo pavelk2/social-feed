@@ -399,14 +399,20 @@ function getTemplate(data, lastelement){
     content.time_ago = data.dt_create.fromNow();
     content.dt_create=content.dt_create.valueOf();
     content.text = wrapLinks(shorten(data.message + ' ' + data.description),data.social_network);
+    
     if (template!=undefined)
         placeTemplate(template(content),data, lastelement);  
-    else 
-        $.get(options.template,function(template_html){
-            template = doT.template(template_html);
-            placeTemplate(template(content),data,lastelement);      
-        });
-
+    else{ 
+        if (options.template_html){
+            template = doT.template(options.template_html);
+            placeTemplate(template(content),data,lastelement); 
+        }else{
+            $.get(options.template,function(template_html){
+                template = doT.template(template_html);
+                placeTemplate(template(content),data,lastelement);      
+            });
+        }
+    }
 }
 function placeTemplate(template,data, lastelement){
     if ($(container).children('[social-feed-id='+data.id+']').length != 0)
