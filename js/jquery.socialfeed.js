@@ -471,7 +471,7 @@ function shorten(string){
     string = $.trim(string);
     if (string.length > options.length)
     {
-        var cut = string.substring(0, options.length),
+        /*var cut = string.substring(0, options.length),
         link_start_position = cut.lastIndexOf('http');
         if (link_start_position > 0){
             var link_end_position = string.indexOf(' ',link_start_position);
@@ -481,7 +481,8 @@ function shorten(string){
                 return string;
         }else{
             return cut + "..";
-        } 
+        }*/
+        return jQuery.trim(string).substring(0, options.length).split(" ").slice(0, -1).join(" ") + "..."; 
     }else
     return string;
 }
