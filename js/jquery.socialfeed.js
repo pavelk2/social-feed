@@ -113,8 +113,6 @@ function getFacebookData(account){
         request_url = fb_graph+'search?q='+account+'&' + limit + query_extention; 
         request(request_url,getPosts);
     }
-
-
     function getPosts(json){
         $.each(json.data,function(){
             var element = this,
@@ -149,16 +147,13 @@ function getFacebookData(account){
         });
 }
 
-
-
 }
 function getGoogleplusData(account){
     var url, api_base = 'https://www.googleapis.com/plus/v1/';
     switch (account[0]){
         case '#':
         var hashtag = account.substr(1);
-        url = api_base+'activities?query='+hashtag+'&key=' + options.google.access_token + '&maxResults=' + options.google.limit;
-        request(url,getPosts);
+        url = api_base+'activities?query='+hashtag+'&key=' + options.google.access_token + '&maxResults=' + options.google.limit;        request(url,getPosts);
         break;
 
         case '@':
@@ -185,8 +180,6 @@ function getGoogleplusData(account){
             post.author_name = element.actor.displayName;
 
             if(options.show_media === true){
-                console.log(element);
-
                 if(element.object.attachments){
                     $.each(element.object.attachments, function(){
                         var image = '';
@@ -477,17 +470,6 @@ function shorten(string){
     string = $.trim(string);
     if (string.length > options.length)
     {
-        /*var cut = string.substring(0, options.length),
-        link_start_position = cut.lastIndexOf('http');
-        if (link_start_position > 0){
-            var link_end_position = string.indexOf(' ',link_start_position);
-            if (link_end_position > options.length && string != string.substring(0,link_end_position))
-                return string.substring(0,link_end_position) + " ..";
-            else
-                return string;
-        }else{
-            return cut + "..";
-        }*/
         return jQuery.trim(string).substring(0, options.length).split(" ").slice(0, -1).join(" ") + "..."; 
     }else
     return string;
