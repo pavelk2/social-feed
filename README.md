@@ -43,7 +43,7 @@ Initialize the social-feed plugin:
                     facebook:{
                         accounts:['@teslamotors','#teslamotors'],
                         limit:2,
-                        token:'YOUR_FACEBOOK_TOKEN' //you can also create an app and put  here your 'APP ID|APP SECRET' - it is easier but not safe
+                        token:'YOUR_FACEBOOK_TOKEN' // go to https://developers.facebook.com/tools/explorer/ to get one
                     },
                     //VK--------------------
                     vk:{
@@ -53,14 +53,14 @@ Initialize the social-feed plugin:
                     },
                     //GOOGLEPLUS-------------------
                     google:{
-                         access_token: 'YOUR_GOOGLEPLUS_TOKEN',
+                         access_token: 'YOUR_GOOGLEPLUS_TOKEN', // go to https://console.developers.google.com/project, create project, allow Google + API, go to credentials and create an access token for browser use
                          accounts: ['#teslamotors'],
                          limit: 2
                      },
                     //INSTAGRAM---------------------
                     instagram:{
                         accounts:['@teslamotors','#teslamotors'],
-                        client_id:'YOUR_INSTAGRAM_CLIENT_ID', 
+                        client_id:'YOUR_INSTAGRAM_CLIENT_ID', // go to http://instagram.com/developer/clients/manage/, create app and copy your client_id
                         limit:2
                     },
                     //GENERAL SETTINGS--------------
@@ -76,6 +76,7 @@ When you run the plugin, make sure that you have your <strong>webserver running<
 
 If you want to change the layout of the feed, you can do it in the <em>template.html</em> file.
 <br/>
+Also you can simply create template as a string and pass it as template_html parameter.
 If you don't need to show the feed from all the supported social networks, put the credentials only for those you need.
 
 <h4>Dependencies:</h4>
@@ -83,6 +84,6 @@ If you don't need to show the feed from all the supported social networks, put t
 -  http://momentjs.com/ - for displaying time ago
 -  http://olado.github.io/doT/ - for rendering templates
 
-<strong>Attention!</strong> The current version of the plugin does not fully support IE browser. Please follow the process of solving issues for IE.
-
+<h4>License:</h4>
+MIT
 
