@@ -126,8 +126,9 @@
                     show_media:true,
                     // Moderation function - if returns false, template will have class hidden
                     moderation: function(content){
-                        return content.text.indexOf('fuck') == -1;
+                        return  (content.text) ? content.text.indexOf('fuck') == -1 : true;
                     },
+                    update_period: 5000,
                     // When all the posts are collected and displayed - this function is evoked
                     callback: function(){
                         console.log('all posts are collected');

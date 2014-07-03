@@ -41,7 +41,13 @@ $.fn.socialfeed = function(options)
     container.empty().css('display', 'inline-block');
     //---------------------------------------------------------------------------------
     // Initiate function
-    return getAllData();
+
+    getAllData();
+    if (options.update_period){
+        setInterval(function(){
+            return getAllData();
+        },option.update_period);
+    }
     //---------------------------------------------------------------------------------
     // This function performs consequent data loading from all of the sources by calling corresponding functions
     function getAllData(){
@@ -73,7 +79,6 @@ $.fn.socialfeed = function(options)
                 loaded['igm']++;
                 getInstagramData(this);
             });
-            
         }
     }
     function fireCallback(){
@@ -326,7 +331,8 @@ function getInstagramData(account) {
             post.author_picture = element.user.profile_picture;
             post.post_url = element.link;
             post.author_name = element.user.full_name;
-            post.message = element.caption.text;
+
+            post.message = (element.caption && element.caption)? element.caption.text : '';
             post.description = '';
             post.social_network = 'instagram';
             post.link = element.link;
