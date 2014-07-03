@@ -53,14 +53,14 @@ Initialize the social-feed plugin:
                     },
                     //GOOGLEPLUS-------------------
                     google:{
-                         access_token: 'YOUR_GOOGLEPLUS_TOKEN', # go to https://console.developers.google.com/project, create project, allow Google + API, go to credentials and create an access token for browser use
+                         access_token: 'YOUR_GOOGLEPLUS_TOKEN', // go to https://console.developers.google.com/project, create project, allow Google + API, go to credentials and create an access token for browser use
                          accounts: ['#teslamotors'],
                          limit: 2
                      },
                     //INSTAGRAM---------------------
                     instagram:{
                         accounts:['@teslamotors','#teslamotors'],
-                        client_id:'YOUR_INSTAGRAM_CLIENT_ID', # go to http://instagram.com/developer/clients/manage/, create app and copy your client_id
+                        client_id:'YOUR_INSTAGRAM_CLIENT_ID', // go to http://instagram.com/developer/clients/manage/, create app and copy your client_id
                         limit:2
                     },
                     //GENERAL SETTINGS--------------
