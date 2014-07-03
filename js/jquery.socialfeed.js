@@ -95,7 +95,7 @@ function fireCallback(){
 }
 function getFacebookData(account){
     var request_url, limit = 'limit=' + options.facebook.limit,
-    query_extention = '&access_token=' + options.facebook.token + '&callback=?',
+    query_extention = '&access_token=' + options.facebook.access_token + '&callback=?',
     fb_graph = 'https://graph.facebook.com/';
 
     switch (account[0]){
