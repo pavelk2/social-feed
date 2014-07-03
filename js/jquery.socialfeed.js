@@ -46,7 +46,7 @@ $.fn.socialfeed = function(options)
     if (options.update_period){
         setInterval(function(){
             return getAllData();
-        },option.update_period);
+        },options.update_period);
     }
     //---------------------------------------------------------------------------------
     // This function performs consequent data loading from all of the sources by calling corresponding functions
