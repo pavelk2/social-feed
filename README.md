@@ -43,7 +43,7 @@ Initialize the social-feed plugin:
                     facebook:{
                         accounts:['@teslamotors','#teslamotors'],
                         limit:2,
-                        token:'YOUR_FACEBOOK_TOKEN' // go to https://developers.facebook.com/tools/explorer/ to get one
+                        access_token:'YOUR_FACEBOOK_TOKEN' // go to https://developers.facebook.com/tools/explorer/ to get one
                     },
                     //VK--------------------
                     vk:{
