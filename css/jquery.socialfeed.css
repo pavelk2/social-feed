@@ -1,4 +1,7 @@
 /* Plugin styles */
+.social-feed-element.hidden{
+    background-color:red !important;
+}
 .social-feed-element .pull-left{
     float:left;
     margin-right: 10px;

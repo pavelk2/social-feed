@@ -97,33 +97,38 @@
     <script>
     $(document).ready(function(){
         $('.social-feed-container').socialfeed({
-                    //FACEBOOK--------------------
+                    // FACEBOOK
                     facebook:{
                         accounts:['@teslamotors','#teslamotors'],
                         limit:2,
-                        access_token:'CAACEdEose0cBAGZAQZCNULKvJHYUjwZAFRV2mGUtZBDAEnuT4M0ZCnfBJEtFLQwYgamnBfWHRx82YuYAPlBekFqUjuXopTtSi45PcUUod3gpJXdBkB6XFUVMJDBMwsVWVZAn3AVXctmYx8ZAcQEk2ZBpZAgLcxSSlRR0ld7W3oYygnsGkyqi3gCsoL3nME3nhTK0ZD'
+                        access_token:'150849908413827|a20e87978f1ac491a0c4a721c961b68c'
                     },
-                    //VK--------------------
+                    // VK
                     vk:{
                         accounts:['@125936523','#teslamotors'],
                         limit:2,
                         source:'all'
                     },
-                    //GOOGLEPLUS-------------------
+                    // GOOGLEPLUS
                     google:{
                          access_token: 'AIzaSyDpNQcIwQf5TcKmI8B0rh3e4OodIywJP14',
                          accounts: ['#teslamotors'],
                          limit: 2
                      },
-                    //INSTAGRAM---------------------
+                    // INSTAGRAM
                     instagram:{
                         accounts:['@teslamotors','#teslamotors'],
                         client_id:'2c6d2173ae9d41de905236e6301e5a43',
                         limit:2
                     },
-                    //GENERAL SETTINGS--------------
+                    // GENERAL SETTINGS
                     length:130,
                     show_media:true,
+                    // Moderation function - if returns false, template will have class hidden
+                    moderation: function(content){
+                        return content.text.indexOf('fuck') == -1;
+                    },
+                    // When all the posts are collected and displayed - this function is evoked
                     callback: function(){
                         console.log('all posts are collected');
                     }
