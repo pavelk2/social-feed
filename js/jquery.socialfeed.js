@@ -335,8 +335,15 @@ blogspot: function(account){
         $.each(json.feed.entry, function() {
             var post = {}, element = this;
             post.id = element.id['$t'].replace(/[^a-z0-9]/gi,'');
-            post.dt_create = moment((element.published['$t']));
+            //post.dt_create = moment((element.published['$t'])); // why introducing a new library
+            post.dt_create = new Date(element.published['$t']);
+            
+            // use if statement if ternary caused an error. did not tried it myself
+            typeof(element.category!="undefined")?post.category=element.category:post.category=[]; //category is an array of tags
+            
+            
             post.author_link = element.author[0]['uri']['$t'];
+            // is this neccessary? for each entry?
             post.author_picture = 'http:'+element.author[0]['gd$image']['src'];
             post.author_name = element.author[0]['name']['$t'];
             post.message = element.title['$t']+'</br></br>'+stripHTML(element.content['$t']);
