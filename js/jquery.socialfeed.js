@@ -37,50 +37,13 @@ $.fn.socialfeed = function(options)
             length: 500 // maximum length of post message shown
         };
     //---------------------------------------------------------------------------------
-    var options = $.extend(defaults, options),container = $(this),template,loaded = []; 
+    var options = $.extend(defaults, options),container = $(this),template,loaded = [], social_networks = ['facebook','instagram','vk','google','blogspot']; 
     container.empty().css('display', 'inline-block');
     //---------------------------------------------------------------------------------
-    // Initiate function
-
-    getAllData();
-    if (options.update_period){
-        setInterval(function(){
-            return getAllData();
-        },options.update_period);
-    }
+    
     //---------------------------------------------------------------------------------
     // This function performs consequent data loading from all of the sources by calling corresponding functions
-    function getAllData(){
-        if (options.facebook) {
-            loaded['fb']=0;
-            $.each(options.facebook.accounts,function(){
-                loaded['fb']++;
-                getFacebookData(this);
-            });
-            
-        }
-        if (options.vk) {
-            loaded['vk']=0;
-            $.each(options.vk.accounts,function(){
-                loaded['vk']++;
-                getVKData(this);
-            });
-        }
-        if (options.google){
-            loaded['google']=0;
-            $.each(options.google.accounts,function(){
-                loaded['google']++;
-                getGoogleplusData(this);
-            });
-        }
-        if (options.instagram){
-            loaded['igm']=0;
-            $.each(options.instagram.accounts,function(){
-                loaded['igm']++;
-                getInstagramData(this);
-            });
-        }
-    }
+
     function fireCallback(){
         var fire = true;
         $.each(Object.keys(loaded),function(){
@@ -90,146 +53,136 @@ $.fn.socialfeed = function(options)
         if (fire && options.callback)
             options.callback();
     }
-    function getFacebookData(account){
-        var request_url, limit = 'limit=' + options.facebook.limit,
-        query_extention = '&access_token=' + options.facebook.access_token + '&callback=?',
-        fb_graph = 'https://graph.facebook.com/';
-
-        switch (account[0]){
-            case '@':
-            var username = account.substr(1);
-            request_url = fb_graph + username + '/feed?' + limit + query_extention; 
-            request(request_url,getPosts);
-            break;
-            case '#':
-            var hashtag = account.substr(1);
-            request_url = fb_graph+'search?q=%23'+hashtag+'&' + limit + query_extention; 
-            request(request_url,getPosts);
-            break;
-            default:
-            request_url = fb_graph+'search?q='+account+'&' + limit + query_extention; 
-            request(request_url,getPosts);
-        }
-        function getPosts(json){
-            $.each(json.data,function(){
-                var element = this,
-                post = {};
-                if (element.message || element.story){
-                    var text = element.story, url = 'http://facebook.com/' + element.from.id
-                    if (element.message)
-                        text = element.message;                            
-                    if (element.link)
-                        url = element.link;   
-                    if (options.show_media){
-                        if (element.picture){
-                            var image_url = element.picture;
-                            if (image_url.indexOf('?') == -1){
-                                image_url = image_url.replace('_s.', '_b.').replace('s130x130', 's720x720')
-                            }
-                            post.attachment = '<img class="attachment" src="' + image_url + '" />';
-                        }
-                    }
-                    post.id = element.id;
-                    post.dt_create = moment(element.created_time);
-                    post.author_link = 'http://facebook.com/' + element.from.id;
-                    post.author_picture = fb_graph + element.from.id + '/picture';
-                    post.post_url = url;
-                    post.author_name = element.from.name;
-                    post.message = text;
-                    post.description = (element.description) ? element.description : '';
-                    post.link = url;
-                    post.social_network = 'facebook';
-                    getTemplate(post, json.data[json.data.length-1] == element);
+    var getData = {
+        checkAll: function(){
+            social_networks.forEach(function(network){
+                if (options[network]) {
+                    loaded[network]=0;
+                    options[network].accounts.forEach(function(account){
+                        loaded[network]++;
+                        getData[network](account);
+                    });
                 }
             });
-}
+        },
+        facebook: function(account){
 
+            var request_url, limit = 'limit=' + options.facebook.limit,
+            query_extention = '&access_token=' + options.facebook.access_token + '&callback=?',
+            fb_graph = 'https://graph.facebook.com/';
+
+            switch (account[0]){
+                case '@':
+                var username = account.substr(1);
+
+                request_url = fb_graph + username + '/feed?' + limit + query_extention; 
+                request(request_url,getPosts);
+                break;
+                case '#':
+                var hashtag = account.substr(1);
+                
+                request_url = fb_graph+'search?q=%23'+hashtag+'&' + limit + query_extention; 
+                request(request_url,getPosts);
+                break;
+                default:
+                request_url = fb_graph+'search?q='+account+'&' + limit + query_extention; 
+                request(request_url,getPosts);
+            }
+            
+            function getPosts(json){
+                $.each(json.data,function(){
+                    var element = this, post = {};
+
+                    if (element.message || element.story){
+                        var text = element.story, url = 'http://facebook.com/' + element.from.id
+                        if (element.message) text = element.message;                            
+                        if (element.link) url = element.link;   
+                        if (options.show_media){
+                            if (element.picture){
+                                var image_url = element.picture;
+                                if (image_url.indexOf('?') == -1){
+                                    image_url = image_url.replace('_s.', '_b.').replace('s130x130', 's720x720')
+                                }
+                                post.attachment = '<img class="attachment" src="' + image_url + '" />';
+                            }
+                        }
+
+                        post.id = element.id;
+                        post.dt_create = moment(element.created_time);
+                        post.author_link = 'http://facebook.com/' + element.from.id;
+                        post.author_picture = fb_graph + element.from.id + '/picture';
+                        post.author_name = element.from.name;
+                        post.message = text;
+                        post.description = (element.description) ? element.description : '';
+                        post.link = url;
+                        post.social_network = 'facebook';
+                        
+                        getTemplate(post, json.data[json.data.length-1] == element);
+                    }
+                });
 }
-function getGoogleplusData(account){
-    var url, api_base = 'https://www.googleapis.com/plus/v1/';
+},
+instagram: function(account){
+    var url, search = '', limit = 'count=' + options.instagram.limit, query_extention = 'client_id=' + options.instagram.client_id + '&' + limit + '&callback=?', igm_api_base = 'https://api.instagram.com/v1/';
+
     switch (account[0]){
+        case '@':
+        var username = account.substr(1);
+        url = igm_api_base + 'users/search/?q=' + username + '&'+query_extention;
+        request(url,getUsers);
+        break;
         case '#':
         var hashtag = account.substr(1);
-        url = api_base+'activities?query='+hashtag+'&key=' + options.google.access_token + '&maxResults=' + options.google.limit;        request(url,getPosts);
+        url = igm_api_base + 'tags/' + hashtag + '/media/recent/?'+query_extention;
+        request(url,getImages);
         break;
-
-        case '@':
-        var username = account.substr(1);
-        url = api_base+'people/' + username + '/activities/public?key=' + options.google.access_token + '&maxResults=' + options.google.limit;
-        request(url,getPosts);
-        break;
-
         default:
-        var a = 1;
-        
+        var a =1;
     }
-    function getPosts(json){
-        $.each(json.items, function(){          
-            var post = {},
-            element = this;     
+
+    function getUsers(json){
+        $.each(json.data, function() {
+            var user = this;
+            if (user.username == username){
+                url = igm_api_base + 'users/' + user.id + '/media/recent/?'+query_extention;
+                request(url,getImages);
+            }
+        });
+    }
+    function getImages(json){
+        $.each(json.data, function() {
+            var post = {}, element = this;
+
             post.id = element.id;
-            post.attachment = '';      
-            post.description = '';                                                 
-            post.dt_create = moment(element.published);
-            post.author_link = element.actor.url;
-            post.author_picture = element.actor.image.url;
-            post.post_url = element.url;
-            post.author_name = element.actor.displayName;
-
-            if(options.show_media === true){
-                if(element.object.attachments){
-                    $.each(element.object.attachments, function(){
-                        var image = '';
-                        if (this.fullImage){
-                            image =  this.fullImage.url;
-                        }else{
-                            if (this.objectType=='album'){
-                                if (this.thumbnails && this.thumbnails.length>0)
-                                    if (this.thumbnails[0].image)
-                                        image=this.thumbnails[0].image.url;
-                                }
-                            }
-                            post.attachment = '<img class="attachment" src="' + image + '"/>';
-                        });
-                }
+            post.dt_create = moment((element.created_time * 1000));
+            post.author_link = 'http://instagram.com/' + element.user.username;
+            post.author_picture = element.user.profile_picture;
+            post.author_name = element.user.full_name;
+            post.message = (element.caption && element.caption)? element.caption.text : '';
+            post.description = '';
+            post.social_network = 'instagram';
+            post.link = element.link;
+            if (options.show_media) {
+                post.attachment = '<img class="attachment" src="' + element.images.standard_resolution.url + '' + '" />';
             }
 
-            if(element.object.content === ''){
-                $.each(element.object.attachments, function(){
-                    if(this.content !== undefined){                                    
-                        post.message = this.content;                                                                                                           
-                    }
-                    else if(this.displayName !== undefined){                                    
-                        post.message = this.displayName + '<br />' + this.url;
-                    }                                
-                });                            
-            }
-            else{                            
-                post.message = element.object.content;                                                                               
-            }
-            post.social_network = 'google-plus';      
-            post.link = element.url;                                          
-            getTemplate(post, json.items[json.items.length-1] == element);                    
+            getTemplate(post, json.data[json.data.length-1] == element);
+        });
+    }
+},
+vk: function(account){
+    var vk_api_base = 'https://api.vk.com/method/', request_url, vk_user_json_template = vk_api_base+'users.get?fields=first_name,%20last_name,%20screen_name,%20photo&uid=',
+    vk_group_json_template = vk_api_base+'groups.getById?fields=first_name,%20last_name,%20screen_name,%20photo&gid=';
 
-        }); 
-} 
-
-}
-
-function getVKData(account){
-
-    var request_url, vk_user_json_template = 'https://api.vk.com/method/users.get?fields=first_name,%20last_name,%20screen_name,%20photo&uid=',
-    vk_group_json_template = 'https://api.vk.com/method/groups.getById?fields=first_name,%20last_name,%20screen_name,%20photo&gid=';
-    
     switch (account[0]){
         case '@':
         var username = account.substr(1);
-        request_url = 'https://api.vk.com/method/wall.get?owner_id='+username+'&filter='+options.vk.source+'&count='+options.vk.limit+'&callback=?';
+        request_url = vk_api_base+'wall.get?owner_id='+username+'&filter='+options.vk.source+'&count='+options.vk.limit+'&callback=?';
         get_request(request_url,getPosts);
         break;
         case '#':
         var hashtag = account.substr(1);
-        request_url = 'https://api.vk.com/method/newsfeed.search?q='+hashtag+'&count='+options.vk.limit+'&callback=?';
+        request_url = vk_api_base+'newsfeed.search?q='+hashtag+'&count='+options.vk.limit+'&callback=?';
         get_request(request_url,getPosts);
         break;
         default:
@@ -238,9 +191,8 @@ function getVKData(account){
     function getPosts(json){
         $.each(json.response, function(){ 
             if (this != parseInt(this) && this.post_type == 'post'){
-                var owner_id = (this.owner_id) ? this.owner_id : this.from_id;
-                var vk_wall_owner_url =(owner_id > 0) ? (vk_user_json_template + owner_id + '&callback=?') : (vk_group_json_template+(-1) * owner_id + '&callback=?'); 
-                var element = this;
+                var owner_id = (this.owner_id) ? this.owner_id : this.from_id, vk_wall_owner_url =(owner_id > 0) ? (vk_user_json_template + owner_id + '&callback=?') : (vk_group_json_template+(-1) * owner_id + '&callback=?') ,element = this;
+                
                 get_request(vk_wall_owner_url, function(wall_owner){
                     showPost(wall_owner,element, json);
                 });
@@ -250,6 +202,7 @@ function getVKData(account){
     }
     function showPost(wall_owner, element, json){
         var post = {};
+        
         post.id = element.id;
         post.dt_create = moment.unix(element.date);
         post.description = ' ';
@@ -271,7 +224,7 @@ function getVKData(account){
             get_request(vk_user_json, function(user_json){
                 getUser(user_json, post,element, json);
             });
-            
+
         }else{
             var vk_group_json = vk_group_json_template+(-1) * element.from_id + '&callback=?';
             get_request(vk_group_json, function(user_json){
@@ -284,6 +237,7 @@ function getVKData(account){
         post.author_picture = user_json.response[0].photo;
         post.author_link = 'http://vk.com/' + user_json.response[0].screen_name;
         post.link = 'http://vk.com/' + user_json.response[0].screen_name + '?w=wall' + element.from_id + '_' + element.id;
+        
         getTemplate(post, json.response[json.response.length-1] == element); 
     }
     function getGroup(user_json, post,element, json){
@@ -291,58 +245,122 @@ function getVKData(account){
         post.author_picture = user_json.response[0].photo;
         post.author_link = 'http://vk.com/' + user_json.response[0].screen_name;
         post.link = 'http://vk.com/' + user_json.response[0].screen_name + '?w=wall-' + user_json.response[0].gid  + '_' + element.id;
+        
         getTemplate(post, json.response[json.response.length-1] == element);
     }
+},
+google: function(account){
+    var url, api_base = 'https://www.googleapis.com/plus/v1/';
+    switch (account[0]){
+        case '#':
+        var hashtag = account.substr(1);
+        url = api_base+'activities?query='+hashtag+'&key=' + options.google.access_token + '&maxResults=' + options.google.limit;        request(url,getPosts);
+        break;
 
-}
-function getInstagramData(account) {
-    var url, search = '', limit = 'count=' + options.instagram.limit, query_extention = 'client_id=' + options.instagram.client_id + '&' + limit + '&callback=?', igm_api_base = 'https://api.instagram.com/v1/';
+        case '@':
+        var username = account.substr(1);
+        url = api_base+'people/' + username + '/activities/public?key=' + options.google.access_token + '&maxResults=' + options.google.limit;
+        request(url,getPosts);
+        break;
+
+        default:
+        var a = 1;
+
+    }
+    function getPosts(json){
+        $.each(json.items, function(){          
+            var post = {},
+            element = this;     
+            post.id = element.id;
+            post.attachment = '';      
+            post.description = '';                                                 
+            post.dt_create = moment(element.published);
+            post.author_link = element.actor.url;
+            post.author_picture = element.actor.image.url;
+            post.author_name = element.actor.displayName;
+
+            if(options.show_media === true){
+                if(element.object.attachments){
+                    $.each(element.object.attachments, function(){
+                        var image = '';
+                        if (this.fullImage){
+                            image =  this.fullImage.url;
+                        }else{
+                            if (this.objectType=='album'){
+                                if (this.thumbnails && this.thumbnails.length>0)
+                                    if (this.thumbnails[0].image)
+                                        image=this.thumbnails[0].image.url;
+                                }
+                            }
+                            post.attachment = '<img class="attachment" src="' + image + '"/>';
+                        });
+                }
+            }
+            if(element.object.content === ''){
+                $.each(element.object.attachments, function(){
+                    if(this.content !== undefined){                                    
+                        post.message = this.content;                                                                                                           
+                    }
+                    else if(this.displayName !== undefined){                                    
+                        post.message = this.displayName + '<br />' + this.url;
+                    }                                
+                });                            
+            }
+            else{                            
+                post.message = element.object.content;                                                                               
+            }
+            post.social_network = 'google-plus';      
+            post.link = element.url;                                          
+            
+            getTemplate(post, json.items[json.items.length-1] == element);                    
+
+        }); 
+} 
+},
+blogspot: function(account){
+    var url;
 
     switch (account[0]){
         case '@':
         var username = account.substr(1);
-        url = igm_api_base + 'users/search/?q=' + username + '&'+query_extention;
-        request(url,getUsers);
-        break;
-        case '#':
-        var hashtag = account.substr(1);
-        url = igm_api_base + 'tags/' + hashtag + '/media/recent/?'+query_extention;
-        request(url,getImages);
+        url = 'http://'+username+'.blogspot.com/feeds/posts/default?alt=json-in-script&callback=?';
+        request(url,getPosts);
         break;
         default:
         var a =1;
     }
 
-    function getUsers(json,callback){
-        $.each(json.data, function() {
-            var user = this;
-            if (user.username == username){
-                url = igm_api_base + 'users/' + user.id + '/media/recent/?'+query_extention;
-                request(url,getImages);
-            }
-        });
-    }
-    function getImages(json){
-        $.each(json.data, function() {
-            var post = {}, element = this;
-            post.id = element.id;
-            post.dt_create = moment((element.created_time * 1000));
-            post.author_link = 'http://instagram.com/' + element.user.username;
-            post.author_picture = element.user.profile_picture;
-            post.post_url = element.link;
-            post.author_name = element.user.full_name;
+    function getPosts(json){
 
-            post.message = (element.caption && element.caption)? element.caption.text : '';
+        $.each(json.feed.entry, function() {
+            var post = {}, element = this;
+            post.id = element.id['$t'].replace(/[^a-z0-9]/gi,'');
+            post.dt_create = moment((element.published['$t']));
+            post.author_link = element.author[0]['uri']['$t'];
+            post.author_picture = 'http:'+element.author[0]['gd$image']['src'];
+            post.author_name = element.author[0]['name']['$t'];
+            post.message = element.title['$t']+'</br></br>'+stripHTML(element.content['$t']);
             post.description = '';
-            post.social_network = 'instagram';
-            post.link = element.link;
+            post.social_network = 'blogspot';
+            post.link = element.link.pop().href;
             if (options.show_media) {
-                post.attachment = '<img class="attachment" src="' + element.images.standard_resolution.url + '' + '" />';
+                if (element['media$thumbnail'])
+                    post.attachment = '<img class="attachment" src="' + element['media$thumbnail']['url']+'" />';
             }
-            getTemplate(post, json.data[json.data.length-1] == element);
+
+            getTemplate(post, json.feed.entry[json.feed.entry-1] == element);
         });
     }
 }
+};
+// Initiate function
+getData.checkAll();
+if (options.update_period){
+    setInterval(function(){
+        return getData.checkAll();
+    },options.update_period);
+}
+
 //---------------------------------------------------------------------------------
 // Render functions
 //---------------------------------------------------------------------------------
