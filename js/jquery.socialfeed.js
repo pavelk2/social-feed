@@ -101,7 +101,7 @@ $.fn.socialfeed = function(options)
                             if (element.picture){
                                 var image_url = element.picture;
                                 if (image_url.indexOf('?') == -1){
-                                    image_url = image_url.replace('_s.', '_b.').replace('s130x130', 's720x720')
+                                    image_url = fb_graph + element.object_id + '/picture/?type=normal';
                                 }
                                 post.attachment = '<img class="attachment" src="' + image_url + '" />';
                             }
