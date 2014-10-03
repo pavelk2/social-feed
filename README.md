@@ -42,9 +42,9 @@ Initialize the social-feed plugin:
         $('.social-feed-container').socialfeed({
                     // FACEBOOK
                     facebook:{
-                        accounts:['@teslamotors','#teslamotors'],
-                        limit:2,
-                        access_token:'YOUR_FACEBOOK_ACCESS_TOKEN' // APP_ID|APP_SECRET
+                        accounts: ['@teslamotors','#teslamotors'],
+                        limit: 2,
+                        access_token: 'YOUR_FACEBOOK_ACCESS_TOKEN' // APP_ID|APP_SECRET
                     },
                     // TWITTER
                     twitter:{
@@ -55,21 +55,21 @@ Initialize the social-feed plugin:
                      },
                     // VK
                     vk:{
-                        accounts:['@125936523','#teslamotors'], 
-                        limit:2,
-                        source:'all'
+                        accounts: ['@125936523','#teslamotors'], 
+                        limit: 2,
+                        source: 'all'
                     },
                     // GOOGLEPLUS
                     google:{
-                         access_token: 'YOUR_GOOGLE_PLUS_ACCESS_TOKEN', 
                          accounts: ['#teslamotors'],
-                         limit: 2
+                         limit: 2,
+                         access_token: 'YOUR_GOOGLE_PLUS_ACCESS_TOKEN'
                      },
                     // INSTAGRAM
                     instagram:{
-                        accounts:['@teslamotors','#teslamotors'],
-                        client_id:'YOUR_INSTAGRAM_CLIENT_ID',
-                        limit:2
+                        accounts: ['@teslamotors','#teslamotors'],
+                        limit:2,
+                        client_id: 'YOUR_INSTAGRAM_CLIENT_ID'
                     },
                     // BLOGSPOT
                     /*blogspot:{

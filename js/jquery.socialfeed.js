@@ -384,7 +384,6 @@ if (typeof Object.create !== 'function') {
                             Utility.request(url, Feed.instagram.utility.getImages);
                             break;
                         default:
-                            var a = 1;
                     }
                 },
                 utility: {
@@ -522,7 +521,6 @@ if (typeof Object.create !== 'function') {
                             request(url, getPosts);
                             break;
                         default:
-                            var a = 1;
                     }
                 },
                 utility: {
