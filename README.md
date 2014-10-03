@@ -102,6 +102,7 @@ If you don't need to show the feed from all the supported social networks, put t
 -  http://fontawesome.io/ - for displaying icons of social networks
 -  http://momentjs.com/ - for displaying time ago
 -  http://olado.github.io/doT/ - for rendering templates
+-  https://github.com/jublonet/codebird-js - for sending requests to Twitter
 
 <h4>License:</h4>
 MIT
