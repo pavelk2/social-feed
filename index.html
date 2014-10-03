@@ -1,5 +1,7 @@
 <html>
 <head>
+    
+
     <!-- Social-feed css -->
     <link href="css/jquery.socialfeed.css" rel="stylesheet" type="text/css">
     <!-- font-awesome for social network icons -->
@@ -87,6 +89,8 @@
 
     <!-- jQuery -->
     <script src="dependencies/jquery.min.js"></script>
+    <!-- Codebird.js -->
+    <script type="text/javascript" src="dependencies/codebird.js"></script>
     <!-- doT.js for rendering templates and moment.js for showing time ago -->
     <script src="dependencies/doT.min.js"></script>
     <script src="dependencies/moment.min.js"></script>
@@ -99,27 +103,34 @@
         $('.social-feed-container').socialfeed({
                     // FACEBOOK
                     facebook:{
-                        accounts:['@teslamotors','#teslamotors'],
-                        limit:2,
+                        accounts:['@SpaceX'],
+                        limit:1,
                         access_token:'150849908413827|a20e87978f1ac491a0c4a721c961b68c'
                     },
-                    // VK
+                    // GOOGLEPLUS
+                    google:{ 
+                        accounts: ['#spacex'],
+                        limit: 1,
+                        access_token: 'AIzaSyDpNQcIwQf5TcKmI8B0rh3e4OodIywJP14'
+                    },
+                    // Twitter
+                    twitter:{
+                        accounts: ['@spacex'],
+                        limit: 1,
+                        consumer_key: 'eZe0Sk4GdH7LKWTlotow', // make sure to have your app read-only
+                        consumer_secret: 'j35RWFf6JntvQP9qEWfdzroVCpz4YLnWWIhrdlNw', // make sure to have your app read-only
+                     },
+                    // VKONTAKTE
                     vk:{
-                        accounts:['@125936523','#teslamotors'],
-                        limit:2,
+                        accounts:['#spacex'],
+                        limit:1,
                         source:'all'
                     },
-                    // GOOGLEPLUS
-                    google:{
-                         access_token: 'AIzaSyDpNQcIwQf5TcKmI8B0rh3e4OodIywJP14',
-                         accounts: ['#teslamotors'],
-                         limit: 2
-                     },
                     // INSTAGRAM
                     instagram:{
-                        accounts:['@teslamotors','#teslamotors'],
-                        client_id:'2c6d2173ae9d41de905236e6301e5a43',
-                        limit:2
+                        accounts:['#spacex'],
+                        limit:1,
+                        client_id:'2c6d2173ae9d41de905236e6301e5a43'
                     },
                     // BLOGSPOT
                     /*blogspot:{
