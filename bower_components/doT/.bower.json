@@ -1,0 +1,15 @@
+{
+  "name": "doT",
+  "homepage": "https://github.com/olado/doT",
+  "version": "1.0.1",
+  "_release": "1.0.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "1.0.1",
+    "commit": "daf27a4d673bf321d80634e12e65530aa4c67edb"
+  },
+  "_source": "git://github.com/olado/doT.git",
+  "_target": "~1.0.1",
+  "_originalSource": "doT",
+  "_direct": true
+}

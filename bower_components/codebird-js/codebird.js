@@ -2,7 +2,7 @@
  * A Twitter library in JavaScript
  *
  * @package   codebird
- * @version   2.6.0-dev
+ * @version   2.5.0
  * @author    Jublo Solutions <support@jublo.net>
  * @copyright 2010-2014 Jublo Solutions <support@jublo.net>
  * @license   http://opensource.org/licenses/GPL-3.0 GNU Public License 3.0
@@ -135,7 +135,7 @@ var Codebird = function () {
     /**
      * The current Codebird version
      */
-    var _version = "2.6.0-dev";
+    var _version = "2.5.0";
 
     /**
      * Sets the OAuth consumer key and secret (App key)
@@ -306,160 +306,6 @@ var Codebird = function () {
                 /* jshint +W061 */
             }
         }
-    };
-
-    /**
-     * Get allowed API methods, sorted by GET or POST
-     * Watch out for multiple-method "account/settings"!
-     *
-     * @return array $apimethods
-     */
-    var getApiMethods = function () {
-        var httpmethods = {
-            GET: [
-                "account/settings",
-                "account/verify_credentials",
-                "application/rate_limit_status",
-                "blocks/ids",
-                "blocks/list",
-                "direct_messages",
-                "direct_messages/sent",
-                "direct_messages/show",
-                "favorites/list",
-                "followers/ids",
-                "followers/list",
-                "friends/ids",
-                "friends/list",
-                "friendships/incoming",
-                "friendships/lookup",
-                "friendships/lookup",
-                "friendships/no_retweets/ids",
-                "friendships/outgoing",
-                "friendships/show",
-                "geo/id/:place_id",
-                "geo/reverse_geocode",
-                "geo/search",
-                "geo/similar_places",
-                "help/configuration",
-                "help/languages",
-                "help/privacy",
-                "help/tos",
-                "lists/list",
-                "lists/members",
-                "lists/members/show",
-                "lists/memberships",
-                "lists/ownerships",
-                "lists/show",
-                "lists/statuses",
-                "lists/subscribers",
-                "lists/subscribers/show",
-                "lists/subscriptions",
-                "mutes/users/ids",
-                "mutes/users/list",
-                "oauth/authenticate",
-                "oauth/authorize",
-                "saved_searches/list",
-                "saved_searches/show/:id",
-                "search/tweets",
-                "statuses/home_timeline",
-                "statuses/mentions_timeline",
-                "statuses/oembed",
-                "statuses/retweeters/ids",
-                "statuses/retweets/:id",
-                "statuses/retweets_of_me",
-                "statuses/show/:id",
-                "statuses/user_timeline",
-                "trends/available",
-                "trends/closest",
-                "trends/place",
-                "users/contributees",
-                "users/contributors",
-                "users/profile_banner",
-                "users/search",
-                "users/show",
-                "users/suggestions",
-                "users/suggestions/:slug",
-                "users/suggestions/:slug/members",
-
-                // Internal
-                "users/recommendations",
-                "account/push_destinations/device",
-                "activity/about_me",
-                "activity/by_friends",
-                "statuses/media_timeline",
-                "timeline/home",
-                "help/experiments",
-                "search/typeahead",
-                "search/universal",
-                "discover/universal",
-                "conversation/show",
-                "statuses/:id/activity/summary",
-                "account/login_verification_enrollment",
-                "account/login_verification_request",
-                "prompts/suggest",
-
-                "beta/timelines/custom/list",
-                "beta/timelines/timeline",
-                "beta/timelines/custom/show"
-            ],
-            POST: [
-                "account/remove_profile_banner",
-                "account/settings__post",
-                "account/update_delivery_device",
-                "account/update_profile",
-                "account/update_profile_background_image",
-                "account/update_profile_banner",
-                "account/update_profile_colors",
-                "account/update_profile_image",
-                "blocks/create",
-                "blocks/destroy",
-                "direct_messages/destroy",
-                "direct_messages/new",
-                "favorites/create",
-                "favorites/destroy",
-                "friendships/create",
-                "friendships/destroy",
-                "friendships/update",
-                "lists/create",
-                "lists/destroy",
-                "lists/members/create",
-                "lists/members/create_all",
-                "lists/members/destroy",
-                "lists/members/destroy_all",
-                "lists/subscribers/create",
-                "lists/subscribers/destroy",
-                "lists/update",
-                "media/upload",
-                "mutes/users/create",
-                "mutes/users/destroy",
-                "oauth/access_token",
-                "oauth/request_token",
-                "oauth2/invalidate_token",
-                "oauth2/token",
-                "saved_searches/create",
-                "saved_searches/destroy/:id",
-                "statuses/destroy/:id",
-                "statuses/lookup",
-                "statuses/retweet/:id",
-                "statuses/update",
-                "statuses/update_with_media",
-                "users/lookup",
-                "users/report_spam",
-
-                // Internal
-                "direct_messages/read",
-                "account/login_verification_enrollment__post",
-                "push_destinations/enable_login_verification",
-                "account/login_verification_request__post",
-
-                "beta/timelines/custom/create",
-                "beta/timelines/custom/update",
-                "beta/timelines/custom/destroy",
-                "beta/timelines/custom/add",
-                "beta/timelines/custom/remove"
-            ]
-        };
-        return httpmethods;
     };
 
     /**
@@ -1058,9 +904,197 @@ var Codebird = function () {
             break;
         }
 
-        var apimethods = getApiMethods();
-        for (var httpmethod in apimethods) {
-            if (apimethods[httpmethod].indexOf(method) > -1) {
+        var httpmethods = {};
+        httpmethods.GET = [
+            // Timelines
+            "statuses/mentions_timeline",
+            "statuses/user_timeline",
+            "statuses/home_timeline",
+            "statuses/retweets_of_me",
+
+            // Tweets
+            "statuses/retweets/:id",
+            "statuses/show/:id",
+            "statuses/oembed",
+            "statuses/retweeters/ids",
+
+            // Search
+            "search/tweets",
+
+            // Direct Messages
+            "direct_messages",
+            "direct_messages/sent",
+            "direct_messages/show",
+
+            // Friends & Followers
+            "friendships/no_retweets/ids",
+            "friends/ids",
+            "followers/ids",
+            "friendships/lookup",
+            "friendships/incoming",
+            "friendships/outgoing",
+            "friendships/show",
+            "friends/list",
+            "followers/list",
+            "friendships/lookup",
+
+            // Users
+            "account/settings",
+            "account/verify_credentials",
+            "blocks/list",
+            "blocks/ids",
+            "users/lookup",
+            "users/show",
+            "users/search",
+            "users/contributees",
+            "users/contributors",
+            "users/profile_banner",
+            "mutes/users/ids",
+            "mutes/users/list",
+
+            // Suggested Users
+            "users/suggestions/:slug",
+            "users/suggestions",
+            "users/suggestions/:slug/members",
+
+            // Favorites
+            "favorites/list",
+
+            // Lists
+            "lists/list",
+            "lists/statuses",
+            "lists/memberships",
+            "lists/subscribers",
+            "lists/subscribers/show",
+            "lists/members/show",
+            "lists/members",
+            "lists/show",
+            "lists/subscriptions",
+            "lists/ownerships",
+
+            // Saved searches
+            "saved_searches/list",
+            "saved_searches/show/:id",
+
+            // Places & Geo
+            "geo/id/:place_id",
+            "geo/reverse_geocode",
+            "geo/search",
+            "geo/similar_places",
+
+            // Trends
+            "trends/place",
+            "trends/available",
+            "trends/closest",
+
+            // OAuth
+            "oauth/authenticate",
+            "oauth/authorize",
+
+            // Help
+            "help/configuration",
+            "help/languages",
+            "help/privacy",
+            "help/tos",
+            "application/rate_limit_status",
+
+            // Tweets
+            "statuses/lookup",
+
+            // Internal
+            "users/recommendations",
+            "account/push_destinations/device",
+            "activity/about_me",
+            "activity/by_friends",
+            "statuses/media_timeline",
+            "timeline/home",
+            "help/experiments",
+            "search/typeahead",
+            "search/universal",
+            "discover/universal",
+            "conversation/show",
+            "statuses/:id/activity/summary",
+            "account/login_verification_enrollment",
+            "account/login_verification_request",
+            "prompts/suggest",
+
+            "beta/timelines/custom/list",
+            "beta/timelines/timeline",
+            "beta/timelines/custom/show"
+        ];
+        httpmethods.POST = [
+            // Tweets
+            "statuses/destroy/:id",
+            "statuses/update",
+            "statuses/retweet/:id",
+            "statuses/update_with_media",
+            "media/upload",
+
+            // Direct Messages
+            "direct_messages/destroy",
+            "direct_messages/new",
+
+            // Friends & Followers
+            "friendships/create",
+            "friendships/destroy",
+            "friendships/update",
+
+            // Users
+            "account/settings__post",
+            "account/update_delivery_device",
+            "account/update_profile",
+            "account/update_profile_background_image",
+            "account/update_profile_colors",
+            "account/update_profile_image",
+            "blocks/create",
+            "blocks/destroy",
+            "account/update_profile_banner",
+            "account/remove_profile_banner",
+            "mutes/users/create",
+            "mutes/users/destroy",
+
+            // Favorites
+            "favorites/destroy",
+            "favorites/create",
+
+            // Lists
+            "lists/members/destroy",
+            "lists/subscribers/create",
+            "lists/subscribers/destroy",
+            "lists/members/create_all",
+            "lists/members/create",
+            "lists/destroy",
+            "lists/update",
+            "lists/create",
+            "lists/members/destroy_all",
+
+            // Saved Searches
+            "saved_searches/create",
+            "saved_searches/destroy/:id",
+
+            // Spam Reporting
+            "users/report_spam",
+
+            // OAuth
+            "oauth/access_token",
+            "oauth/request_token",
+            "oauth2/token",
+            "oauth2/invalidate_token",
+
+            // Internal
+            "direct_messages/read",
+            "account/login_verification_enrollment__post",
+            "push_destinations/enable_login_verification",
+            "account/login_verification_request__post",
+
+            "beta/timelines/custom/create",
+            "beta/timelines/custom/update",
+            "beta/timelines/custom/destroy",
+            "beta/timelines/custom/add",
+            "beta/timelines/custom/remove"
+        ];
+        for (var httpmethod in httpmethods) {
+            if (httpmethods[httpmethod].indexOf(method) > -1) {
                 return httpmethod;
             }
         }
@@ -1474,7 +1508,6 @@ var Codebird = function () {
         setBearerToken: setBearerToken,
         setUseProxy: setUseProxy,
         setProxy: setProxy,
-        getApiMethods: getApiMethods,
         __call: __call,
         oauth_authenticate: oauth_authenticate,
         oauth_authorize: oauth_authorize,

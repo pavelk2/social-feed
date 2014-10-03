@@ -1,0 +1,41 @@
+{
+  "name": "codebird-js",
+  "version": "2.5.0",
+  "homepage": "http://www.jublo.net/projects/codebird/js",
+  "authors": [
+    "Joshua Atkins <joshua.atkins@jublo.net>",
+    "J.M. <jm@jublo.net>"
+  ],
+  "description": "A Twitter library in JavaScript.",
+  "main": "codebird.js",
+  "moduleType": [
+    "amd",
+    "globals",
+    "node"
+  ],
+  "keywords": [
+    "Twitter",
+    "API",
+    "networking",
+    "CORS"
+  ],
+  "license": "GPL-3.0+",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "RELEASE_MESSAGE*",
+    "test",
+    "tests"
+  ],
+  "_release": "2.5.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "2.5.0",
+    "commit": "740af44f58423d230ab839e2cc192fb3937a38f5"
+  },
+  "_source": "git://github.com/jublonet/codebird-js.git",
+  "_target": "~2.5.0",
+  "_originalSource": "codebird-js",
+  "_direct": true
+}

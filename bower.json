@@ -1,0 +1,41 @@
+{
+  "name": "social-feed",
+  "version": "0.1.0",
+  "homepage": "http://pavelk2.github.io/social-feed/",
+  "authors": [
+    {
+      "name": "Pavel Kucherbaev",
+      "email": "pavel@kucherbaev.com",
+      "homepage": "http://kucherbaev.com"
+    }
+  ],
+  "keywords":[
+    "Twitter",
+    "Facebook",
+    "Instagram",
+    "Google+",
+    "Vkontakte",
+    "social",
+    "feed"
+  ],
+  "license":"MIT",
+  "main": "js/jquery.socialfeed.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pavelk2/social-feed.git"
+  },
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "RELEASE_MESSAGE*",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.1",
+    "doT": "~1.0.1",
+    "codebird-js": "~2.5.0",
+    "moment": "~2.8.3"
+  }
+}
