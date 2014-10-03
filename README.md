@@ -31,45 +31,66 @@ Connect js:
         <!-- doT.js for rendering templates and moment.js for showing time ago -->
         <script src="dependencies/doT.min.js"></script>
         <script src="dependencies/moment.min.js"></script>
+        <!-- Codebird.js - required for TWITTER -->
+        <script type="text/javascript" src="dependencies/codebird.js"></script>
     
         <!-- Social-feed js -->
         <script src="js/jquery.socialfeed.js"></script>
 
 Initialize the social-feed plugin:
 
-        <script>
-          $('.social-feed-container').socialfeed({
-                    //FACEBOOK--------------------
+    <script>
+    $(document).ready(function(){
+        $('.social-feed-container').socialfeed({
+                    // FACEBOOK
                     facebook:{
                         accounts:['@teslamotors','#teslamotors'],
                         limit:2,
-                        access_token:'YOUR_FACEBOOK_TOKEN' // go to https://developers.facebook.com/tools/explorer/ to get one
+                        access_token:'YOUR_FACEBOOK_ACCESS_TOKEN' // APP_ID|APP_SECRET
                     },
-                    //VK--------------------
+                    // TWITTER
+                    twitter:{
+                        accounts: ['@spacex'],
+                        limit: 2,
+                        consumer_key: 'YOUR_CONSUMER_KEY', // make sure to have your app read-only
+                        consumer_secret: 'YOUR_CONSUMER_SECRET_KEY', // make sure to have your app read-only
+                     },
+                    // VK
                     vk:{
-                        accounts:['@125936523','#teslamotors'], //id for users and -id (with minus) for groups 
+                        accounts:['@125936523','#teslamotors'], 
                         limit:2,
                         source:'all'
                     },
-                    //GOOGLEPLUS-------------------
+                    // GOOGLEPLUS
                     google:{
-                         access_token: 'YOUR_GOOGLEPLUS_TOKEN', // go to https://console.developers.google.com/project, create project, allow Google + API, go to credentials and create an access token for browser use
+                         access_token: 'YOUR_GOOGLE_PLUS_ACCESS_TOKEN', 
                          accounts: ['#teslamotors'],
                          limit: 2
                      },
-                    //INSTAGRAM---------------------
+                    // INSTAGRAM
                     instagram:{
                         accounts:['@teslamotors','#teslamotors'],
-                        client_id:'YOUR_INSTAGRAM_CLIENT_ID', // go to http://instagram.com/developer/clients/manage/, create app and copy your client_id
+                        client_id:'YOUR_INSTAGRAM_CLIENT_ID',
                         limit:2
                     },
-                    //GENERAL SETTINGS--------------
-                    length:130,
+                    // BLOGSPOT
+                    /*blogspot:{
+                        accounts:['@iman-khaghanifar']
+                    },*/
+                    // GENERAL SETTINGS
+                    length:400,
                     show_media:true,
+                    // Moderation function - if returns false, template will have class hidden
+                    moderation: function(content){
+                        return  (content.text) ? content.text.indexOf('fuck') == -1 : true;
+                    },
+                    //update_period: 5000,
+                    // When all the posts are collected and displayed - this function is evoked
                     callback: function(){
                         console.log('all posts are collected');
                     }
                 });
+        });
         </script>
 
 When you run the plugin, make sure that you have your <strong>webserver running</strong>
