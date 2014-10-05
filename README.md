@@ -122,8 +122,6 @@ If you don't need to show the feed from all the supported social networks, put t
 ## License
 MIT
 
-Check out my other projects: http://kucherbaev.com
-
 ## Issues
 Found a bug or want a feature to be implemented?
 Please report it here https://github.com/pavelk2/social-feed/issues
@@ -131,3 +129,5 @@ Please report it here https://github.com/pavelk2/social-feed/issues
 ## Let me know
 
 If you use this plugin, please <a href="mailto:pavel@kucherbaev.com">write me a short message</a> with a link to the project where you embed the plugin, and some features you want to have implemented here. It helps me to stay focused on the important issues. *It is not mandatory, but I really appreciate it!*
+
+Check out my other projects: http://kucherbaev.com
