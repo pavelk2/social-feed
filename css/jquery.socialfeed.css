@@ -54,7 +54,7 @@
 }
 .social-feed-element .media-body > p{
     margin-bottom:4px;
-    height:20px;
+    min-height:20px;
 }
 .social-feed-element p.social-feed-text {
     margin: 0;
