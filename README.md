@@ -1,15 +1,16 @@
 # Social-feed
 ===========
 <a href="http://pavelk2.github.io/social-feed/" target="_blank"><img src="http://habrastorage.org/files/7f6/0f6/e3f/7f60f6e3fab24b0d8c2e4b9b15ccbfc0.png"/></a>
-The jQuery plugin which shows a user feed from the most popular social networks.<br/> 
-Currently are supported: <a href="http://facebook.com">Facebook</a>, <a href="http://instagram.com">Instagram</a>, <a href="http://vk.com">VK</a>, <a href="http://plus.google.com">Google+</a>, <a href="http://twitter.com">Twitter</a>.
+
+The jQuery plugin which shows a user feed from the most popular social networks.
+Currently are supported: http://facebook.com, http://instagram.com, http://vk.com, http://plus.google.com, http://twitter.com.
 
 If you use this plugin, please <a href="mailto:pavel@kucherbaev.com">write me a short message</a> with a link to the project where you embed the plugin, and some features you want to have implemented here. It will help me to stay focused on the important issues and see the global picture!
-<strong>It is not mandatory, but I really appreciate it!</strong>
+*It is not mandatory, but I really appreciate it!*
 
-<h6>Check out my other projects: <a href="http://kucherbaev.com" target="_blank"> http://kucherbaev.com</a><h6>
+###### Check out my other projects: http://kucherbaev.com
 
-## Install with <a href="http://bower.io">Bower</a>
+## Install with http://bower.io
 ```
 bower install social-feed
 ```
@@ -40,7 +41,8 @@ Connect js:
 ```
 Initialize the social-feed plugin:
 
-```javascript
+```html
+<script>
     $(document).ready(function(){
         $('.social-feed-container').socialfeed({
                     // FACEBOOK
@@ -92,12 +94,14 @@ Initialize the social-feed plugin:
                     }
                 });
         });
+</script>
 ```
 
-When you run the plugin, make sure that you have your <strong>webserver running</strong>
+When you run the plugin, make sure that you have your *webserver running*
 
-If you want to change the layout of the feed, you can do it in the <em>template.html</em> file.
-<br/>
+If you want to change the layout of the feed, you can do it in the _template.html_ file.
+
+
 Also you can simply create template as a string and pass it as template_html parameter.
 If you don't need to show the feed from all the supported social networks, put the credentials only for those you need.
 
