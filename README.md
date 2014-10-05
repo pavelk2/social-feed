@@ -9,6 +9,10 @@ If you use this plugin, please <a href="mailto:pavel@kucherbaev.com">write me a 
 
 <h6>Check out my other projects: <a href="http://kucherbaev.com" target="_blank"> http://kucherbaev.com</a><h6>
 
+## Install with <a href="http://bower.io">Bower</a>
+```
+bower install social-feed
+```
 ## Getting started
 
 Connect css:
