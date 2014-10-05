@@ -2,7 +2,7 @@
 
 The jQuery plugin which shows user feeds from the most popular social networks.
 
-![](http://habrastorage.org/files/7f6/0f6/e3f/7f60f6e3fab24b0d8c2e4b9b15ccbfc0.png)
+![](http://habrastorage.org/files/286/85e/03e/28685e03ef2b4bdc8f7da551b339426e.png)
 
 ## Demo
 
