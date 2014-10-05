@@ -1,16 +1,23 @@
 # Social-feed
-===========
-<a href="http://pavelk2.github.io/social-feed/" target="_blank"><img src="http://habrastorage.org/files/7f6/0f6/e3f/7f60f6e3fab24b0d8c2e4b9b15ccbfc0.png"/></a>
 
-The jQuery plugin which shows a user feed from the most popular social networks.
-Currently are supported: http://facebook.com, http://instagram.com, http://vk.com, http://plus.google.com, http://twitter.com.
+The jQuery plugin which shows user feeds from the most popular social networks.
 
-If you use this plugin, please <a href="mailto:pavel@kucherbaev.com">write me a short message</a> with a link to the project where you embed the plugin, and some features you want to have implemented here. It will help me to stay focused on the important issues and see the global picture!
+![Demo](http://habrastorage.org/files/7f6/0f6/e3f/7f60f6e3fab24b0d8c2e4b9b15ccbfc0.png "http://pavelk2.github.io/social-feed/")
+
+Social networks supported: 
+- [x] http://facebook.com
+- [x] http://instagram.com
+- [x] http://twitter.com
+- [x] http://plus.google.com
+- [x] http://vk.com
+ 
+
+
+If you use this plugin, please <a href="mailto:pavel@kucherbaev.com">write me a short message</a> with a link to the project where you embed the plugin, and some features you want to have implemented here. It helps me to stay focused on the important issues and to see the global picture!
 *It is not mandatory, but I really appreciate it!*
 
-###### Check out my other projects: http://kucherbaev.com
-
-## Install with http://bower.io
+## Install
+with http://bower.io:
 ```
 bower install social-feed
 ```
@@ -114,3 +121,4 @@ If you don't need to show the feed from all the supported social networks, put t
 ## License:
 MIT
 
+Check out my other projects: http://kucherbaev.com
