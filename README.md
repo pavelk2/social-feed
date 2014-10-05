@@ -28,26 +28,24 @@ https://github.com/pavelk2/social-feed/releases
 
 Connect css:
 ```html
-        <!-- Social-feed css -->
-        <link href="css/jquery.socialfeed.css" rel="stylesheet" type="text/css">
-        <!-- font-awesome for social network icons -->
-        <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+<!-- Social-feed css -->
+<link href="css/jquery.socialfeed.css" rel="stylesheet" type="text/css">
+<!-- font-awesome for social network icons -->
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 ```
 Create a container for your feed:
 ```html
-        <div class="social-feed-container"></div>
+<div class="social-feed-container"></div>
 ```
 Connect js:
 ```html
-        <!-- jQuery -->
-        <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-        <!-- doT.js for rendering templates and moment.js for showing time ago -->
-        <script src="dependencies/doT.min.js"></script>
-        <script src="dependencies/moment.min.js"></script>
-        <!-- Codebird.js - required for TWITTER -->
-        <script type="text/javascript" src="dependencies/codebird.js"></script>
-        <!-- Social-feed js -->
-        <script src="js/jquery.socialfeed.js"></script>
+<!-- jQuery -->
+<script src="bower_components/jquery/dist/jquery.min.js"></script>
+<!-- Codebird.js - required for TWITTER -->
+<script src="bower_components/codebird-js/codebird.js"></script>
+<!-- doT.js for rendering templates and moment.js for showing time ago -->
+<script src="bower_components/doT/doT.min.js"></script>
+<script src="bower_components/moment/min/moment.min.js"></script>
 ```
 Initialize the social-feed plugin:
 
