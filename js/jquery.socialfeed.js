@@ -251,6 +251,7 @@ if (typeof Object.create !== 'function') {
                 },
                 utility: {
                     getPosts: function(json) {
+                        console.log(json);
                         if (json['data'])
                             json['data'].forEach(function(element) {
                                 var post = new SocialFeedPost('facebook', Feed.facebook.utility.unifyPostData(element));
@@ -443,7 +444,7 @@ if (typeof Object.create !== 'function') {
                     },
                     unifyPostData: function(wall_owner, element, json) {
                         var post = {};
-                        
+
                         post.id = element.id;
                         post.dt_create = moment.unix(element.date);
                         post.description = ' ';
