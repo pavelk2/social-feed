@@ -120,13 +120,13 @@ If you want to change the layout of the feed, you can do it in the **template.ht
 Also you can simply create template as a string and pass it as template_html parameter.
 If you don't need to show the feed from all the supported social networks, put the credentials only for those you need.
 
-## Dependencies:
+## Dependencies
 *  http://fontawesome.io/ - for displaying icons of social networks
 *  http://momentjs.com/ - for displaying time ago
 *  http://olado.github.io/doT/ - for rendering templates
 *  https://github.com/jublonet/codebird-js - for sending requests to Twitter
 
-## License:
+## License
 MIT
 
 Check out my other projects: http://kucherbaev.com
