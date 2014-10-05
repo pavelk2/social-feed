@@ -21,9 +21,9 @@ Connect css:
 Create a container for your feed:
 ```html
         <div class="social-feed-container"></div>
-```html
-Connect js:
 ```
+Connect js:
+```html
         <!-- jQuery -->
         <script src="http://code.jquery.com/jquery-latest.min.js"></script>
         <!-- doT.js for rendering templates and moment.js for showing time ago -->
