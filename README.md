@@ -14,17 +14,21 @@ Social networks supported:
 - [x] Twitter
 - [x] Google+
 - [x] VK
+- [x] Blogspot
  
 ## Let me know
 
 If you use this plugin, please <a href="mailto:pavel@kucherbaev.com">write me a short message</a> with a link to the project where you embed the plugin, and some features you want to have implemented here. It helps me to stay focused on the important issues and to see the global picture!
 *It is not mandatory, but I really appreciate it!*
 
-## Install
-with http://bower.io:
+## Installation
+via http://bower.io:
 ```
 bower install social-feed
 ```
+or download the latest release:
+
+https://github.com/pavelk2/social-feed/releases
 ## Getting started
 
 Connect css:
@@ -108,9 +112,9 @@ Initialize the social-feed plugin:
 </script>
 ```
 
-When you run the plugin, make sure that you have your *webserver running*
+When you run the plugin, make sure that you have your **webserver running**
 
-If you want to change the layout of the feed, you can do it in the _template.html_ file.
+If you want to change the layout of the feed, you can do it in the **template.html** file.
 
 
 Also you can simply create template as a string and pass it as template_html parameter.
@@ -126,3 +130,7 @@ If you don't need to show the feed from all the supported social networks, put t
 MIT
 
 Check out my other projects: http://kucherbaev.com
+
+## Issues
+Found a bug or want a feature to be implemented?
+Please report it here https://github.com/pavelk2/social-feed/issues
