@@ -175,7 +175,7 @@ if (typeof Object.create !== 'function') {
                             var hashtag = account.substr(1);
                             cb.__call(
                                 "search_tweets",
-                                "q=" + hashtag,
+                                "q=" + hashtag + "&count=" + options.twitter.limit,
                                 function(reply) {
                                     Feed.twitter.utility.getPosts(reply.statuses);
                                 },
@@ -260,7 +260,6 @@ if (typeof Object.create !== 'function') {
                     unifyPostData: function(element) {
                         var post = {},
                             text = (element.message) ? element.message : element.story;
-
                         post.id = element.id;
                         post.dt_create = moment(element.created_time);
                         post.author_link = 'http://facebook.com/' + element.from.id;
@@ -272,13 +271,12 @@ if (typeof Object.create !== 'function') {
                         post.description = (element.description) ? element.description : '';
                         post.link = (element.link) ? element.link : 'http://facebook.com/' + element.from.id;
                         post.social_network = 'facebook';
-
                         if (options.show_media === true) {
                             if (element.picture) {
                                 var image_url = element.picture;
                                 if (element.object_id) {
                                     image_url = Feed.facebook.graph + element.object_id + '/picture/?type=normal';
-                                } else {
+                                } else if (image_url.indexOf('fbcdn-profile') == -1) {
                                     image_url = image_url + "&w=500&h=500"
                                 }
                                 post.attachment = '<img class="attachment" src="' + image_url + '" />';
@@ -291,31 +289,29 @@ if (typeof Object.create !== 'function') {
             google: {
                 posts: [],
                 loaded: false,
-                api : 'https://www.googleapis.com/plus/v1/',
+                api: 'https://www.googleapis.com/plus/v1/',
                 getData: function(account) {
                     var request_url;
                     switch (account[0]) {
                         case '#':
                             var hashtag = account.substr(1);
                             request_url = Feed.google.api + 'activities?query=' + hashtag + '&key=' + options.google.access_token + '&maxResults=' + options.google.limit;
-                            Utility.request(request_url, Feed.google.utility.getPosts);
+                            Utility.get_request(request_url, Feed.google.utility.getPosts);
                             break;
-
                         case '@':
                             var username = account.substr(1);
                             request_url = Feed.google.api + 'people/' + username + '/activities/public?key=' + options.google.access_token + '&maxResults=' + options.google.limit;
-                            Utilityrequest(request_url, Feed.google.utility.getPosts);
+                            Utility.get_request(request_url, Feed.google.utility.getPosts);
                             break;
-
                         default:
                     }
                 },
                 utility: {
                     getPosts: function(json) {
-                        json.items.forEach(function(element) {
-                            var post = new SocialFeedPost('google', Feed.google.utility.unifyPostData(element));
+                        $.each(json.items, function(i) {
+                            var post = new SocialFeedPost('google', Feed.google.utility.unifyPostData(json.items[i]));
                             post.render();
-                        });
+                        })
                     },
                     unifyPostData: function(element) {
                         var post = {};
@@ -345,17 +341,7 @@ if (typeof Object.create !== 'function') {
                                 });
                             }
                         }
-                        if (element.object.content === '') {
-                            $.each(element.object.attachments, function() {
-                                if (this.content !== undefined) {
-                                    post.message = this.content;
-                                } else if (this.displayName !== undefined) {
-                                    post.message = this.displayName + '<br />' + this.url;
-                                }
-                            });
-                        } else {
-                            post.message = element.object.content;
-                        }
+                        post.message = element.title;
                         post.social_network = 'google-plus';
                         post.link = element.url;
 
@@ -365,22 +351,22 @@ if (typeof Object.create !== 'function') {
             },
             instagram: {
                 posts: [],
+                api: 'https://api.instagram.com/v1/',
                 loaded: false,
+                access: 'client_id=' + options.instagram.client_id,
+                limit: 'count=' + options.instagram.limit,
                 getData: function(account) {
-                    var url,
-                        limit = 'count=' + options.instagram.limit,
-                        query_extention = 'client_id=' + options.instagram.client_id + '&' + limit + '&callback=?',
-                        igm_api_base = 'https://api.instagram.com/v1/';
+                    var url;
 
                     switch (account[0]) {
                         case '@':
                             var username = account.substr(1);
-                            url = igm_api_base + 'users/search/?q=' + username + '&' + query_extention;
+                            url = Feed.instagram.api + 'users/search/?q=' + username + '&' + Feed.instagram.access + '&count=1' + '&callback=?';
                             Utility.request(url, Feed.instagram.utility.getUsers);
                             break;
                         case '#':
                             var hashtag = account.substr(1);
-                            url = igm_api_base + 'tags/' + hashtag + '/media/recent/?' + query_extention;
+                            url = Feed.instagram.api + 'tags/' + hashtag + '/media/recent/?' + Feed.instagram.access + '&' + Feed.instagram.limit + '&callback=?';
                             Utility.request(url, Feed.instagram.utility.getImages);
                             break;
                         default:
@@ -393,12 +379,10 @@ if (typeof Object.create !== 'function') {
                             post.render();
                         });
                     },
-                    getUsers: function(json, username) {
+                    getUsers: function(json) {
                         json.data.forEach(function(user) {
-                            if (user.username == username) {
-                                var url = igm_api_base + 'users/' + user.id + '/media/recent/?' + query_extention;
-                                Utility.request(url, Feed.instagram.utility.getImages);
-                            }
+                            var url = Feed.instagram.api + 'users/' + user.id + '/media/recent/?' + Feed.instagram.access + '&' + Feed.instagram.limit + '&callback=?';
+                            Utility.request(url, Feed.instagram.utility.getImages);
                         });
                     },
                     unifyPostData: function(element) {
@@ -459,7 +443,7 @@ if (typeof Object.create !== 'function') {
                     },
                     unifyPostData: function(wall_owner, element, json) {
                         var post = {};
-
+                        
                         post.id = element.id;
                         post.dt_create = moment.unix(element.date);
                         post.description = ' ';
@@ -467,12 +451,12 @@ if (typeof Object.create !== 'function') {
                         post.social_network = 'vk';
                         if (options.show_media) {
                             if (element.attachment) {
+                                if (element.attachment.type == 'link')
+                                    post.attachment = '<img class="attachment" src="' + element.attachment.link.image_src + '" />';
                                 if (element.attachment.type == 'video')
                                     post.attachment = '<img class="attachment" src="' + element.attachment.video.image_big + '" />';
                                 if (element.attachment.type == 'photo')
                                     post.attachment = '<img class="attachment" src="' + element.attachment.photo.src_big + '" />';
-                                if (element.attachment.type == 'link')
-                                    post.attachment = '<img class="attachment" src="' + element.attachment.link.image_src + '" />';
                             }
                         }
 
@@ -525,7 +509,6 @@ if (typeof Object.create !== 'function') {
                 },
                 utility: {
                     getPosts: function(json) {
-
                         $.each(json.feed.entry, function() {
                             var post = {},
                                 element = this;
@@ -552,7 +535,7 @@ if (typeof Object.create !== 'function') {
             }
         }
 
-        // Initiate function
+        // Initialization
         Feed.init();
         if (options.update_period) {
             setInterval(function() {
