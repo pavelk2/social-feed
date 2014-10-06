@@ -43,9 +43,12 @@ Connect js:
 <script src="bower_components/jquery/dist/jquery.min.js"></script>
 <!-- Codebird.js - required for TWITTER -->
 <script src="bower_components/codebird-js/codebird.js"></script>
-<!-- doT.js for rendering templates and moment.js for showing time ago -->
+<!-- doT.js for rendering templates -->
 <script src="bower_components/doT/doT.min.js"></script>
+<!-- Moment.js for showing "time ago" -->
 <script src="bower_components/moment/min/moment.min.js"></script>
+<!-- Social-feed js -->
+<script src="js/jquery.socialfeed.js"></script>
 ```
 Initialize the social-feed plugin:
 
