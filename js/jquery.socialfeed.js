@@ -219,6 +219,68 @@ if (typeof Object.create !== 'function') {
                 }
 
             },
+            vine: {
+                posts: [],
+                api: 'https://api.vineapp.com/',
+                loaded: false,
+                getData: function(account) {
+                    var request_url, limit = 'limit=' + options.vine.limit,
+                        query_extention = 'callback=?';
+                    switch (account[0]) {
+                        case '@':
+                            var username = account.substr(1);
+
+                            request_url = Feed.vine.api + 'timelines/users/'+username + '?'  + query_extention;
+                            //Utility.request(request_url, Feed.vine.utility.getPosts);
+                            break;
+                        case '#':
+                            var hashtag = account.substr(1);
+
+                            request_url = Feed.vine.api + 'timelines/tags/' + hashtag + '?'  + query_extention;
+                            console.log(request_url);
+                            //Utility.request(request_url, Feed.vine.utility.getPosts);
+                            break;
+                        default:
+                    }
+                },
+                utility: {
+                    getPosts: function(json){
+                        console.log(json);
+                        /*if (json['data'])
+                            json['data'].forEach(function(element) {
+                                var post = new SocialFeedPost('facebook', Feed.facebook.utility.unifyPostData(element));
+                                post.render();
+                            });*/
+                    },
+                    unifyPostData: function(element) {
+                        var post = {},
+                            text = (element.message) ? element.message : element.story;
+                        post.id = element.id;
+                        post.dt_create = moment(element.created_time);
+                        post.author_link = 'http://facebook.com/' + element.from.id;
+                        post.author_picture = Feed.facebook.graph + element.from.id + '/picture';
+                        post.author_name = element.from.name;
+                        if (text) {
+                            post.message = text;
+                        }
+                        post.description = (element.description) ? element.description : '';
+                        post.link = (element.link) ? element.link : 'http://facebook.com/' + element.from.id;
+                        post.social_network = 'facebook';
+                        if (options.show_media === true) {
+                            if (element.picture) {
+                                var image_url = element.picture;
+                                if (element.object_id) {
+                                    image_url = Feed.facebook.graph + element.object_id + '/picture/?type=normal';
+                                } else if (image_url.indexOf('fbcdn-profile') == -1) {
+                                    image_url = image_url + "&w=500&h=500"
+                                }
+                                post.attachment = '<img class="attachment" src="' + image_url + '" />';
+                            }
+                        }
+                        return post;
+                    }
+                }
+            },
             facebook: {
                 posts: [],
                 graph: 'https://graph.facebook.com/',
@@ -246,7 +308,6 @@ if (typeof Object.create !== 'function') {
                 },
                 utility: {
                     getPosts: function(json) {
-                        console.log(json);
                         if (json['data'])
                             json['data'].forEach(function(element) {
                                 var post = new SocialFeedPost('facebook', Feed.facebook.utility.unifyPostData(element));
@@ -349,20 +410,18 @@ if (typeof Object.create !== 'function') {
                 posts: [],
                 api: 'https://api.instagram.com/v1/',
                 loaded: false,
-                access: 'client_id=' + options.instagram.client_id,
-                limit: 'count=' + options.instagram.limit,
                 getData: function(account) {
                     var url;
 
                     switch (account[0]) {
                         case '@':
                             var username = account.substr(1);
-                            url = Feed.instagram.api + 'users/search/?q=' + username + '&' + Feed.instagram.access + '&count=1' + '&callback=?';
+                            url = Feed.instagram.api + 'users/search/?q=' + username + '&' + 'client_id=' + options.instagram.client_id + '&count=1' + '&callback=?';
                             Utility.request(url, Feed.instagram.utility.getUsers);
                             break;
                         case '#':
                             var hashtag = account.substr(1);
-                            url = Feed.instagram.api + 'tags/' + hashtag + '/media/recent/?' + Feed.instagram.access + '&' + Feed.instagram.limit + '&callback=?';
+                            url = Feed.instagram.api + 'tags/' + hashtag + '/media/recent/?' + 'client_id=' + options.instagram.client_id + '&' + 'count=' + options.instagram.limit + '&callback=?';
                             Utility.request(url, Feed.instagram.utility.getImages);
                             break;
                         default:
@@ -377,7 +436,7 @@ if (typeof Object.create !== 'function') {
                     },
                     getUsers: function(json) {
                         json.data.forEach(function(user) {
-                            var url = Feed.instagram.api + 'users/' + user.id + '/media/recent/?' + Feed.instagram.access + '&' + Feed.instagram.limit + '&callback=?';
+                            var url = Feed.instagram.api + 'users/' + user.id + '/media/recent/?' + 'client_id=' + options.instagram.client_id + '&' + 'count=' + options.instagram.limit + '&callback=?';
                             Utility.request(url, Feed.instagram.utility.getImages);
                         });
                     },
