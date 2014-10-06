@@ -196,7 +196,7 @@ if (typeof Object.create !== 'function') {
                     unifyPostData: function(element) {
                         var post = {};
                         post.id = element.id;
-                        post.dt_create = moment(Feed.twitter.utility.fixTwitterDate(element.created_at));
+                        post.dt_create = moment(element.created_at);
                         post.author_link = 'http://twitter.com/' + element.user.screen_name;
                         post.author_picture = element.user.profile_image_url;
                         post.post_url = post.author_link + '/status/' + element.id_str;
@@ -216,11 +216,6 @@ if (typeof Object.create !== 'function') {
                         }
                         return post;
                     },
-                    fixTwitterDate: function(created_at) {
-                        created_at = created_at.replace('+0000', 'Z');
-                        if (created_at !== undefined)
-                            return created_at;
-                    }
                 }
 
             },
