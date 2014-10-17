@@ -35,6 +35,17 @@ if (typeof Object.create !== 'function') {
             if (fire && options.callback)
                 options.callback();
         }
+        
+        function sanitiseImageURL(imageURL) {
+            // facebook add safe image wrapper for outside links
+            // return the pure image URL
+            if (imageURL.indexOf('safe_image.php') > 0) {
+                return decodeURIComponent(imageURL).split('url=')[1].replace('&w=500&h=500', '');
+            } else {
+                return imageURL;
+            }
+        }
+    
         var Utility = {
             request: function(url, callback) {
                 $.ajax({
@@ -275,7 +286,7 @@ if (typeof Object.create !== 'function') {
                                 } else if (image_url.indexOf('fbcdn-profile') == -1) {
                                     image_url = image_url + "&w=500&h=500"
                                 }
-                                post.attachment = '<img class="attachment" src="' + image_url + '" />';
+                                post.attachment = '<img class="attachment" src="' + sanitiseImageURL(image_url) + '" />';
                             }
                         }
                         return post;
