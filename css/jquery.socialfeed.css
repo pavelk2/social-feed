@@ -10,7 +10,7 @@
     margin-left: 10px;
 }
 .social-feed-element img {
-    max-width: 100%;
+    width: 100%;
     width: auto\9;
     height: auto;
     border: 0;  
@@ -105,6 +105,7 @@
 }
 
 .social-feed-element{
+    box-shadow: 0 0 10px 0 rgba(10, 10, 10, 0.2);
     transition: 0.25s;
     -webkit-backface-visibility: hidden;
     margin:-1px;
@@ -117,7 +118,7 @@
     line-height: 16px;
 }
 .social-feed-element:hover{
-    box-shadow: 0 0 40px 0 rgba(10, 10, 10, 0.2);
+    box-shadow: 0 0 20px 0 rgba(10, 10, 10, 0.4);
 }
 
 .social-feed-element .content{

@@ -1,88 +1,47 @@
 <!doctype html>
 <html>
+
 <head>
     <meta charset="utf-8" />
     <!-- Social-feed css -->
     <link href="css/jquery.socialfeed.css" rel="stylesheet" type="text/css">
     <!-- font-awesome for social network icons -->
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.css" rel="stylesheet">
-    <style>
-    /*This style is needed only for the plugin demo page. Do not use it in your projects*/
-    body{ 
-        padding:0px;
-        padding-bottom:50px;
-        margin:0px;
-        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-        font-size: 14px;
-        line-height: 20px;
-        color: #eee;
-        text-align:center;
-
-        background-image: -webkit-gradient(
-            linear,
-            left top,
-            right bottom,
-            color-stop(0.07, #4A4DA1),
-            color-stop(0.86, #8EFAFA)
-            );
-        background-image: -o-linear-gradient(right bottom, #4A4DA1 7%, #8EFAFA 86%);
-        background-image: -moz-linear-gradient(right bottom, #4A4DA1 7%, #8EFAFA 86%);
-        background-image: -webkit-linear-gradient(right bottom, #4A4DA1 7%, #8EFAFA 86%);
-        background-image: -ms-linear-gradient(right bottom, #4A4DA1 7%, #8EFAFA 86%);
-        background-image: linear-gradient(to right bottom, #4A4DA1 7%, #8EFAFA 86%);
-    }
-    h1{
-        font-weight: 100;
-        font-size: 70px;
-    }
-    h2{
-        line-height: 24px;
-        font-weight: 100;
-    }
-    a{color: #FFF;}
-    a.btn {
-        text-decoration: none;
-        border: 1px solid #fff;
-        padding: 8px 11px;
-        border-radius: 5px;
-        transition: 0.25s;
-        -webkit-backface-visibility: hidden;
-    }
-    a.btn.btn-primary{
-        font-weight: 200;
-        border-width: 2px;
-        padding: 7px 10px;
-    }
-    a.btn:hover {
-        color:rgba(0, 50, 150, 0.5);
-        text-decoration: none;
-        background-color:#fff;
-    }
-    hr{
-        opacity:0.4;
-        border-color: #fff;
-        border-bottom: none;
-    }
-    .container {display:inline-block;width:400px;}
-    .social-feed-container{width:100%;}
-    </style>
+    <link href='http://fonts.googleapis.com/css?family=Indie+Flower' rel='stylesheet' type='text/css'>
+    <!-- This style is needed only for the plugin demo page. Do not use it in your projects -->
+    <link href="css/demo.css" rel="stylesheet" type="text/css">
 </head>
+
 <body>
-    <div class="container">
-        <h1>social-feed.js</h1>
-        <hr/>
-        <h2>jQuery plugin which displays posts by a username or a hashtag from the popular social networks: <br/><i>Facebook</i>, <i>Instagram</i>, <i>Twitter</i>, <i>Google+</i>, <i>VK</i>.
-        </h2>
-        <h2><a href='https://github.com/pavelk2/social-feed/' target = '_blank' class='btn btn-primary'>download</a></h2>
-        <hr/>
-        <iframe src="http://ghbtns.com/github-btn.html?user=pavelk2&amp;repo=social-feed&amp;type=watch&amp;count=true&amp;size=large" allowtransparency="true" frameborder="0" scrolling="0" width="152px" height="30px"></iframe>
-        <iframe src="http://ghbtns.com/github-btn.html?user=pavelk2&amp;repo=social-feed&amp;type=fork&amp;count=true&amp;size=large" allowtransparency="true" frameborder="0" scrolling="0" width="152px" height="30px"></iframe>     
-
-        <h2>#dolomiti</h2>
-
-        <div class="social-feed-container">
+    <section class="intro">
+        <div class="container">
+            <h1>social-feed.js</h1>
+            <hr/>
+            <p>jQuery plugin which displays posts by a username or a hashtag from the popular social networks:
+                <br/><i>Facebook</i>, <i>Instagram</i>, <i>Twitter</i>, <i>Google+</i>, <i>VK</i>.
+            </p>
+            <hr/>
+            <div class="controls">
+                <a href='https://github.com/pavelk2/social-feed/' target='_blank' class='btn btn-primary button-leave'><i class="fa fa-github"></i> Get Started</a>
+            </div>
         </div>
-    </div>
+    </section>
+    <section class="stripe">
+        <div class="container field">
+            <input type="text" class="btn" value="@elonmusk, #elonmusk" id="query">
+            <button class='btn btn-primary' id="button-update"><i class="fa fa-refresh"></i></button>
+        </div>
+    </section>
+    <section class="feed">
+        <div class="container">
+            <!--div class="controls">
+                <input type="field" value="#dolomiti" id="query" />
+                <input type="button" value="Update" />
+            </div-->
+            <div class="social-feed-container">
+            </div>
+        </div>
+    </section>
 
     <!-- jQuery -->
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
@@ -96,55 +55,66 @@
     <script src="js/jquery.socialfeed.js"></script>
 
     <script>
-    $(document).ready(function(){
-        $('.social-feed-container').socialfeed({
-                    // FACEBOOK
-                    facebook:{
-                        accounts:['dolomiti'],
-                        limit:2,
-                        access_token:'150849908413827|a20e87978f1ac491a0c4a721c961b68c'
-                    },
-                    // GOOGLEPLUS
-                    google:{ 
-                        accounts: ['#dolomiti'],
-                        limit: 2,
-                        access_token: 'AIzaSyDpNQcIwQf5TcKmI8B0rh3e4OodIywJP14'
-                    },
-                    // Twitter
-                    twitter:{
-                        accounts: ['#dolomiti'],
-                        limit: 2,
-                        consumer_key: 'eZe0Sk4GdH7LKWTlotow', // make sure to have your app read-only
-                        consumer_secret: 'j35RWFf6JntvQP9qEWfdzroVCpz4YLnWWIhrdlNw', // make sure to have your app read-only
-                     },
-                    // VKONTAKTE
-                    vk:{
-                        accounts:['#dolomiti'],
-                        limit:2,
-                        source:'all'
-                    },
-                    // INSTAGRAM
-                    instagram:{
-                        accounts:['#dolomiti'],
-                        limit:2,
-                        client_id:'2c6d2173ae9d41de905236e6301e5a43'
-                    },
-                    
-                    // GENERAL SETTINGS
-                    length:200,
-                    show_media:true,
-                    // Moderation function - if returns false, template will have class hidden
-                    moderation: function(content){
-                        return  (content.text) ? content.text.indexOf('fuck') == -1 : true;
-                    },
-                    //update_period: 5000,
-                    // When all the posts are collected and displayed - this function is evoked
-                    callback: function(){
-                        console.log('all posts are collected');
-                    }
-                });
-});
-</script>
+    $(document).ready(function() {
+
+        var updateFeed = function() {
+            var initialQuery = $('#query').val();
+            var queryTags = initialQuery.split(", ");
+            $('.social-feed-container').socialfeed({
+                // FACEBOOK
+                facebook: {
+                    accounts: queryTags,
+                    limit: 2,
+                    access_token: '150849908413827|a20e87978f1ac491a0c4a721c961b68c'
+                },
+                // GOOGLEPLUS
+                google: {
+                    accounts: queryTags,
+                    limit: 2,
+                    access_token: 'AIzaSyDpNQcIwQf5TcKmI8B0rh3e4OodIywJP14'
+                },
+                // Twitter
+                twitter: {
+                    accounts: queryTags,
+                    limit: 2,
+                    consumer_key: 'eZe0Sk4GdH7LKWTlotow', // make sure to have your app read-only
+                    consumer_secret: 'j35RWFf6JntvQP9qEWfdzroVCpz4YLnWWIhrdlNw', // make sure to have your app read-only
+                },
+                // VKONTAKTE
+                vk: {
+                    accounts: queryTags,
+                    limit: 2,
+                    source: 'all'
+                },
+                // INSTAGRAM
+                instagram: {
+                    accounts: queryTags,
+                    limit: 2,
+                    client_id: '2c6d2173ae9d41de905236e6301e5a43'
+                },
+
+                // GENERAL SETTINGS
+                length: 200,
+                show_media: true,
+                // Moderation function - if returns false, template will have class hidden
+                moderation: function(content) {
+                    return (content.text) ? content.text.indexOf('fuck') == -1 : true;
+                },
+                //update_period: 5000,
+                // When all the posts are collected and displayed - this function is evoked
+                callback: function() {
+                    console.log('all posts are collected');
+                }
+            });
+        };
+      
+        updateFeed();
+        $('#button-update').click(function() {
+            updateFeed();
+        });
+
+    });
+    </script>
 </body>
 
 </html>

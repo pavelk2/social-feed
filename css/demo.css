@@ -1,0 +1,122 @@
+section {
+    display: block;
+    padding: 15px 0px;
+}
+section.intro {
+    /*background-image: -webkit-gradient( linear, left top, right bottom, color-stop(0.07, #4A4DA1), color-stop(0.86, #8EFAFA));
+        background-image: -o-linear-gradient(right bottom, #4A4DA1 7%, #8EFAFA 86%);
+        background-image: -moz-linear-gradient(right bottom, #4A4DA1 7%, #8EFAFA 86%);
+        background-image: -webkit-linear-gradient(right bottom, #4A4DA1 7%, #8EFAFA 86%);
+        background-image: -ms-linear-gradient(right bottom, #4A4DA1 7%, #8EFAFA 86%);*/
+    
+    background-image: radial-gradient(ellipse farthest-side at 100% 100%, #85D8CE 10%, #085078 120%);
+}
+section.intro h1 {
+    font-family: 'Indie Flower', cursive;
+    font-size: 70px;
+    font-weight: 100;
+}
+section.intro i {
+    font-weight: 200;
+}
+section.intro p {
+    line-height: 24px;
+    font-size: 20px;
+    font-weight: 100;
+}
+section.intro a {
+    color: #FFF;
+}
+section .controls {
+    margin: 30px 0;
+}
+section.stripe {
+    background-color: #444;
+}
+.btn {
+    font-size: 18px;
+    color: #fff;
+    background: none;
+    text-decoration: none;
+    border: 1px solid #fff;
+    padding: 8px 11px;
+    border-radius: 5px;
+    transition: 0.25s;
+    -webkit-backface-visibility: hidden;
+}
+.btn.btn-primary {
+    font-weight: 200;
+    border-width: 1px;
+    padding: 7px 10px;
+}
+.btn-primary:hover {
+    cursor:pointer;
+    color: rgba(0, 50, 150, 0.5);
+    text-decoration: none;
+    background-color: #fff;
+}
+.field{
+    margin-top:6px;
+}
+.field input {
+    margin:0px;
+    float: left;
+    width: 327px;
+    text-align: center;
+    font-size: 16px;
+    border-right: none;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+.field input:hover {
+    background: none;
+    color: #fff;
+}
+.field .btn-primary {
+    width: 50px;
+    height:36px;
+    float: right;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+}
+section.intro hr {
+    opacity: 0.4;
+    border-color: #fff;
+    border-bottom: none;
+}
+section.feed {
+    padding: 50px 0px;
+}
+section.feed .controls {
+    padding-bottom: 20px;
+}
+section.feed .controls input {
+    border: none;
+    border-bottom: 1px dashed #FFF;
+    text-align: center;
+    background: none;
+    height: 30px;
+    /* width: 100%; */
+    
+    font-size: 22px;
+    font-weight: 100;
+    color: #FFF;
+    padding: 4px;
+}
+body {
+    background-color: #ddd;
+    padding: 0px;
+    margin: 0px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 20px;
+    color: #eee;
+    text-align: center;
+}
+.container {
+    display: inline-block;
+    width: 400px;
+}
+.social-feed-container {
+    width: 100%;
+}
