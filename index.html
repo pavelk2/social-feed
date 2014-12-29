@@ -61,7 +61,8 @@
 
         var updateFeed = function() {
             var initialQuery = $('#query').val();
-            var queryTags = initialQuery.split(", ");
+            initialQuery = initialQuery.replace(" ","");
+            var queryTags = initialQuery.split(",");
             $('.social-feed-container').socialfeed({
                 // FACEBOOK
                 facebook: {
