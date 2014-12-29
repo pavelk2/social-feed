@@ -4,12 +4,13 @@
 <head>
     <meta charset="utf-8" />
     <!-- Social-feed css -->
+    <link href="css/example.css" rel="stylesheet" type="text/css">
     <link href="css/jquery.socialfeed.css" rel="stylesheet" type="text/css">
     <!-- font-awesome for social network icons -->
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.css" rel="stylesheet">
     <link href='http://fonts.googleapis.com/css?family=Indie+Flower' rel='stylesheet' type='text/css'>
     <!-- This style is needed only for the plugin demo page. Do not use it in your projects -->
-    <link href="css/demo.css" rel="stylesheet" type="text/css">
+
 </head>
 
 <body>
@@ -22,14 +23,15 @@
             </p>
             <hr/>
             <div class="controls">
-                <a href='https://github.com/pavelk2/social-feed/' target='_blank' class='btn btn-primary button-leave'><i class="fa fa-github"></i> Get Started</a>
+                <a href='https://github.com/pavelk2/social-feed/' target='_blank' class='button'><i class="fa fa-github"></i> Get Started</a>
             </div>
         </div>
     </section>
     <section class="stripe">
         <div class="container field">
-            <input type="text" class="btn" value="@elonmusk, #elonmusk" id="query">
-            <button class='btn btn-primary' id="button-update"><i class="fa fa-refresh"></i></button>
+            <input type="text" class="input field-left" value="@elonmusk, #elonmusk" id="query">
+            <button class='button field-right' id="button-update"><i class="fa fa-refresh"></i>
+            </button>
         </div>
     </section>
     <section class="feed">
@@ -107,7 +109,7 @@
                 }
             });
         };
-      
+
         updateFeed();
         $('#button-update').click(function() {
             updateFeed();
