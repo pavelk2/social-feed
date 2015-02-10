@@ -221,7 +221,7 @@ if (typeof Object.create !== 'function') {
                             var post = {};
                             if (element.id) {
                                 post.id = element.id;
-                                post.dt_create = moment(element.created_at);
+                                post.dt_create = moment(element.created_at, 'dd MMM DD HH:mm:ss ZZ YYYY', 'en');
                                 post.author_link = 'http://twitter.com/' + element.user.screen_name;
                                 post.author_picture = element.user.profile_image_url;
                                 post.post_url = post.author_link + '/status/' + element.id_str;
@@ -295,8 +295,6 @@ if (typeof Object.create !== 'function') {
                         getPosts: function(json) {
                             if (json['data']){
                                 json['data'].forEach(function(element) {
-                                     //if (element.status_type != 'approved_friend')
-                                     console.log(element);
                                     var post = new SocialFeedPost('facebook', Feed.facebook.utility.unifyPostData(element));
                                     post.render();
                                 });
