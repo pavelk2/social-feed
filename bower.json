@@ -1,6 +1,6 @@
 {
   "name": "social-feed",
-  "version": "0.1.3",
+  "version": "0.1.1",
   "homepage": "http://pavelk2.github.io/social-feed/",
   "authors": [
     {
@@ -27,8 +27,7 @@
   "ignore": [
     "**/.*",
     "node_modules",
-    "bower_components",
-    "sass/.sass-cache*",
+    "bower_components"
   ],
   "dependencies": {
     "jquery": "~2.1.1",
