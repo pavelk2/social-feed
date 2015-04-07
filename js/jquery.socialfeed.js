@@ -123,22 +123,29 @@ if (typeof Object.create !== 'function') {
                 }
                 if (options.media_min_width) {
 
-                    var query = '[social-feed-id=' + data.id + '] img.attachment';
-                    var image = $(query);
-                    image.error(function() {
-                        image.hide();
-                    });
-                    image.load(function() {
-                        if (image.width() < options.media_min_width) {
+					var query = '[social-feed-id=' + data.id + '] img.attachment';
+					var image = $(query);
+					
+					// preload the image
+					var height, width = '';
+					var img = new Image();
+					var imgSrc = image.attr("src");
+					
+					$(img).load(function () {
+					    if (img.width < options.media_min_width) {
+					    	// image smaller than min_width
                             image.hide();
+                            //console.log('Image too small');
                         }
-                    });
-                }
-                //if (lastelement) {
+					    // garbage collect img
+					    delete img;
+					}).error(function () {
+					    // image couldnt be loaded
+					    image.hide();
+					    //console.log('An error occurred and your image could not be loaded.');
+					}).attr({ src: imgSrc });
 
-                //loaded[data.social_network]--;
-                //fireCallback();
-                //}
+				}
             }
 
         };
