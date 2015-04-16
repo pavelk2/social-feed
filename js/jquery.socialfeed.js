@@ -109,11 +109,6 @@ if (typeof Object.create !== 'function') {
         }
         SocialFeedPost.prototype = {
             render: function() {
-                loaded_post_count++;
-                if(loaded_post_count == posts_to_load_count) {
-                  fireCallback();
-                }
-                
                 var rendered_html = Feed.template(this.content);
                 var data = this.content;
 
@@ -166,6 +161,12 @@ if (typeof Object.create !== 'function') {
 					}).attr({ src: imgSrc });
 
 				}
+        
+        loaded_post_count++;
+        if(loaded_post_count == posts_to_load_count) {
+          fireCallback();
+        }
+        
             }
 
         };
