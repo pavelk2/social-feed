@@ -125,12 +125,12 @@ if (typeof Object.create !== 'function') {
 
 					var query = '[social-feed-id=' + data.id + '] img.attachment';
 					var image = $(query);
-					
+
 					// preload the image
 					var height, width = '';
 					var img = new Image();
 					var imgSrc = image.attr("src");
-					
+
 					$(img).load(function () {
 
 					    if (img.width < options.media_min_width) {
@@ -142,7 +142,7 @@ if (typeof Object.create !== 'function') {
 					}).error(function () {
 					    // image couldnt be loaded
 					    image.hide();
-					    
+
 					}).attr({ src: imgSrc });
 
 				}
@@ -417,6 +417,10 @@ if (typeof Object.create !== 'function') {
                                 url = Feed.instagram.api + 'tags/' + hashtag + '/media/recent/?' + 'client_id=' + options.instagram.client_id + '&' + 'count=' + options.instagram.limit + '&callback=?';
                                 Utility.request(url, Feed.instagram.utility.getImages);
                                 break;
+                            case '&':
+                                var id = account.substr(1);
+                                url = Feed.instagram.api + 'users/' + id  + '/?client_id=' + options.instagram.client_id + '&' + 'count=' + options.instagram.limit + '&callback=?';
+                                Utility.request(url, Feed.instagram.utility.getUsers);
                             default:
                         }
                     },
@@ -430,6 +434,7 @@ if (typeof Object.create !== 'function') {
                             }
                         },
                         getUsers: function(json) {
+                            if( ! jQuery.isArray(json.data)) json.data = [json.data]
                             json.data.forEach(function(user) {
                                 var url = Feed.instagram.api + 'users/' + user.id + '/media/recent/?' + 'client_id=' + options.instagram.client_id + '&' + 'count=' + options.instagram.limit + '&callback=?';
                                 Utility.request(url, Feed.instagram.utility.getImages);
