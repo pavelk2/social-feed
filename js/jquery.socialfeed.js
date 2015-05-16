@@ -271,6 +271,21 @@ if (typeof Object.create !== 'function') {
                         Utility.request(request_url, Feed.facebook.utility.getPosts);
                     },
                     utility: {
+                        getUserId: function(username) {
+                            var url = 'https://graph.facebook.com/' + username;
+                            var result = '';
+                            $.ajax({
+                                url: url,
+                                async: false,
+                                dataType: 'json'
+                            }).done(function(data) {
+                                result = data.id; 
+                            })
+                            .fail(function (xhr, status, errorThrown) {
+                                result = '';
+                            });
+                            return result;
+                        },
                         prepareAttachment: function(element) {
                             var image_url = element.picture;
                             if (image_url.indexOf('_b.') !== -1) {
