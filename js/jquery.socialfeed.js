@@ -263,10 +263,6 @@ if (typeof Object.create !== 'function') {
                                 var username = account.substr(1);
                                 request_url = Feed.facebook.graph + 'v1.0/' + username + '/posts?' + limit + query_extention;
                                 break;
-                            case '#':
-                                var hashtag = account.substr(1);
-                                // search by hashtags is depriciated in API v2.x, so we use here v1.0 explicitly
-                                request_url = Feed.facebook.graph + 'v1.0/search?q=%23' + hashtag + '&' + limit + query_extention;
                                 break;
                             default:
                                 // search by hashtags is depriciated in API v2.x, so we use here v1.0 explicitly
