@@ -261,20 +261,35 @@ if (typeof Object.create !== 'function') {
                         switch (account[0]) {
                             case '@':
                                 var username = account.substr(1);
-                                request_url = Feed.facebook.graph + 'v1.0/' + username + '/posts?' + limit + query_extention;
+                                var userid = Feed.facebook.utility.getUserId(username);
+                                if (userid !== '') {
+                                    request_url = Feed.facebook.graph + 'v2.3/' + userid + '/posts?' + limit + query_extention;    
+                                }
                                 break;
-                            case '#':
-                                var hashtag = account.substr(1);
-                                // search by hashtags is depriciated in API v2.x, so we use here v1.0 explicitly
-                                request_url = Feed.facebook.graph + 'v1.0/search?q=%23' + hashtag + '&' + limit + query_extention;
+                            case '!':
+                                var page = account.substr(1);
+                                request_url = Feed.facebook.graph + 'v2.3/' + page + '/feed?' + limit + query_extention;
                                 break;
                             default:
-                                // search by hashtags is depriciated in API v2.x, so we use here v1.0 explicitly
-                                request_url = Feed.facebook.graph + 'v1.0/search?q=' + account + '&' + limit + query_extention;
                         }
                         Utility.request(request_url, Feed.facebook.utility.getPosts);
                     },
                     utility: {
+                        getUserId: function(username) {
+                            var url = 'https://graph.facebook.com/' + username;
+                            var result = '';
+                            $.ajax({
+                                url: url,
+                                async: false,
+                                dataType: 'json'
+                            }).done(function(data) {
+                                result = data.id; 
+                            })
+                            .fail(function (xhr, status, errorThrown) {
+                                result = '';
+                            });
+                            return result;
+                        },
                         prepareAttachment: function(element) {
                             var image_url = element.picture;
                             if (image_url.indexOf('_b.') !== -1) {
