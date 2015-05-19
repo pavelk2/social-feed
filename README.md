@@ -29,7 +29,7 @@ https://github.com/pavelk2/social-feed/releases
 Connect css:
 ```html
 <!-- Social-feed css -->
-<link href="css/jquery.socialfeed.css" rel="stylesheet" type="text/css">
+<link href="bower_components/social-feed/css/jquery.socialfeed.css" rel="stylesheet" type="text/css">
 <!-- font-awesome for social network icons -->
 <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 ```
@@ -48,7 +48,7 @@ Connect js:
 <!-- Moment.js for showing "time ago" -->
 <script src="bower_components/moment/min/moment.min.js"></script>
 <!-- Social-feed js -->
-<script src="js/jquery.socialfeed.js"></script>
+<script src="bower_components/social-feed/js/jquery.socialfeed.js"></script>
 ```
 Initialize the social-feed plugin:
 
