@@ -21,12 +21,27 @@ if (typeof Object.create !== 'function') {
         var options = $.extend(defaults, _options),
             container = $(this),
             template,
-            social_networks = ['facebook', 'instagram', 'vk', 'google', 'blogspot', 'twitter'];
-        container.empty().css('display', 'inline-block');
+            social_networks = ['facebook', 'instagram', 'vk', 'google', 'blogspot', 'twitter'],
+            posts_to_load_count = 0,
+            loaded_post_count = 0;
+        // container.empty().css('display', 'block');
         //---------------------------------------------------------------------------------
-
+        
         //---------------------------------------------------------------------------------
         // This function performs consequent data loading from all of the sources by calling corresponding functions
+        function calculatePostsToLoadCount() {
+          social_networks.forEach(function(network) {
+            if (options[network]) {
+              if (options[network].accounts) {
+                posts_to_load_count += options[network].limit * options[network].accounts.length;
+              } else {
+                posts_to_load_count += options[network].limit;
+              }
+            }
+          });
+        };
+        
+        calculatePostsToLoadCount();
 
         function fireCallback() {
             var fire = true;
@@ -146,6 +161,12 @@ if (typeof Object.create !== 'function') {
 					}).attr({ src: imgSrc });
 
 				}
+        
+        loaded_post_count++;
+        if(loaded_post_count == posts_to_load_count) {
+          fireCallback();
+        }
+        
             }
 
         };
