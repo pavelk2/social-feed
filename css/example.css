@@ -90,10 +90,12 @@ section.intro hr, .intro hr, .intro.stripe hr {
   border-top-right-radius: 0px;
   border-bottom-right-radius: 0px; }
 
-.refferal {
+.referral {
   text-align: left; }
-  .refferal a {
+  .referral a {
     color: white;
     font-weight: 200; }
+  .referral ul {
+    list-style: none; }
 
 /*# sourceMappingURL=example.css.map */

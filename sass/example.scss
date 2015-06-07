@@ -142,10 +142,13 @@ section.intro {
     border-bottom-right-radius: 0px;
 }
 
-.refferal {
+.referral {
     text-align: left;
     a {
         color: white;
-        font-weight:200;
+        font-weight: 200;
+    }
+    ul {
+        list-style: none;
     }
 }
