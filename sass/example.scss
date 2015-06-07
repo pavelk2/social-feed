@@ -1,5 +1,9 @@
-$font-family-title: "Indie Flower", cursive;
-$font-family-body: "Helvetica Neue", Helvetica, Arial, sans-serif;
+$font-family-title: "Indie Flower",
+cursive;
+$font-family-body: "Helvetica Neue",
+Helvetica,
+Arial,
+sans-serif;
 $color-light: #fff;
 $color-dark: #444;
 $background-color-dark: #444;
@@ -17,10 +21,12 @@ $container-width: 400px;
     //background-image: -webkit-linear-gradient(right bottom, #4A4DA1 7%, #8EFAFA 86%);
     //background-image: -ms-linear-gradient(right bottom, #4A4DA1 7%, #8EFAFA 86%);
 }
+
 @mixin span-zero {
     padding: 0px;
     margin: 0px;
 }
+
 body {
     @include span-zero;
     background-color: $background-color-middle;
@@ -30,6 +36,7 @@ body {
     font-family: $font-family-body;
     font-size: $font-size-sm;
 }
+
 .container {
     display: inline-block;
     width: $container-width;
@@ -40,15 +47,16 @@ section {
     display: block;
     padding: 20px 0px;
 }
+
 .intro {
-	
     @extend section;
     font-weight: 100;
     @include gradient(#85D8CE, #085078);
-    .controls{
-    	margin: 20px 0px 0px 0px;
+    .controls {
+        margin: 20px 0px 0px 0px;
     }
 }
+
 .stripe {
     @extend section;
     font-weight: 100;
@@ -89,6 +97,7 @@ section.intro {
     transition: 0.25s;
     -webkit-backface-visibility: hidden;
 }
+
 .button {
     @extend %borders;
     padding: 7px 10px;
@@ -100,31 +109,43 @@ section.intro {
         background-color: $background-color-light;
     }
 }
+
 .input {
-	height:41px;
+    height: 41px;
     @extend %borders;
     padding: 7px;
-    -moz-box-sizing: border-box; 
+    -moz-box-sizing: border-box;
     box-sizing: border-box;
     &:hover {
         background: none;
         color: $color-light;
     }
 }
-.field{
-	margin-top:7px;
+
+.field {
+    margin-top: 7px;
 }
+
 .field-right {
     width: 20%;
-    height:41px;
+    height: 41px;
     float: right;
     border-top-left-radius: 0px;
     border-bottom-left-radius: 0px;
 }
+
 .field-left {
     width: 80%;
     float: left;
     border-right: none;
     border-top-right-radius: 0px;
     border-bottom-right-radius: 0px;
+}
+
+.refferal {
+    text-align: left;
+    a {
+        color: white;
+        font-weight:200;
+    }
 }

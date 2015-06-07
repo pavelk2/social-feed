@@ -10,7 +10,6 @@
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.css" rel="stylesheet">
     <link href='http://fonts.googleapis.com/css?family=Indie+Flower' rel='stylesheet' type='text/css'>
     <!-- This style is needed only for the plugin demo page. Do not use it in your projects -->
-
 </head>
 
 <body>
@@ -18,7 +17,7 @@
         <div class="container">
             <h1>social-feed.js</h1>
             <hr/>
-            <p>jQuery plugin which displays posts by a username (@), hashtag (#) or a facebook page (!) from the popular social networks:
+            <p>jQuery plugin which displays posts by a username and hashtag from the popular social networks:
                 <br/><i>Facebook</i>, <i>Instagram</i>, <i>Twitter</i>, <i>Google+</i>, <i>VK</i>.
             </p>
             <hr/>
@@ -29,7 +28,7 @@
     </section>
     <section class="stripe">
         <div class="container field">
-            <input type="text" class="input field-left" value="@teslamotors, !teslamotors" id="query">
+            <input type="text" class="input field-left" value="@teslamotors, #teslamotors" id="query">
             <button class='button field-right' id="button-update"><i class="fa fa-refresh"></i>
             </button>
         </div>
@@ -44,7 +43,15 @@
             </div>
         </div>
     </section>
-
+    <section class="stripe">
+        <div class="container field refferal">
+            <p>If you like <i>social-feed.js</i>, you can support the developers by signing up via refferal links on:</p>
+            <ul>
+                <li><a href="https://www.digitalocean.com/?refcode=22a9ed42f948" target="_blank">DigitalOcean</a> (you get 10$) </li>
+                <li><a href="http://mbsy.co/CodeSchool/18980243" target="_blank">CodeSchool</a></li>
+            </ul>
+        </div>
+    </section>
     <!-- jQuery -->
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
     <!-- Codebird.js - required for TWITTER -->
@@ -55,7 +62,6 @@
     <script src="bower_components/moment/min/moment.min.js"></script>
     <!-- Social-feed js -->
     <script src="js/jquery.socialfeed.js"></script>
-
     <script>
     $(document).ready(function() {
 
@@ -74,7 +80,7 @@
                 google: {
                     accounts: queryTags,
                     limit: 2,
-                    access_token: 'AIzaSyDpNQcIwQf5TcKmI8B0rh3e4OodIywJP14'
+                    access_token: 'AIzaSyDAelFmJhg6BSUbSLe8UT7s-G53tL4_KRg'
                 },
                 // Twitter
                 twitter: {
