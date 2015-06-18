@@ -1,6 +1,6 @@
 # Social-feed
 The jQuery plugin which shows user feeds from the most popular social networks.
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/pavelk2/social-feed/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
 ![](http://habrastorage.org/files/286/85e/03e/28685e03ef2b4bdc8f7da551b339426e.png)
 
 ## Demo
@@ -136,3 +136,5 @@ If you use this plugin, please <a href="mailto:pavel@kucherbaev.com">write me a 
 Do you want to become a part of the Social-feed? Write me and become an active contributor.
 
 Check out my other projects: http://kucherbaev.com
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/pavelk2/social-feed/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
