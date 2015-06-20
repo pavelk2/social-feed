@@ -360,7 +360,7 @@ if (typeof Object.create !== 'function') {
                             post.message = (text) ? text : '';
                             post.description = (element.description) ? element.description : '';
                             post.link = (element.link) ? element.link : 'http://facebook.com/' + element.from.id;
-                            
+
                             if (options.show_media === true) {
                                 if (element.picture) {
                                     var attachment = Feed.facebook.utility.prepareAttachment(element);
@@ -487,7 +487,7 @@ if (typeof Object.create !== 'function') {
                         },
                         unifyPostData: function(element) {
                             var post = {};
-                            
+
                             post.id = element.id;
                             post.dt_create = moment(element.created_time * 1000);
                             post.author_link = 'http://instagram.com/' + element.user.username;
