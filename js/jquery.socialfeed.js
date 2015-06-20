@@ -32,7 +32,7 @@ if (typeof Object.create !== 'function') {
         function calculatePostsToLoadCount() {
           social_networks.forEach(function(network) {
             if (options[network]) {
-              if (options[network].accounts) {
+              if (options[network].accounts && options.instagram.operator !== 'AND') {
                 posts_to_load_count += options[network].limit * options[network].accounts.length;
               } else {
                 posts_to_load_count += options[network].limit;
@@ -104,15 +104,21 @@ if (typeof Object.create !== 'function') {
             this.content.dt_create = this.content.dt_create.valueOf();
             this.content.text = Utility.wrapLinks(Utility.shorten(data.message + ' ' + data.description), data.social_network);
             this.content.moderation_passed = (options.moderation) ? options.moderation(this.content) : true;
-
+            this.content.tags = data.tags;
             Feed[social_network].posts.push(this);
         }
         SocialFeedPost.prototype = {
             render: function() {
+                if(loaded_post_count < posts_to_load_count) {
                 var rendered_html = Feed.template(this.content);
                 var data = this.content;
-
-                if ($(container).children('[social-feed-id=' + data.id + ']').length !== 0) {
+	            var hashtag = options.instagram.accounts[1].substr(1);
+				if(data.social_network === "instagram" && options.instagram.operator === 'AND') {
+                    if($.inArray(hashtag, data.tags) === -1) {
+					return false;
+				    }
+                }
+	        if ($(container).children('[social-feed-id=' + data.id + ']').length !== 0) {
                     return false;
                 }
                 if ($(container).children().length === 0) {
@@ -163,12 +169,11 @@ if (typeof Object.create !== 'function') {
 				}
         
         loaded_post_count++;
-        if(loaded_post_count == posts_to_load_count) {
-          fireCallback();
-        }
-        
+//          fireCallback();
+
             }
 
+            }
         };
 
         var Feed = {
@@ -346,7 +351,6 @@ if (typeof Object.create !== 'function') {
                         unifyPostData: function(element) {
                             var post = {},
                                 text = (element.message) ? element.message : element.story;
-
                             post.id = element.id;
                             post.dt_create = moment(element.created_time);
                             post.author_link = 'http://facebook.com/' + element.from.id;
@@ -449,9 +453,11 @@ if (typeof Object.create !== 'function') {
                                 Utility.request(url, Feed.instagram.utility.getUsers);
                                 break;
                             case '#':
+                                if(options.instagram.operator === 'OR') {
                                 var hashtag = account.substr(1);
                                 url = Feed.instagram.api + 'tags/' + hashtag + '/media/recent/?' + 'client_id=' + options.instagram.client_id + '&' + 'count=' + options.instagram.limit + '&callback=?';
-                                Utility.request(url, Feed.instagram.utility.getImages);
+                                Utility.request(url, Feed.instagram.utility.getImages); 
+                                }
                                 break;
                             case '&':
                                 var id = account.substr(1);
@@ -471,6 +477,9 @@ if (typeof Object.create !== 'function') {
                         },
                         getUsers: function(json) {
                             if( ! jQuery.isArray(json.data)) json.data = [json.data]
+                            if(options.instagram.operator === 'AND') {
+                                options.instagram.limit = 60;
+                            }
                             json.data.forEach(function(user) {
                                 var url = Feed.instagram.api + 'users/' + user.id + '/media/recent/?' + 'client_id=' + options.instagram.client_id + '&' + 'count=' + options.instagram.limit + '&callback=?';
                                 Utility.request(url, Feed.instagram.utility.getImages);
@@ -487,6 +496,9 @@ if (typeof Object.create !== 'function') {
                             post.message = (element.caption && element.caption) ? element.caption.text : '';
                             post.description = '';
                             post.link = element.link;
+                            if(options.instagram.operator === 'AND') {
+                            post.tags = element.tags;
+                            }
                             if (options.show_media) {
                                 post.attachment = '<img class="attachment" src="' + element.images.standard_resolution.url + '' + '" />';
                             }
@@ -584,7 +596,7 @@ if (typeof Object.create !== 'function') {
                         }
                     }
                 },
-                blogspot: {
+             	blogspot: {
                     loaded: false,
                     getData: function(account) {
                         var url;
