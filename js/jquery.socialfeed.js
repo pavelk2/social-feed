@@ -105,7 +105,7 @@ if (typeof Object.create !== 'function') {
             this.content.text = Utility.wrapLinks(Utility.shorten(data.message + ' ' + data.description), data.social_network);
             this.content.moderation_passed = (options.moderation) ? options.moderation(this.content) : true;
             this.content.tags = data.tags;
-        		Feed[social_network].posts.push(this);
+            Feed[social_network].posts.push(this);
         }
         SocialFeedPost.prototype = {
             render: function() {
@@ -118,7 +118,7 @@ if (typeof Object.create !== 'function') {
 					return false;
 				    }
                 }
-	            if ($(container).children('[social-feed-id=' + data.id + ']').length !== 0) {
+	        if ($(container).children('[social-feed-id=' + data.id + ']').length !== 0) {
                     return false;
                 }
                 if ($(container).children().length === 0) {
@@ -168,8 +168,8 @@ if (typeof Object.create !== 'function') {
 
 				}
         
-            loaded_post_count++;
-//              fireCallback();
+        loaded_post_count++;
+//          fireCallback();
 
             }
 
@@ -313,7 +313,6 @@ if (typeof Object.create !== 'function') {
                             })
                             .fail(function (xhr, status, errorThrown) {
                                 result = '';
-                                console.log(xhr, status, errorThrown);
                             });
                             return result;
                         },
@@ -348,7 +347,6 @@ if (typeof Object.create !== 'function') {
                                     post.render();
                                 });
                             }
-
                         },
                         unifyPostData: function(element) {
                             var post = {},
@@ -489,6 +487,7 @@ if (typeof Object.create !== 'function') {
                         },
                         unifyPostData: function(element) {
                             var post = {};
+                            
                             post.id = element.id;
                             post.dt_create = moment(element.created_time * 1000);
                             post.author_link = 'http://instagram.com/' + element.user.username;
@@ -503,7 +502,6 @@ if (typeof Object.create !== 'function') {
                             if (options.show_media) {
                                 post.attachment = '<img class="attachment" src="' + element.images.standard_resolution.url + '' + '" />';
                             }
-
                             return post;
                         }
                     }
