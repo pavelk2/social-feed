@@ -287,7 +287,6 @@ if (typeof Object.create !== 'function') {
                         case '@':
                             var username = account.substr(1);
                             Feed.facebook.utility.getUserId(username, function(userdata) {
-                                console.log(userdata);
                                 if (userdata.id !== '') {
                                     request_url = Feed.facebook.graph + 'v2.3/' + userdata.id + '/posts?' + limit + query_extention;
                                     proceed(request_url);
