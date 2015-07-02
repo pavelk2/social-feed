@@ -234,13 +234,16 @@ if (typeof Object.create !== 'function') {
                     switch (account[0]) {
                         case '@':
                             var username = account.substr(1);
-
                             request_url = Feed.facebook.graph + username + '/posts?' + limit + query_extention;
+                            Utility.request(request_url, Feed.facebook.utility.getPosts);
+                            break;
+                        case '!':
+                            var tagged = account.substr(1);
+                            request_url = Feed.facebook.graph + tagged + '/tagged?' + limit + query_extention;
                             Utility.request(request_url, Feed.facebook.utility.getPosts);
                             break;
                         case '#':
                             var hashtag = account.substr(1);
-
                             request_url = Feed.facebook.graph + 'search?q=%23' + hashtag + '&' + limit + query_extention;
                             Utility.request(request_url, Feed.facebook.utility.getPosts);
                             break;
