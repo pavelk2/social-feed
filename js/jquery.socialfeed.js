@@ -210,8 +210,13 @@ if (typeof Object.create !== 'function') {
 
                 getData: function(account) {
 
-                    var cb = new Codebird;
+                    var cb = new Codebird();
                     cb.setConsumerKey(options.twitter.consumer_key, options.twitter.consumer_secret);
+                    
+                    // Allow setting your own proxy with Codebird
+                    if (options.twitter.proxy !== undefined) {
+                        cb.setProxy(options.twitter.proxy);
+                    }
 
                     switch (account[0]) {
                         case '@':
