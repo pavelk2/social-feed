@@ -293,14 +293,14 @@ if (typeof Object.create !== 'function') {
                             var username = account.substr(1);
                             Feed.facebook.utility.getUserId(username, function(userdata) {
                                 if (userdata.id !== '') {
-                                    request_url = Feed.facebook.graph + 'v2.3/' + userdata.id + '/posts?' + limit + query_extention;
+                                    request_url = Feed.facebook.graph + 'v2.4/' + userdata.id + '/posts?fields=id,from,name,message,created_time,story,description,link,picture,object_id&' + limit + query_extention;
                                     proceed(request_url);
                                 }
                             });
                             break;
                         case '!':
                             var page = account.substr(1);
-                            request_url = Feed.facebook.graph + 'v2.3/' + page + '/feed?' + limit + query_extention;
+                            request_url = Feed.facebook.graph + 'v2.4/' + page + '/feed?fields=id,from,name,message,created_time,story,description,link,picture,object_id&' + limit + query_extention;
                             proceed(request_url);
                             break;
                         default:
