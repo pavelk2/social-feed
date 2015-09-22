@@ -286,21 +286,23 @@ if (typeof Object.create !== 'function') {
                     var proceed = function(request_url){
                         Utility.request(request_url, Feed.facebook.utility.getPosts);
                     }
-                    var request_url, limit = 'limit=' + options.facebook.limit,
+                    var fields = '?fields=id,from,name,message,created_time,story,description,link';
+                    	fields += (options.show_media === true)?',picture,object_id':'';
+                    var request_url, limit = '&limit=' + options.facebook.limit,
                         query_extention = '&access_token=' + options.facebook.access_token + '&callback=?';
                     switch (account[0]) {
                         case '@':
                             var username = account.substr(1);
                             Feed.facebook.utility.getUserId(username, function(userdata) {
                                 if (userdata.id !== '') {
-                                    request_url = Feed.facebook.graph + 'v2.3/' + userdata.id + '/posts?' + limit + query_extention;
+                                    request_url = Feed.facebook.graph + 'v2.4/' + userdata.id + '/posts'+ fields + limit + query_extention;
                                     proceed(request_url);
                                 }
                             });
                             break;
                         case '!':
                             var page = account.substr(1);
-                            request_url = Feed.facebook.graph + 'v2.3/' + page + '/feed?' + limit + query_extention;
+                            request_url = Feed.facebook.graph + 'v2.4/' + page + '/feed'+ fields + limit + query_extention;
                             proceed(request_url);
                             break;
                         default:
