@@ -212,7 +212,7 @@ if (typeof Object.create !== 'function') {
 
                     var cb = new Codebird();
                     cb.setConsumerKey(options.twitter.consumer_key, options.twitter.consumer_secret);
-                    
+
                     // Allow setting your own proxy with Codebird
                     if (options.twitter.proxy !== undefined) {
                         cb.setProxy(options.twitter.proxy);
@@ -256,7 +256,8 @@ if (typeof Object.create !== 'function') {
                         var post = {};
                         if (element.id) {
                             post.id = element.id;
-                            post.dt_create = moment(element.created_at);
+                            //prevent a moment.js console warning due to Twitter's poor date format.
+                            post.dt_create = moment(new Date(element.created_at));
                             post.author_link = 'http://twitter.com/' + element.user.screen_name;
                             post.author_picture = element.user.profile_image_url;
                             post.post_url = post.author_link + '/status/' + element.id_str;
