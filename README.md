@@ -116,13 +116,13 @@ Also you can simply create template as a string and pass it as template_html par
 $('.social-feed-container').socialfeed({
     // Twitter
     twitter: {
-        accounts: queryTags,
+        accounts: ['@ford']
         limit: 2,
         consumer_key: 'qzRXgkI7enflNJH1lWFvujT2P', // make sure to have your app read-only
         consumer_secret: '8e7E7gHuTwyDHw9lGQFO73FcUwz9YozT37lEvZulMq8FXaPl8O', // make sure to have your app read-only
     },
     template_html: '<article class="twitter-post"><h4>{{=it.author_name}}</h4><p>{{=it.text}} <a href="{{=it.link}}" target="_blank">read more</a></p></article>'
-};
+});
 ````
 
 If you don't need to show the feed from all the supported social networks, put the credentials only for those you need.
