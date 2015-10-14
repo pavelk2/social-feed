@@ -109,10 +109,22 @@ Initialize the social-feed plugin:
 
 When you run the plugin, make sure that you have your **webserver running**
 
-If you want to change the layout of the feed, you can do it in the **template.html** file.
-
+To alter the default post markup, edit ````template.html````
 
 Also you can simply create template as a string and pass it as template_html parameter.
+````
+$('.social-feed-container').socialfeed({
+    // Twitter
+    twitter: {
+        accounts: queryTags,
+        limit: 2,
+        consumer_key: 'qzRXgkI7enflNJH1lWFvujT2P', // make sure to have your app read-only
+        consumer_secret: '8e7E7gHuTwyDHw9lGQFO73FcUwz9YozT37lEvZulMq8FXaPl8O', // make sure to have your app read-only
+    },
+    template_html: '<article class="twitter-post"><h4>{{=it.author_name}}</h4><p>{{=it.text}} <a href="{{=it.link}}" target="_blank">read more</a></p></article>'
+};
+````
+
 If you don't need to show the feed from all the supported social networks, put the credentials only for those you need.
 
 ## Dependencies
@@ -122,7 +134,7 @@ If you don't need to show the feed from all the supported social networks, put t
 *  https://github.com/jublonet/codebird-js - for sending requests to Twitter
 
 ## License
-MIT
+[MIT](http://mit-license.org/)
 
 ## Issues
 Found a bug or want a feature to be implemented?
