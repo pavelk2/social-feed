@@ -7,14 +7,14 @@ The jQuery plugin which shows user feeds from the most popular social networks.
 
 http://pavelk2.github.io/social-feed/
 
-Social networks supported: 
+Social networks supported:
 - [x] Facebook
 - [x] Instagram
 - [x] Twitter
 - [x] Google+
 - [x] VK
-- [x] Blogspot
- 
+- [ ] Blogspot
+
 ## Installation
 via http://bower.io:
 ```
@@ -25,7 +25,7 @@ or download the latest release:
 https://github.com/pavelk2/social-feed/releases
 ## Getting started
 
-Connect css:
+Load dependency CSS:
 ```html
 <!-- Social-feed css -->
 <link href="bower_components/social-feed/css/jquery.socialfeed.css" rel="stylesheet" type="text/css">
@@ -36,7 +36,7 @@ Create a container for your feed:
 ```html
 <div class="social-feed-container"></div>
 ```
-Connect js:
+Load dependency javascript
 ```html
 <!-- jQuery -->
 <script src="bower_components/jquery/dist/jquery.min.js"></script>
@@ -55,80 +55,89 @@ Initialize the social-feed plugin:
 <script>
     $(document).ready(function(){
         $('.social-feed-container').socialfeed({
-                    // FACEBOOK
-                    facebook:{
-                        accounts: ['@teslamotors','!teslamotors'],
-                        limit: 2,
-                        access_token: 'YOUR_FACEBOOK_ACCESS_TOKEN' // APP_ID|APP_SECRET
-                    },
-                    // TWITTER
-                    twitter:{
-                        accounts: ['@spacex'],
-                        limit: 2,
-                        consumer_key: 'YOUR_CONSUMER_KEY', // make sure to have your app read-only
-                        consumer_secret: 'YOUR_CONSUMER_SECRET_KEY', // make sure to have your app read-only
-                     },
-                    // VK
-                    vk:{
-                        accounts: ['@125936523','#teslamotors'], 
-                        limit: 2,
-                        source: 'all'
-                    },
-                    // GOOGLEPLUS
-                    google:{
-                         accounts: ['#teslamotors'],
-                         limit: 2,
-                         access_token: 'YOUR_GOOGLE_PLUS_ACCESS_TOKEN'
-                     },
-                    // INSTAGRAM
-                    instagram:{
-                        accounts: ['@teslamotors','#teslamotors'],
-                        limit:2,
-                        client_id: 'YOUR_INSTAGRAM_CLIENT_ID'
-                    },
-                    // BLOGSPOT
-                    /*blogspot:{
-                        accounts:['@iman-khaghanifar']
-                    },*/
-                    // GENERAL SETTINGS
-                    length:400,
-                    show_media:true,
-                    // Moderation function - if returns false, template will have class hidden
-                    moderation: function(content){
-                        return  (content.text) ? content.text.indexOf('fuck') == -1 : true;
-                    },
-                    //update_period: 5000,
-                    // When all the posts are collected and displayed - this function is evoked
-                    callback: function(){
-                        console.log('all posts are collected');
-                    }
-                });
+            // INSTAGRAM
+            instagram:{
+                accounts: ['@teslamotors','#teslamotors'],  //Array: Specify a list of accounts from which to pull posts
+                limit: 2,                                    //Integer: max number of posts to load
+                client_id: 'YOUR_INSTAGRAM_CLIENT_ID'       //String: Instagram client id
+            },
+
+            // GENERAL SETTINGS
+            length:400                                      //Integer: For posts with text longer than this length, show an ellipsis.
         });
+    });
 </script>
 ```
 
 When you run the plugin, make sure that you have your **webserver running**
 
-To alter the default post markup, edit ````template.html````
+To alter the default post markup, edit ````template.html```` or pass a template string into the ````template_html```` parameter.
 
-Also you can simply create template as a string and pass it as template_html parameter.
-````
+##All Settings
+
+Social-feed.js supports many social networks. If you don't need or want to pull data from them all, remove the ones you don't need.
+
+````javascript
 $('.social-feed-container').socialfeed({
-    // Twitter
-    twitter: {
-        accounts: ['@ford']
-        limit: 2,
-        consumer_key: 'qzRXgkI7enflNJH1lWFvujT2P', // make sure to have your app read-only
-        consumer_secret: '8e7E7gHuTwyDHw9lGQFO73FcUwz9YozT37lEvZulMq8FXaPl8O', // make sure to have your app read-only
+    // FACEBOOK
+    facebook:{
+        accounts: ['@teslamotors','!teslamotors'],  //Array: Specify a list of accounts from which to pull wall posts
+        limit: 2,                                   //Integer: max number of posts to load
+        access_token: 'YOUR_FACEBOOK_ACCESS_TOKEN'  //String: "APP_ID|APP_SECRET"
     },
-    template_html: '<article class="twitter-post"><h4>{{=it.author_name}}</h4><p>{{=it.text}} <a href="{{=it.link}}" target="_blank">read more</a></p></article>'
+
+    // TWITTER
+    twitter:{
+        accounts: ['@spacex'],                      //Array: Specify a list of accounts from which to pull tweets
+        limit: 2,                                   //Integer: max number of tweets to load
+        consumer_key: 'YOUR_CONSUMER_KEY',          //String: consumer key. make sure to have your app read-only
+        consumer_secret: 'YOUR_CONSUMER_SECRET_KEY',//String: consumer secret key. make sure to have your app read-only
+     },
+
+    // VK
+    vk:{
+        accounts: ['@125936523','#teslamotors'],    //Array: Specify a list of accounts from which to pull posts
+        limit: 2,                                   //Integer: max number of posts to load
+        source: 'all'                               //String: VK API post filter. Possible values: "Owner","Others","all","suggests"
+    },
+
+    // GOOGLEPLUS
+    google:{
+         accounts: ['#teslamotors'],                //Array: Specify a list of accounts from which to pull posts
+         limit: 2,                                  //Integer: max number of posts to load
+         access_token: 'YOUR_GOOGLE_PLUS_ACCESS_TOKEN'//String: G+ access token
+     },
+
+    // INSTAGRAM
+    instagram:{
+        accounts: ['@teslamotors','#teslamotors'],  //Array: Specify a list of accounts from which to pull posts
+        limit: 2,                                    //Integer: max number of posts to load
+        client_id: 'YOUR_INSTAGRAM_CLIENT_ID'       //String: Instagram client id
+    },
+
+    // GENERAL SETTINGS
+    length:400,                     //Integer: For posts with text longer than this length, show an ellipsis.
+    show_media:true,                //Boolean: if false, doesn't display any post images
+    media_min_width: 300,           //Integer: Only get posts with images larger than this value
+    update_period: 5000,            //Integer: Number of seconds before social-feed will attempt to load new posts.
+    template: "tweet.html",         //String: Filename used to get the post template.
+    template_html:                  //String: HTML used for each post. This overrides the 'template' filename option
+    '<article class="twitter-post"> \
+    <h4>{{=it.author_name}}</h4><p>{{=it.text}}  \
+    <a href="{{=it.link}}" target="_blank">read more</a> \
+    </p> \
+    </article>',
+    moderation: function(content) { // Function: if returns false, template will have class hidden
+        return  (content.text) ? content.text.indexOf('fuck') == -1 : true;
+    },
+    callback: function() {          // Function: This is a callback function which is evoked when all the posts are collected and displayed
+        console.log("All posts collected!");
+    }
 });
 ````
 
-If you don't need to show the feed from all the supported social networks, put the credentials only for those you need.
-
 ## Dependencies
-*  http://fontawesome.io/ - for displaying icons of social networks
+*  http://fontawesome.io/ - for displaying icons of social networks. You can remove this dependency by editing replacing .fa icons with images in the template.
 *  http://momentjs.com/ - for displaying time ago
 *  http://olado.github.io/doT/ - for rendering templates
 *  https://github.com/jublonet/codebird-js - for sending requests to Twitter
