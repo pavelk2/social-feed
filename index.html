@@ -119,6 +119,10 @@
 
         updateFeed();
         $('#button-update').click(function() {
+            //first, get rid of old data/posts.
+            $('.social-feed-container').html('');
+
+            //then load new posts
             updateFeed();
         });
 
