@@ -631,13 +631,17 @@ if (typeof Object.create !== 'function') {
                 }
             }
         };
-        // Initialization
-        Feed.init();
-        if (options.update_period) {
-            setInterval(function() {
-                return Feed.init();
-            }, options.update_period);
-        }
+        
+        //make the plugin chainable
+        return this.each(function() {
+            // Initialization
+            Feed.init();
+            if (options.update_period) {
+                setInterval(function() {
+                    return Feed.init();
+                }, options.update_period);
+            }
+        })
     };
 
 })(jQuery);
