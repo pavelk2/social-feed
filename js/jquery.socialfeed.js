@@ -645,14 +645,13 @@ if (typeof Object.create !== 'function') {
                             var username = account.substr(1);
                             if (username === 'me') {
                                 request_url = Feed.pinterest.apiv1 + 'me/pins/?' + query_extention;
-                                Utility.request(request_url, Feed.pinterest.utility.getPosts);
                             } else {
                                 request_url = Feed.pinterest.apiv1 + 'boards/' + username + '/pins?' + query_extention;
-                                Utility.request(request_url, Feed.pinterest.utility.getPosts);
                             }
                             break;
                         default:
                     }
+                    Utility.request(request_url, Feed.pinterest.utility.getPosts);
                 },
                 utility: {
 
