@@ -123,7 +123,7 @@ $('.social-feed-container').socialfeed({
                                                     //@me to pull your pins
                                                     //@user/board to pull pins from a user board
         limit: 2,                                   //Integer: max number of posts to load
-        access_token: 'YOUR_PINTEREST_ACCESS_TOKEN' //String: Instagram client id
+        access_token: 'YOUR_PINTEREST_ACCESS_TOKEN' //String: Pinterest client id
     },
 
     // GENERAL SETTINGS
