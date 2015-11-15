@@ -13,6 +13,7 @@ Social networks supported:
 - [x] Twitter
 - [x] Google+
 - [x] VK
+- [x] Pinterest
 - [ ] Blogspot
 
 ## Installation
@@ -113,6 +114,16 @@ $('.social-feed-container').socialfeed({
         accounts: ['@teslamotors','#teslamotors'],  //Array: Specify a list of accounts from which to pull posts
         limit: 2,                                   //Integer: max number of posts to load
         client_id: 'YOUR_INSTAGRAM_CLIENT_ID'       //String: Instagram client id
+    },
+    
+    // PINTEREST
+
+    pinterest:{
+        accounts: ['@teslamotors/model-s','@me'],   //Array: Specify a list of accounts from which to pull posts
+                                                    //@me to pull your pins
+                                                    //@user/board to pull pins from a user board
+        limit: 2,                                   //Integer: max number of posts to load
+        access_token: 'YOUR_PINTEREST_ACCESS_TOKEN' //String: Instagram client id
     },
 
     // GENERAL SETTINGS

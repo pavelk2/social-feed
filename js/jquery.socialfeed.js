@@ -21,7 +21,7 @@ if (typeof Object.create !== 'function') {
         var options = $.extend(defaults, _options),
             container = $(this),
             template,
-            social_networks = ['facebook', 'instagram', 'vk', 'google', 'blogspot', 'twitter'],
+            social_networks = ['facebook', 'instagram', 'vk', 'google', 'blogspot', 'twitter', 'pinterest'],
             posts_to_load_count = 0,
             loaded_post_count = 0;
         // container.empty().css('display', 'block');
@@ -627,6 +627,57 @@ if (typeof Object.create !== 'function') {
                             post.render();
 
                         });
+                    }
+                }
+            },
+            pinterest: {
+                posts: [],
+                loaded: false,
+                apiv1: 'https://api.pinterest.com/v1/',
+
+                getData: function(account) {
+                    var request_url,
+                      limit = 'limit=' + options.pinterest.limit,
+                      fields = 'fields=id,created_at,link,note,creator(url,first_name,last_name,image),image',
+                      query_extention = fields + '&access_token=' + options.pinterest.access_token + '&' + limit + '&callback=?';
+                    switch (account[0]) {
+                        case '@':
+                            var username = account.substr(1);
+                            if (username === 'me') {
+                                request_url = Feed.pinterest.apiv1 + 'me/pins/?' + query_extention;
+                            } else {
+                                request_url = Feed.pinterest.apiv1 + 'boards/' + username + '/pins?' + query_extention;
+                            }
+                            break;
+                        default:
+                    }
+                    Utility.request(request_url, Feed.pinterest.utility.getPosts);
+                },
+                utility: {
+
+                    getPosts: function(json) {
+                        json.data.forEach(function(element) {
+                            var post = new SocialFeedPost('pinterest', Feed.pinterest.utility.unifyPostData(element));
+                            post.render();
+                        });
+                    },
+
+                    unifyPostData: function(element){
+                        var post = {};
+
+                        post.id = element.id;
+                        post.dt_create= moment(element.created_at);
+                        post.author_link = element.creator.url;
+                        post.author_picture = element.creator.image['60x60' ].url;
+                        post.author_name =  element.creator.first_name + element.creator.last_name;
+                        post.message = element.note;
+                        post.description = '';
+                        post.social_network = 'pinterest';
+                        post.link = element.link;
+                        if (options.show_media) {
+                            post.attachment = '<img class="attachment" src="' + element.image['original'].url + '" />';
+                        }
+                        return post;
                     }
                 }
             }
