@@ -276,7 +276,7 @@ if (typeof Object.create !== 'function') {
                             }
                         }
                         return post;
-                    },
+                    }
                 }
             },
             facebook: {
