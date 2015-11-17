@@ -21,7 +21,7 @@ if (typeof Object.create !== 'function') {
         var options = $.extend(defaults, _options),
             container = $(this),
             template,
-            social_networks = ['facebook', 'instagram', 'vk', 'google', 'blogspot', 'twitter', 'pinterest'],
+            social_networks = ['facebook', 'instagram', 'vk', 'google', 'blogspot', 'twitter', 'pinterest', 'rss'],
             posts_to_load_count = 0,
             loaded_post_count = 0;
         // container.empty().css('display', 'block');
@@ -39,7 +39,7 @@ if (typeof Object.create !== 'function') {
                     }
                 }
             });
-        };
+        }
 
         calculatePostsToLoadCount();
 
@@ -179,11 +179,15 @@ if (typeof Object.create !== 'function') {
                 Feed.getTemplate(function() {
                     social_networks.forEach(function(network) {
                         if (options[network]) {
-                            //loaded[network] = 0;
-                            options[network].accounts.forEach(function(account) {
-                                //loaded[network]++;
-                                Feed[network].getData(account);
-                            });
+                            if ( options[network].accounts ) {
+                                //loaded[network] = 0;
+                                options[network].accounts.forEach(function(account) {
+                                    //loaded[network]++;
+                                    Feed[network].getData(account);
+                                });
+                            } else {
+                                Feed[network].getData();
+                            }
                         }
                     });
                 });
@@ -286,9 +290,9 @@ if (typeof Object.create !== 'function') {
                 getData: function(account) {
                     var proceed = function(request_url){
                         Utility.request(request_url, Feed.facebook.utility.getPosts);
-                    }
+                    };
                     var fields = '?fields=id,from,name,message,created_time,story,description,link';
-                    	fields += (options.show_media === true)?',picture,object_id':'';
+                       fields += (options.show_media === true)?',picture,object_id':'';
                     var request_url, limit = '&limit=' + options.facebook.limit,
                         query_extention = '&access_token=' + options.facebook.access_token + '&callback=?';
                     switch (account[0]) {
@@ -680,9 +684,45 @@ if (typeof Object.create !== 'function') {
                         return post;
                     }
                 }
+            },
+            rss : {
+                posts: [],
+                loaded: false,
+                api : 'https://ajax.googleapis.com/ajax/services/feed/load?v=1.0',
+
+                getData: function() {
+                    var limit = '&num='+ options.rss.limit,
+                      request_url = Feed.rss.api + limit + '&q=' + encodeURIComponent(options.rss.url);
+
+                    Utility.request(request_url, Feed.rss.utility.getPosts);
+                },
+                utility: {
+
+                    getPosts: function(json) {
+                        $.each(json.responseData.feed.entries, function(index, element) {
+                            var post = new SocialFeedPost('rss', Feed.rss.utility.unifyPostData(index, element));
+                            post.render();
+                        });
+                    },
+
+                    unifyPostData: function(index, element){
+                        var post = {};
+
+                        post.id = index;
+                        post.dt_create= moment(element.publishedDate, 'MMM, DD MMM YYYY HH:mm:ss Z');
+                        post.author_link = '';
+                        post.author_picture = '';
+                        post.author_name = element.author;
+                        post.message = Utility.stripHTML(element.title);
+                        post.description = Utility.stripHTML(element.content);
+                        post.social_network = 'rss';
+                        post.link = element.link;
+                        return post;
+                    }
+                }
             }
         };
-        
+
         //make the plugin chainable
         return this.each(function() {
             // Initialization
