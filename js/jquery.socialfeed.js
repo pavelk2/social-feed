@@ -713,8 +713,8 @@ if (typeof Object.create !== 'function') {
                         post.author_link = '';
                         post.author_picture = '';
                         post.author_name = element.author;
-                        post.message = element.title;
-                        post.description = element.content;
+                        post.message = Utility.stripHTML(element.title);
+                        post.description = Utility.stripHTML(element.content);
                         post.social_network = 'rss';
                         post.link = element.link;
                         return post;
