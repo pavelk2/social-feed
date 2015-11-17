@@ -14,6 +14,7 @@ Social networks supported:
 - [x] Google+
 - [x] VK
 - [x] Pinterest
+- [x] RSS
 - [ ] Blogspot
 
 ## Installation
@@ -125,6 +126,13 @@ $('.social-feed-container').socialfeed({
         limit: 2,                                   //Integer: max number of posts to load
         access_token: 'YOUR_PINTEREST_ACCESS_TOKEN' //String: Pinterest client id
     },
+    
+    // RSS
+    
+    rss:{
+        url: 'RSS_FEED_URL',                        //String: Specifiy a rss feed from which to pull posts
+        limit: 2                                    //Integer: max number of posts to load
+    }
 
     // GENERAL SETTINGS
     length:400,                                     //Integer: For posts with text longer than this length, show an ellipsis.
