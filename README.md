@@ -46,8 +46,10 @@ Load dependency javascript
 <script src="bower_components/codebird-js/codebird.js"></script>
 <!-- doT.js for rendering templates -->
 <script src="bower_components/doT/doT.min.js"></script>
-<!-- Moment.js for showing "time ago" -->
+<!-- Moment.js for showing "time ago" and/or "date"-->
 <script src="bower_components/moment/min/moment.min.js"></script>
+<!-- Moment Locale to format the date to your language (eg. italian lang)-->
+<script src="bower_components/moment/locale/it.js"></script>
 <!-- Social-feed js -->
 <script src="bower_components/social-feed/js/jquery.socialfeed.js"></script>
 ```
@@ -146,6 +148,7 @@ $('.social-feed-container').socialfeed({
     <a href="{{=it.link}}" target="_blank">read more</a> \
     </p> \
     </article>',
+    date_format: "ll",                              //String: Display format of the date attribute (see http://momentjs.com/docs/#/displaying/format/)
     moderation: function(content) {                 //Function: if returns false, template will have class hidden
         return  (content.text) ? content.text.indexOf('fuck') == -1 : true;
     },
