@@ -15,7 +15,8 @@ if (typeof Object.create !== 'function') {
             template: 'template.html', // a path to the template file
             show_media: false, // show images of attachments if available
             media_min_width: 300,
-            length: 500 // maximum length of post message shown
+            length: 500, // maximum length of post message shown
+            date_format: 'll'
         };
         //---------------------------------------------------------------------------------
         var options = $.extend(defaults, _options),
@@ -101,6 +102,7 @@ if (typeof Object.create !== 'function') {
             this.content.social_network = social_network;
             this.content.attachment = (this.content.attachment === undefined) ? '' : this.content.attachment;
             this.content.time_ago = data.dt_create.fromNow();
+            this.content.date = data.dt_create.format(options.date_format);
             this.content.dt_create = this.content.dt_create.valueOf();
             this.content.text = Utility.wrapLinks(Utility.shorten(data.message + ' ' + data.description), data.social_network);
             this.content.moderation_passed = (options.moderation) ? options.moderation(this.content) : true;
@@ -184,6 +186,10 @@ if (typeof Object.create !== 'function') {
                                 options[network].accounts.forEach(function(account) {
                                     //loaded[network]++;
                                     Feed[network].getData(account);
+                                });
+                            } else if ( options[network].urls ) {
+                                options[network].urls.forEach(function(url) {
+                                    Feed[network].getData(url);
                                 });
                             } else {
                                 Feed[network].getData();
@@ -709,7 +715,7 @@ if (typeof Object.create !== 'function') {
                         var post = {};
 
                         post.id = index;
-                        post.dt_create= moment(element.publishedDate, 'MMM, DD MMM YYYY HH:mm:ss Z');
+                        post.dt_create= moment(element.publishedDate, 'ddd, DD MMM YYYY HH:mm:ss ZZ', 'en');
                         post.author_link = '';
                         post.author_picture = '';
                         post.author_name = element.author;
