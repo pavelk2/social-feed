@@ -696,9 +696,9 @@ if (typeof Object.create !== 'function') {
                 loaded: false,
                 api : 'https://ajax.googleapis.com/ajax/services/feed/load?v=1.0',
 
-                getData: function() {
+                getData: function(url) {
                     var limit = '&num='+ options.rss.limit,
-                      request_url = Feed.rss.api + limit + '&q=' + encodeURIComponent(options.rss.url);
+                      request_url = Feed.rss.api + limit + '&q=' + encodeURIComponent(url);
 
                     Utility.request(request_url, Feed.rss.utility.getPosts);
                 },
@@ -723,6 +723,9 @@ if (typeof Object.create !== 'function') {
                         post.description = Utility.stripHTML(element.content);
                         post.social_network = 'rss';
                         post.link = element.link;
+                        if (options.show_media && element.mediaGroups ) {
+                            post.attachment = '<img class="attachment" src="' + element.mediaGroups[0].contents[0].url + '" />';
+                        }
                         return post;
                     }
                 }
