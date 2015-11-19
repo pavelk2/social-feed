@@ -164,6 +164,9 @@ $('.social-feed-container').socialfeed({
 *  http://olado.github.io/doT/ - for rendering templates
 *  https://github.com/jublonet/codebird-js - for sending requests to Twitter
 
+### Ordering / sorting
+Please note, when using a custom template, that the ordering mechanism depends on the `dt-create` attribute.
+
 ## License
 [MIT](http://mit-license.org/)
 
