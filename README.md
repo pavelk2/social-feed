@@ -133,7 +133,7 @@ $('.social-feed-container').socialfeed({
     
     rss:{
         urls: ['http://teslapodcast.libsyn.com/rss'], //Array: Specifiy a list of rss feed from which to pull posts
-        limit: 2                                      //Integer: max number of posts to load
+        limit: 2                                      //Integer: max number of posts to load for each url
     }
 
     // GENERAL SETTINGS
