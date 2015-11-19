@@ -683,7 +683,7 @@ if (typeof Object.create !== 'function') {
                         post.message = element.note;
                         post.description = '';
                         post.social_network = 'pinterest';
-                        post.link = element.link;
+                        post.link = element.link ? element.link : 'https://www.pinterest.com/pin/' + element.id;
                         if (options.show_media) {
                             post.attachment = '<img class="attachment" src="' + element.image['original'].url + '" />';
                         }
