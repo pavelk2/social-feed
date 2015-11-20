@@ -1,6 +1,5 @@
 # Social-feed
 
-[![Join the chat at https://gitter.im/pavelk2/social-feed](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/pavelk2/social-feed?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 The jQuery plugin which shows user feeds from the most popular social networks.
 
 ![](http://habrastorage.org/files/286/85e/03e/28685e03ef2b4bdc8f7da551b339426e.png)
@@ -186,3 +185,5 @@ Do you want to become a part of the Social-feed? Write me and become an active c
 Check out my other projects: http://kucherbaev.com
 
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/pavelk2/social-feed/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
+[![Join the chat at https://gitter.im/pavelk2/social-feed](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/pavelk2/social-feed?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
