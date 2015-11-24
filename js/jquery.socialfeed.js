@@ -499,7 +499,7 @@ if (typeof Object.create !== 'function') {
                         post.dt_create = moment(element.created_time * 1000);
                         post.author_link = 'http://instagram.com/' + element.user.username;
                         post.author_picture = element.user.profile_picture;
-                        post.author_name = element.user.full_name;
+                        post.author_name = element.user.full_name || element.user.username;
                         post.message = (element.caption && element.caption) ? element.caption.text : '';
                         post.description = '';
                         post.link = element.link;
