@@ -64,7 +64,8 @@ Initialize the social-feed plugin:
             instagram:{
                 accounts: ['@teslamotors','#teslamotors'],  //Array: Specify a list of accounts from which to pull posts
                 limit: 2,                                    //Integer: max number of posts to load
-                client_id: 'YOUR_INSTAGRAM_CLIENT_ID'       //String: Instagram client id
+                client_id: 'YOUR_INSTAGRAM_CLIENT_ID'       //String: Instagram client id (optional if using access token)
+                access_token: 'YOUR_INSTAGRAM_ACCESS_TOKEN' //String: Instagram access token
             },
 
             // GENERAL SETTINGS
@@ -117,9 +118,10 @@ $('.social-feed-container').socialfeed({
     instagram:{
         accounts: ['@teslamotors','#teslamotors'],  //Array: Specify a list of accounts from which to pull posts
         limit: 2,                                   //Integer: max number of posts to load
-        client_id: 'YOUR_INSTAGRAM_CLIENT_ID'       //String: Instagram client id
+        client_id: 'YOUR_INSTAGRAM_CLIENT_ID'       //String: Instagram client id (option if using access token)
+        access_token: 'YOUR_INSTAGRAM_ACCESS_TOKEN' //String: Instagram access token
     },
-    
+
     // PINTEREST
 
     pinterest:{
@@ -129,9 +131,9 @@ $('.social-feed-container').socialfeed({
         limit: 2,                                   //Integer: max number of posts to load
         access_token: 'YOUR_PINTEREST_ACCESS_TOKEN' //String: Pinterest client id
     },
-    
+
     // RSS
-    
+
     rss:{
         urls: ['http://teslapodcast.libsyn.com/rss'], //Array: Specifiy a list of rss feed from which to pull posts
         limit: 2                                      //Integer: max number of posts to load for each url
