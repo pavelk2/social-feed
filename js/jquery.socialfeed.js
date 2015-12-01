@@ -745,9 +745,16 @@ if (typeof Object.create !== 'function') {
                         post.description = Utility.stripHTML(element.content);
                         post.social_network = 'rss';
                         post.link = element.link;
-                        if (options.show_media && element.mediaGroups ) {
-                            post.attachment = '<img class="attachment" src="' + element.mediaGroups[0].contents[0].url + '" />';
-                        }
+						if (options.show_media) {
+							if (element.mediaGroups ) {
+									post.attachment = '<img class="attachment" src="' + element.mediaGroups[0].contents[1].url + '" />';
+							} else {
+							
+								var imgurl = "";
+								imgurl = $(element.content).find('img:first').attr('src');
+								if (imgurl !== '' ) post.attachment = '<img class="attachment" src="' + imgurl + '" />';
+							}
+						}
                         return post;
                     }
                 }
