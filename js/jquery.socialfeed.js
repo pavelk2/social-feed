@@ -720,11 +720,7 @@ if (typeof Object.create !== 'function') {
 
                 getData: function(url) {
                     var limit = '&num='+ options.rss.limit,
-                      request_url = Feed.rss.api + limit + '&q=' + encodeURIComponent(url);
-					  
-				// write in console
-				console.info(request_url);					  
-
+                    request_url = Feed.rss.api + limit + '&q=' + encodeURIComponent(url);
                     Utility.request(request_url, Feed.rss.utility.getPosts);
                 },
                 utility: {
