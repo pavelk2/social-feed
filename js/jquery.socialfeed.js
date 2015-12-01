@@ -721,6 +721,9 @@ if (typeof Object.create !== 'function') {
                 getData: function(url) {
                     var limit = '&num='+ options.rss.limit,
                       request_url = Feed.rss.api + limit + '&q=' + encodeURIComponent(url);
+					  
+				// write in console
+				console.info(request_url);					  
 
                     Utility.request(request_url, Feed.rss.utility.getPosts);
                 },
@@ -737,7 +740,7 @@ if (typeof Object.create !== 'function') {
                         var post = {};
 
                         post.id = index;
-                        post.dt_create= moment(element.publishedDate, 'ddd, DD MMM YYYY HH:mm:ss ZZ', 'en');
+						post.dt_create= moment(element.publishedDate);
                         post.author_link = '';
                         post.author_picture = '';
                         post.author_name = element.author;
