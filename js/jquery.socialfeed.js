@@ -720,8 +720,7 @@ if (typeof Object.create !== 'function') {
 
                 getData: function(url) {
                     var limit = '&num='+ options.rss.limit,
-                      request_url = Feed.rss.api + limit + '&q=' + encodeURIComponent(url);
-
+                    request_url = Feed.rss.api + limit + '&q=' + encodeURIComponent(url);
                     Utility.request(request_url, Feed.rss.utility.getPosts);
                 },
                 utility: {
@@ -737,7 +736,7 @@ if (typeof Object.create !== 'function') {
                         var post = {};
 
                         post.id = index;
-                        post.dt_create= moment(element.publishedDate, 'ddd, DD MMM YYYY HH:mm:ss ZZ', 'en');
+						post.dt_create= moment(element.publishedDate);
                         post.author_link = '';
                         post.author_picture = '';
                         post.author_name = element.author;
@@ -745,9 +744,16 @@ if (typeof Object.create !== 'function') {
                         post.description = Utility.stripHTML(element.content);
                         post.social_network = 'rss';
                         post.link = element.link;
-                        if (options.show_media && element.mediaGroups ) {
-                            post.attachment = '<img class="attachment" src="' + element.mediaGroups[0].contents[0].url + '" />';
-                        }
+						if (options.show_media) {
+							if (element.mediaGroups ) {
+									post.attachment = '<img class="attachment" src="' + element.mediaGroups[0].contents[1].url + '" />';
+							} else {
+							
+								var imgurl = "";
+								imgurl = $(element.content).find('img:first').attr('src');
+								if (imgurl !== '' ) post.attachment = '<img class="attachment" src="' + imgurl + '" />';
+							}
+						}
                         return post;
                     }
                 }
