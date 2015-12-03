@@ -35,6 +35,8 @@ if (typeof Object.create !== 'function') {
                 if (options[network]) {
                     if (options[network].accounts) {
                         posts_to_load_count += options[network].limit * options[network].accounts.length;
+                    } else if (options[network].urls ){
+                        posts_to_load_count += options[network].limit * options[network].urls.length;
                     } else {
                         posts_to_load_count += options[network].limit;
                     }
@@ -723,7 +725,7 @@ if (typeof Object.create !== 'function') {
                     var limit = options.rss.limit,
                       yql = encodeURIComponent('select entry FROM feednormalizer where url=\'' + url + '\' AND output=\'atom_1.0\' | truncate(count=' + limit + ')' ),
                       request_url = Feed.rss.api + yql + '&format=json&callback=?';
-					  
+
                     Utility.request(request_url, Feed.rss.utility.getPosts, Feed.rss.datatype);
                 },
                 utility: {
