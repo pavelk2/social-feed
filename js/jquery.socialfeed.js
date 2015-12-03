@@ -716,37 +716,55 @@ if (typeof Object.create !== 'function') {
             rss : {
                 posts: [],
                 loaded: false,
-                api : 'https://ajax.googleapis.com/ajax/services/feed/load?v=1.0',
+                api : 'https://query.yahooapis.com/v1/public/yql?q=',
+                datatype: 'json',
 
                 getData: function(url) {
-                    var limit = '&num='+ options.rss.limit,
-                      request_url = Feed.rss.api + limit + '&q=' + encodeURIComponent(url);
+                    var limit = options.rss.limit,
+                      yql = encodeURIComponent('select entry FROM feednormalizer where url=\'' + url + '\' AND output=\'atom_1.0\' | truncate(count=' + limit + ')' ),
+                      request_url = Feed.rss.api + yql + '&format=json&callback=?';
 
-                    Utility.request(request_url, Feed.rss.utility.getPosts);
+                    Utility.request(request_url, Feed.rss.utility.getPosts, Feed.rss.datatype);
                 },
                 utility: {
 
                     getPosts: function(json) {
-                        $.each(json.responseData.feed.entries, function(index, element) {
-                            var post = new SocialFeedPost('rss', Feed.rss.utility.unifyPostData(index, element));
-                            post.render();
-                        });
+                        console.log(json);
+                        if (json.query.count > 0 ){
+                            $.each(json.query.results.feed, function(index, element) {
+                                var post = new SocialFeedPost('rss', Feed.rss.utility.unifyPostData(index, element));
+                                post.render();
+                            });
+                        }
                     },
 
                     unifyPostData: function(index, element){
+
+                        var item = element;
+
+                        if ( element.entry !== undefined ){
+                            item = element.entry;
+                        }
                         var post = {};
 
-                        post.id = index;
-                        post.dt_create= moment(element.publishedDate, 'ddd, DD MMM YYYY HH:mm:ss ZZ', 'en');
+                        post.id = '"' + item.id + '"';
+                        post.dt_create= moment(item.published, 'YYYY-MM-DDTHH:mm:ssZ', 'en');
+
                         post.author_link = '';
                         post.author_picture = '';
-                        post.author_name = element.author;
-                        post.message = Utility.stripHTML(element.title);
-                        post.description = Utility.stripHTML(element.content);
+                        post.author_name = '';
+                        if( item.creator !== undefined ){
+                            post.author_name = item.creator;
+                        }
+                        post.message = item.title;
+                        post.description = '';
+                        if( item.summary !== undefined ){
+                            post.description = Utility.stripHTML(item.summary.content);
+                        }
                         post.social_network = 'rss';
-                        post.link = element.link;
-                        if (options.show_media && element.mediaGroups ) {
-                            post.attachment = '<img class="attachment" src="' + element.mediaGroups[0].contents[0].url + '" />';
+                        post.link = item.link.href;
+                        if (options.show_media && item.thumbnail !== undefined ) {
+                            post.attachment = '<img class="attachment" src="' + item.thumbnail.url + '" />';
                         }
                         return post;
                     }
