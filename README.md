@@ -178,14 +178,11 @@ Found a bug or want a feature to be implemented?
 Please report it here https://github.com/pavelk2/social-feed/issues
 
 Currently working on the server side: (https://github.com/pavelk2/social-feed-server)
-## Let me know
+## Let us know
 
-If you use this plugin, please <a href="mailto:pavel@kucherbaev.com">write me a short message</a> with a link to the project where you embed the plugin, and some features you want to have implemented here. It helps me to stay focused on the important issues. *It is not mandatory, but I really appreciate it!*
+If you use this plugin, please <a href="https://gitter.im/pavelk2/social-feed" target="_blank">write us a short message</a> with a link to the project where you embed the plugin, and some features you want to have implemented here. It helps us to stay focused on the important issues. *It is not mandatory, but we really appreciate it!*
 
-Do you want to become a part of the Social-feed? Write me and become an active contributor.
+Do you want to become a part of the Social-feed? Write us and become an active contributor.
 
-Check out my other projects: http://kucherbaev.com
-
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/pavelk2/social-feed/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 
 [![Join the chat at https://gitter.im/pavelk2/social-feed](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/pavelk2/social-feed?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
