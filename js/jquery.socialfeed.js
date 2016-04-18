@@ -106,7 +106,7 @@ if (typeof Object.create !== 'function') {
             this.content.time_ago = data.dt_create.fromNow();
             this.content.date = data.dt_create.format(options.date_format);
             this.content.dt_create = this.content.dt_create.valueOf();
-            this.content.text = Utility.wrapLinks(Utility.shorten(data.message + ' ' + data.description), data.social_network);
+            this.content.text = Utility.wrapLinks(Utility.shorten(data.message + ' - ' + data.description), data.social_network);
             this.content.moderation_passed = (options.moderation) ? options.moderation(this.content) : true;
 
             Feed[social_network].posts.push(this);
@@ -257,6 +257,8 @@ if (typeof Object.create !== 'function') {
                 utility: {
                     getPosts: function(json) {
                         if (json) {
+							// fix callback render
+							if(json.length<options.twitter.limit) posts_to_load_count -= options.twitter.limit - json.length;
                             $.each(json, function() {
                                 var element = this;
                                 var post = new SocialFeedPost('twitter', Feed.twitter.utility.unifyPostData(element));
@@ -269,13 +271,15 @@ if (typeof Object.create !== 'function') {
                         if (element.id) {
                             post.id = element.id;
                             //prevent a moment.js console warning due to Twitter's poor date format.
-                            post.dt_create = moment(new Date(element.created_at));
-                            post.author_link = 'http://twitter.com/' + element.user.screen_name;
+                            //post.dt_create = moment(new Date(element.created_at));
+							// https://github.com/pavelk2/social-feed/issues/61#issuecomment-194340224
+							post.dt_create = moment(element.created_at, 'dd MMM DD HH:mm:ss ZZ YYYY','en');
+                        	post.author_link = 'http://twitter.com/' + element.user.screen_name;
                             post.author_picture = element.user.profile_image_url;
                             post.post_url = post.author_link + '/status/' + element.id_str;
                             post.author_name = element.user.name;
                             post.message = element.text;
-                            post.description = '';
+                        	post.description = '';
                             post.link = 'http://twitter.com/' + element.user.screen_name + '/status/' + element.id_str;
 
                             if (options.show_media === true) {
@@ -355,6 +359,9 @@ if (typeof Object.create !== 'function') {
                     },
                     getPosts: function(json) {
                         if (json['data']) {
+							// fix callback render
+							if (json['data'].length < options.facebook.limit) posts_to_load_count -= options.facebook.limit - json['data'].length;
+							
                             json['data'].forEach(function(element) {
                                 var post = new SocialFeedPost('facebook', Feed.facebook.utility.unifyPostData(element));
                                 post.render();
@@ -410,6 +417,8 @@ if (typeof Object.create !== 'function') {
                 utility: {
                     getPosts: function(json) {
                         if (json.items) {
+							// fix callback render
+							if(json.items.length<options.google.limit) posts_to_load_count -= options.google.limit - json.items.length;
                             $.each(json.items, function(i) {
                                 var post = new SocialFeedPost('google', Feed.google.utility.unifyPostData(json.items[i]));
                                 post.render();
@@ -498,6 +507,8 @@ if (typeof Object.create !== 'function') {
                 utility: {
                     getImages: function(json) {
                         if (json.data) {
+							// fix callback render
+							if(json.data.length<options.instagram.limit) posts_to_load_count -= options.instagram.limit - json.data.length;
                             json.data.forEach(function(element) {
                                 var post = new SocialFeedPost('instagram', Feed.instagram.utility.unifyPostData(element));
                                 post.render();
@@ -561,6 +572,8 @@ if (typeof Object.create !== 'function') {
                 utility: {
                     getPosts: function(json) {
                         if (json.response) {
+							// fix callback render
+							if(json.response.length<options.vk.limit) posts_to_load_count -= options.vk.limit - json.response.length;
                             $.each(json.response, function() {
                                 if (this != parseInt(this) && this.post_type === 'post') {
                                     var owner_id = (this.owner_id) ? this.owner_id : this.from_id,
@@ -690,10 +703,14 @@ if (typeof Object.create !== 'function') {
                 utility: {
 
                     getPosts: function(json) {
-                        json.data.forEach(function(element) {
-                            var post = new SocialFeedPost('pinterest', Feed.pinterest.utility.unifyPostData(element));
-                            post.render();
-                        });
+						if(json.data) {
+							if(json.data.length<options.pinterest.limit)
+								posts_to_load_count -= options.pinterest.limit - json.data.length;
+							json.data.forEach(function(element) {
+								var post = new SocialFeedPost('pinterest', Feed.pinterest.utility.unifyPostData(element));
+								post.render();
+							});
+						}
                     },
 
                     unifyPostData: function(element){
@@ -725,13 +742,14 @@ if (typeof Object.create !== 'function') {
                     var limit = options.rss.limit,
                       yql = encodeURIComponent('select entry FROM feednormalizer where url=\'' + url + '\' AND output=\'atom_1.0\' | truncate(count=' + limit + ')' ),
                       request_url = Feed.rss.api + yql + '&format=json&callback=?';
-
                     Utility.request(request_url, Feed.rss.utility.getPosts, Feed.rss.datatype);
                 },
                 utility: {
 
                     getPosts: function(json) {
                         if (json.query.count > 0 ){
+						// fix rendering if posts_to_load_count is not reached
+						if (json.query.count < options.rss.limit) posts_to_load_count -= options.rss.limit - json.query.count;
                             $.each(json.query.results.feed, function(index, element) {
                                 var post = new SocialFeedPost('rss', Feed.rss.utility.unifyPostData(index, element));
                                 post.render();
@@ -749,7 +767,7 @@ if (typeof Object.create !== 'function') {
                         var post = {};
 
                         post.id = '"' + item.id + '"';
-                        post.dt_create= moment(item.published, 'YYYY-MM-DDTHH:mm:ssZ', 'en');
+                        post.dt_create = moment(item.published, 'YYYY-MM-DDTHH:mm:ssZ');
 
                         post.author_link = '';
                         post.author_picture = '';
@@ -757,20 +775,51 @@ if (typeof Object.create !== 'function') {
                         if( item.creator !== undefined ){
                             post.author_name = item.creator;
                         }
-                        post.message = item.title;
+						if ( item.title.content !== undefined ){
+							post.message = item.title.content;
+						} else { 
+							post.message = item.title; 
+						}						
                         post.description = '';
-                        if( item.summary !== undefined ){
+                        if ( item.summary !== undefined ){
                             post.description = Utility.stripHTML(item.summary.content);
-                        }
+                        } else if (item.content.content !== undefined ){
+							post.description = Utility.stripHTML(item.content.content);
+						}
                         post.social_network = 'rss';
-                        post.link = item.link.href;
+						
+                        if ( item.link.href !== undefined ){
+							post.link = item.link.href;
+						} else if ( item.link[0].href !== undefined ){
+							post.link = item.link[0].href;
+						}
+						
 						if (options.show_media){
-							if (item.thumbnail !== undefined ) {
+							
+							if (item.group !== undefined) {
+								post.attachment = '<img class="attachment" src="' + item.group.content.url + '" />';
+								//console.log(post.attachment);
+							}
+							else if (item.thumbnail !== undefined ) {
 								post.attachment = '<img class="attachment" src="' + item.thumbnail.url + '" />';
-							} else {							
-								var imgurl = "";
-								imgurl = $(item.summary.content).find('img:first').attr('src');
-								if (imgurl !== '' ) post.attachment = '<img class="attachment" src="' + imgurl + '" />';
+							} else if (item.summary !== undefined || item.content !== undefined) {							
+								
+								var postHTML = '';
+								if (item.content !== undefined){
+									if (item.content.content !== undefined){
+										postHTML = item.content.content;
+									} else if (item.content[0].content !== undefined){
+										postHTML = item.content[0].content;
+									}  
+								} else if (item.summary !== undefined){
+									postHTML = item.summary.content;
+								}
+								//console.log(postHTML);
+								if (postHTML) {
+									var imgurl = '';
+									imgurl = $(postHTML).find('img:first').attr('src');
+									if (imgurl !== '' ) post.attachment = '<img class="attachment" src="' + imgurl + '" />';
+								}
 							}
 						}
                         return post;
