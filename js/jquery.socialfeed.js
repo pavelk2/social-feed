@@ -274,12 +274,12 @@ if (typeof Object.create !== 'function') {
                             //post.dt_create = moment(new Date(element.created_at));
 							// https://github.com/pavelk2/social-feed/issues/61#issuecomment-194340224
 							post.dt_create = moment(element.created_at, 'dd MMM DD HH:mm:ss ZZ YYYY','en');
-                        	post.author_link = 'http://twitter.com/' + element.user.screen_name;
+                            post.author_link = 'http://twitter.com/' + element.user.screen_name;
                             post.author_picture = element.user.profile_image_url;
                             post.post_url = post.author_link + '/status/' + element.id_str;
                             post.author_name = element.user.name;
                             post.message = element.text;
-                        	post.description = '';
+                            post.description = '';
                             post.link = 'http://twitter.com/' + element.user.screen_name + '/status/' + element.id_str;
 
                             if (options.show_media === true) {
@@ -742,19 +742,19 @@ if (typeof Object.create !== 'function') {
                     var limit = options.rss.limit,
                       yql = encodeURIComponent('select entry FROM feednormalizer where url=\'' + url + '\' AND output=\'atom_1.0\' | truncate(count=' + limit + ')' ),
                       request_url = Feed.rss.api + yql + '&format=json&callback=?';
+					//console.log(request_url);
                     Utility.request(request_url, Feed.rss.utility.getPosts, Feed.rss.datatype);
                 },
                 utility: {
 
                     getPosts: function(json) {
-                        if (json.query.count > 0 ){
 						// fix rendering if posts_to_load_count is not reached
 						if (json.query.count < options.rss.limit) posts_to_load_count -= options.rss.limit - json.query.count;
-                            $.each(json.query.results.feed, function(index, element) {
-                                var post = new SocialFeedPost('rss', Feed.rss.utility.unifyPostData(index, element));
-                                post.render();
-                            });
-                        }
+						
+						$.each(json.query.results.feed, function(index, element) {
+							var post = new SocialFeedPost('rss', Feed.rss.utility.unifyPostData(index, element));
+							post.render();
+						});
                     },
 
                     unifyPostData: function(index, element){
