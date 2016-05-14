@@ -275,7 +275,7 @@ if (typeof Object.create !== 'function') {
 							// https://github.com/pavelk2/social-feed/issues/61#issuecomment-194340224
 							post.dt_create = moment(element.created_at, 'dd MMM DD HH:mm:ss ZZ YYYY','en');
                             post.author_link = 'http://twitter.com/' + element.user.screen_name;
-                            post.author_picture = element.user.profile_image_url;
+                            post.author_picture = element.user.profile_image_url_https;
                             post.post_url = post.author_link + '/status/' + element.id_str;
                             post.author_name = element.user.name;
                             post.message = element.text;
@@ -284,7 +284,7 @@ if (typeof Object.create !== 'function') {
 
                             if (options.show_media === true) {
                                 if (element.entities.media && element.entities.media.length > 0) {
-                                    var image_url = element.entities.media[0].media_url;
+                                    var image_url = element.entities.media[0].media_url_https;
                                     if (image_url) {
                                         post.attachment = '<img class="attachment" src="' + image_url + '" />';
                                     }
