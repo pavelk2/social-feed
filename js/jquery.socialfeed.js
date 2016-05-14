@@ -271,7 +271,7 @@ if (typeof Object.create !== 'function') {
                             //prevent a moment.js console warning due to Twitter's poor date format.
                             post.dt_create = moment(new Date(element.created_at));
                             post.author_link = 'http://twitter.com/' + element.user.screen_name;
-                            post.author_picture = element.user.profile_image_url;
+                            post.author_picture = element.user.profile_image_url_https;
                             post.post_url = post.author_link + '/status/' + element.id_str;
                             post.author_name = element.user.name;
                             post.message = element.text;
@@ -280,7 +280,7 @@ if (typeof Object.create !== 'function') {
 
                             if (options.show_media === true) {
                                 if (element.entities.media && element.entities.media.length > 0) {
-                                    var image_url = element.entities.media[0].media_url;
+                                    var image_url = element.entities.media[0].media_url_https;
                                     if (image_url) {
                                         post.attachment = '<img class="attachment" src="' + image_url + '" />';
                                     }
