@@ -267,7 +267,7 @@ if (typeof Object.create !== 'function') {
                     unifyPostData: function(element) {
                         var post = {};
                         if (element.id) {
-                            post.id = element.id;
+                            post.id = element.id_str;
                             //prevent a moment.js console warning due to Twitter's poor date format.
                             post.dt_create = moment(new Date(element.created_at));
                             post.author_link = 'http://twitter.com/' + element.user.screen_name;
