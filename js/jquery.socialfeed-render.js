@@ -1,7 +1,7 @@
 // new rendering system  https://github.com/pavelk2/social-feed/pull/171
 // new callback fix https://github.com/pavelk2/social-feed/pull/173
-// PIXEL implementation to get Images from RSS feed
-// fix staging_resource for facebook with change from 130x130 to 350x350 (css attachment style changed to force pic view)
+// New RSS implementation to get Images from RSS feed
+// fix staging_resource for facebook 
 
 if (typeof Object.create !== 'function') {
     Object.create = function(obj) {
@@ -371,25 +371,6 @@ if (typeof Object.create !== 'function') {
                         }						
                         return '<img class="attachment" src="' + image_url + '" />';
                     },
-					/*
-                    getExternalImageURL: function(image_url, parameter) {
-						if (image_url.indexOf('staging_resources') === -1) {
-							image_url = decodeURIComponent(image_url).split(parameter + '=')[1];
-							if (image_url.indexOf('fbcdn-sphotos') === -1) {
-								return image_url.split('&')[0];
-							} else {
-								return image_url;
-							}
-							// end of previous core
-						} else {
-							// replacing thumb size w=130 > w=350
-							image_url = image_url.replace("w=130", "w=350");
-							// replacing thumb size h=130 > h=350
-							image_url = image_url.replace("h=130", "h=350");
-							// previous core
-							return image_url;
-						}
-                    },*/
 					getExternalImageURL: function(image_url, parameter) {
                         image_url = decodeURIComponent(image_url).split(parameter + '=')[1];
                         if (image_url.indexOf('fbcdn-sphotos') === -1) {
