@@ -853,7 +853,7 @@ if (typeof Object.create !== 'function') {
 								if (postHTML) {
 									var imgurl = '';
 									imgurl = $(postHTML).find('img:first').attr('src');
-									if (imgurl !== '' ) post.attachment = '<img class="attachment" src="' + imgurl + '" />';
+									if (imgurl !== '' && imgurl !== undefined) post.attachment = '<img class="attachment" src="' + imgurl + '" />';
 								}
 							}
 						}
