@@ -2,6 +2,9 @@
 // new callback fix https://github.com/pavelk2/social-feed/pull/173
 // New RSS implementation to get Images from RSS feed
 // fix staging_resource for facebook 
+// #01 - Fix deprecated  $(img).load(function() 20/07/2016
+// #02 - Fix multilanguage twitter date 20/07/2016
+
 
 if (typeof Object.create !== 'function') {
     Object.create = function(obj) {
@@ -108,9 +111,11 @@ if (typeof Object.create !== 'function') {
                 var height, width = '';
                 var img = new Image();
                 var imgSrc = image.attr("src");
-
-                $(img).load(function() {
-
+				
+				//#01 - Fix deprecated function
+                //$(img).load(function() { 				
+				$(img).on('load',function() {
+					
                     if (img.width < options.media_min_width) {
                         image.hide();
                     }
@@ -280,7 +285,7 @@ if (typeof Object.create !== 'function') {
                     getPosts: function(json) {
                         if (json) {
 							// fix callback
-							if(json.length<options.twitter.limit)
+							if(json.length < options.twitter.limit)
 								posts_to_load_count -= options.twitter.limit - json.length;
                             $.each(json, function() {
                                 var element = this;
@@ -293,10 +298,10 @@ if (typeof Object.create !== 'function') {
                         var post = {};
                         if (element.id) {
                             post.id = element.id_str;
-                            //prevent a moment.js console warning due to Twitter's poor date format.
-                            //post.dt_create = moment(new Date(element.created_at));
-							// https://github.com/pavelk2/social-feed/issues/61#issuecomment-194340224
-							post.dt_create = moment(element.created_at, 'dd MMM DD HH:mm:ss ZZ YYYY','en');
+
+			    //#02 - fix multilanguage twitter date
+			    post.dt_create = moment(element.created_at, 'dd MMM DD HH:mm:ss ZZ YYYY');
+							
                             post.author_link = 'http://twitter.com/' + element.user.screen_name;
                             post.author_picture = element.user.profile_image_url_https;
                             post.post_url = post.author_link + '/status/' + element.id_str;
