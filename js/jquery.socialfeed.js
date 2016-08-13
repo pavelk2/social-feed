@@ -268,8 +268,14 @@ if (typeof Object.create !== 'function') {
                         var post = {};
                         if (element.id) {
                             post.id = element.id_str;
+                            
+                            var datetime = new Date((element.created_at || ""));
+                            // check for invalid date for IE
+                            if(datetime.toString() == 'Invalid Date') {
+                                datetime = this.parse_datetime_str_for_ie( element.created_at );
+                            }
                             //prevent a moment.js console warning due to Twitter's poor date format.
-                            post.dt_create = moment(new Date(element.created_at));
+                            post.dt_create = moment(datetime);
                             post.author_link = 'http://twitter.com/' + element.user.screen_name;
                             post.author_picture = element.user.profile_image_url_https;
                             post.post_url = post.author_link + '/status/' + element.id_str;
@@ -288,6 +294,22 @@ if (typeof Object.create !== 'function') {
                             }
                         }
                         return post;
+                    },
+                    parse_datetime_str_for_ie: function( datetime_str ) {
+                        var monthArray = {"Jan":0, "Feb":1, "Mar":2, "Apr":3, "May":4, "Jun":5, "Jul":6, "Aug":7, "Sep":8, "Oct":9, "Nev":10, "Dec":11};
+                        //get the values from the string
+                        var regex = /^[^ ]+ ([^ ]+) (\d{1,2}) (\d{2}):(\d{2}):(\d{2}) \+(\d{4}) (\d{4})$/;
+                        match = regex.exec(datetime_str);
+                        var month   = monthArray[match[1]],
+                            date    = match[2],
+                            hours   = match[3],
+                            minutes = match[4],
+                            seconds = match[5],
+                            ms      = match[6],
+                            year    = match[7];
+
+                        //create date object with values
+                        return new Date(year, month, date, hours, minutes , seconds, ms);
                     }
                 }
             },
