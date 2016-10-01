@@ -152,6 +152,7 @@ $('.social-feed-container').socialfeed({
     </p> \
     </article>',
     date_format: "ll",                              //String: Display format of the date attribute (see http://momentjs.com/docs/#/displaying/format/)
+    date_locale: "en",                              //String: The locale of the date (see: http://momentjs.com/docs/#/i18n/changing-locale/)
     moderation: function(content) {                 //Function: if returns false, template will have class hidden
         return  (content.text) ? content.text.indexOf('fuck') == -1 : true;
     },
