@@ -6,7 +6,7 @@ The jQuery plugin which shows user feeds from the most popular social networks.
 
 ## Demo
 
-http://pavelk2.github.io/social-feed/
+http://pavelk2.github.io/social-feed-example/
 
 Social networks supported:
 - [x] Facebook
@@ -144,7 +144,7 @@ $('.social-feed-container').socialfeed({
     show_media:true,                                //Boolean: if false, doesn't display any post images
     media_min_width: 300,                           //Integer: Only get posts with images larger than this value
     update_period: 5000,                            //Integer: Number of seconds before social-feed will attempt to load new posts.
-    template: "tweet.html",                         //String: Filename used to get the post template.
+    template: "bower_components/social-feed/template.html",                         //String: Filename used to get the post template.
     template_html:                                  //String: HTML used for each post. This overrides the 'template' filename option
     '<article class="twitter-post"> \
     <h4>{{=it.author_name}}</h4><p>{{=it.text}}  \
@@ -177,7 +177,7 @@ Please note, when using a custom template, that the ordering mechanism depends o
 Found a bug or want a feature to be implemented?
 Please report it here https://github.com/pavelk2/social-feed/issues
 
-Currently working on the server side: (https://github.com/pavelk2/social-feed-server)
+Currently we work on server side: (https://github.com/pavelk2/social-feed-server)
 ## Let us know
 
 If you use this plugin, please <a href="https://gitter.im/pavelk2/social-feed" target="_blank">write us a short message</a> with a link to the project where you embed the plugin, and some features you want to have implemented here. It helps us to stay focused on the important issues. *It is not mandatory, but we really appreciate it!*
