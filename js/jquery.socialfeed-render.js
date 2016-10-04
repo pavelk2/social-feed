@@ -57,10 +57,6 @@ if (typeof Object.create !== 'function') {
 
         function fireCallback() {
             var fire = true;
-            /*$.each(Object.keys(loaded), function() {
-                if (loaded[this] > 0)
-                    fire = false;
-            });*/
             if (fire && options.callback) {
                 options.callback();
             }
@@ -76,7 +72,6 @@ if (typeof Object.create !== 'function') {
 
         function render(data) {
             var rendered_html = Feed.template(data);
-            // var data = this.content;
 
             if ($(container).children('[social-feed-id=' + data.id + ']').length !== 0) {
                 return false;
@@ -111,11 +106,11 @@ if (typeof Object.create !== 'function') {
                 var height, width = '';
                 var img = new Image();
                 var imgSrc = image.attr("src");
-				
-				//#01 - Fix deprecated function
-                //$(img).load(function() { 				
-				$(img).on('load',function() {
-					
+
+                //#01 - Fix deprecated function
+                //$(img).load(function() {
+                $(img).on('load',function() {
+
                     if (img.width < options.media_min_width) {
                         image.hide();
                     }
@@ -211,9 +206,7 @@ if (typeof Object.create !== 'function') {
                     social_networks.forEach(function(network) {
                         if (options[network]) {
                             if ( options[network].accounts ) {
-                                //loaded[network] = 0;
                                 options[network].accounts.forEach(function(account) {
-                                    //loaded[network]++;
                                     Feed[network].getData(account);
                                 });
                             } else if ( options[network].urls ) {
@@ -284,9 +277,9 @@ if (typeof Object.create !== 'function') {
                 utility: {
                     getPosts: function(json) {
                         if (json) {
-							// fix callback
-							if(json.length < options.twitter.limit)
-								posts_to_load_count -= options.twitter.limit - json.length;
+                            // fix callback
+                            if(json.length < options.twitter.limit)
+                                posts_to_load_count -= options.twitter.limit - json.length;
                             $.each(json, function() {
                                 var element = this;
                                 var post = new SocialFeedPost('twitter', Feed.twitter.utility.unifyPostData(element));
@@ -298,10 +291,10 @@ if (typeof Object.create !== 'function') {
                         var post = {};
                         if (element.id) {
                             post.id = element.id_str;
+                            
+                            //#02 - fix multilanguage twitter date
+                            post.dt_create = moment(element.created_at, 'dd MMM DD HH:mm:ss ZZ YYYY');
 
-			    //#02 - fix multilanguage twitter date
-			    post.dt_create = moment(element.created_at, 'dd MMM DD HH:mm:ss ZZ YYYY');
-							
                             post.author_link = 'http://twitter.com/' + element.user.screen_name;
                             post.author_picture = element.user.profile_image_url_https;
                             post.post_url = post.author_link + '/status/' + element.id_str;
@@ -372,11 +365,11 @@ if (typeof Object.create !== 'function') {
                             image_url = Feed.facebook.utility.getExternalImageURL(image_url, 'src');
 
                         } else if (element.object_id) {
-							image_url = Feed.facebook.graph + element.object_id + '/picture/?type=normal';
-                        }						
+                            image_url = Feed.facebook.graph + element.object_id + '/picture/?type=normal';
+                        }
                         return '<img class="attachment" src="' + image_url + '" />';
                     },
-					getExternalImageURL: function(image_url, parameter) {
+                    getExternalImageURL: function(image_url, parameter) {
                         image_url = decodeURIComponent(image_url).split(parameter + '=')[1];
                         if (image_url.indexOf('fbcdn-sphotos') === -1) {
                             image_url = image_url.split('&')[0];
@@ -392,9 +385,9 @@ if (typeof Object.create !== 'function') {
                     },
                     getPosts: function(json) {
                         if (json['data']) {
-							// fix callback
-							if(json['data'].length<options.facebook.limit)
-								posts_to_load_count -= options.facebook.limit - json['data'].length;
+                            // fix callback
+                            if(json['data'].length<options.facebook.limit)
+                                posts_to_load_count -= options.facebook.limit - json['data'].length;
                             json['data'].forEach(function(element) {
                                 var post = new SocialFeedPost('facebook', Feed.facebook.utility.unifyPostData(element));
                                 post.pushData();
@@ -450,8 +443,8 @@ if (typeof Object.create !== 'function') {
                 utility: {
                     getPosts: function(json) {
                         if (json.items) {
-							if(json.items.length<options.google.limit)
-								posts_to_load_count -= options.google.limit - json.items.length;
+                            if(json.items.length<options.google.limit)
+                                posts_to_load_count -= options.google.limit - json.items.length;
                             $.each(json.items, function(i) {
                                 var post = new SocialFeedPost('google', Feed.google.utility.unifyPostData(json.items[i]));
                                 post.pushData();
@@ -540,9 +533,9 @@ if (typeof Object.create !== 'function') {
                 utility: {
                     getImages: function(json) {
                         if (json.data) {
-							// fix callback
-							if(json.data.length<options.instagram.limit)
-								posts_to_load_count -= options.instagram.limit - json.data.length;
+                            // fix callback
+                            if(json.data.length<options.instagram.limit)
+                                posts_to_load_count -= options.instagram.limit - json.data.length;
                             json.data.forEach(function(element) {
                                 var post = new SocialFeedPost('instagram', Feed.instagram.utility.unifyPostData(element));
                                 post.pushData();
@@ -606,9 +599,9 @@ if (typeof Object.create !== 'function') {
                 utility: {
                     getPosts: function(json) {
                         if (json.response) {
-							// fix callback
-							if(json.response.length<options.vk.limit)
-								posts_to_load_count -= options.vk.limit - json.response.length;
+                            // fix callback
+                            if(json.response.length<options.vk.limit)
+                                posts_to_load_count -= options.vk.limit - json.response.length;
                             $.each(json.response, function() {
                                 if (this != parseInt(this) && this.post_type === 'post') {
                                     var owner_id = (this.owner_id) ? this.owner_id : this.from_id,
@@ -738,15 +731,15 @@ if (typeof Object.create !== 'function') {
                 utility: {
 
                     getPosts: function(json) {
-						if(json.data) {
-							// fix callback
+                    if(json.data) {
+                            // fix callback
                             if(json.data.length<options.pinterest.limit)
                                 posts_to_load_count -= options.pinterest.limit - json.data.length;
                            json.data.forEach(function(element) {
                                 var post = new SocialFeedPost('pinterest', Feed.pinterest.utility.unifyPostData(element));
                                 post.pushData();
                              });
-                        }						
+                        }
 
                     },
 
@@ -785,10 +778,9 @@ if (typeof Object.create !== 'function') {
                 utility: {
 
                     getPosts: function(json) {
-                        //console.log(json);
-						// fix callback
-						if(json.query.count < options.rss.limit)
-							posts_to_load_count -= options.rss.limit - json.query.count;
+                        // fix callback
+                        if(json.query.count < options.rss.limit)
+                            posts_to_load_count -= options.rss.limit - json.query.count;
                         if (json.query.count > 0 ){
                             $.each(json.query.results.feed, function(index, element) {
                                 var post = new SocialFeedPost('rss', Feed.rss.utility.unifyPostData(index, element));
@@ -815,53 +807,52 @@ if (typeof Object.create !== 'function') {
                         if( item.creator !== undefined ){
                             post.author_name = item.creator;
                         }
-						if ( item.title.content !== undefined ){
-							post.message = item.title.content;
-						} else { 
-							post.message = item.title; 
-						}						
+                        if ( item.title.content !== undefined ){
+                            post.message = item.title.content;
+                        } else { 
+                            post.message = item.title; 
+                        }
                         post.description = '';
                         if ( item.summary !== undefined ){
                             post.description = Utility.stripHTML(item.summary.content);
                         } else if (item.content.content !== undefined ){
-							post.description = Utility.stripHTML(item.content.content);
-						}
+                            post.description = Utility.stripHTML(item.content.content);
+                        }
                         post.social_network = 'rss';
-						
+
                         if ( item.link.href !== undefined ){
-							post.link = item.link.href;
-						} else if ( item.link[0].href !== undefined ){
-							post.link = item.link[0].href;
-						}
-						
-						if (options.show_media){
-							
-							if (item.group !== undefined) {
-								post.attachment = '<img class="attachment" src="' + item.group.content.url + '" />';
-								//console.log(post.attachment);
-							}
-							else if (item.thumbnail !== undefined ) {
-								post.attachment = '<img class="attachment" src="' + item.thumbnail.url + '" />';
-							} else if (item.summary !== undefined || item.content !== undefined) {							
-								
-								var postHTML = '';
-								if (item.content !== undefined){
-									if (item.content.content !== undefined){
-										postHTML = item.content.content;
-									} else if (item.content[0].content !== undefined){
-										postHTML = item.content[0].content;
-									}  
-								} else if (item.summary !== undefined){
-									postHTML = item.summary.content;
-								}
-								//console.log(postHTML);
-								if (postHTML) {
-									var imgurl = '';
-									imgurl = $(postHTML).find('img:first').attr('src');
-									if (imgurl !== '' && imgurl !== undefined) post.attachment = '<img class="attachment" src="' + imgurl + '" />';
-								}
-							}
-						}
+                            post.link = item.link.href;
+                        } else if ( item.link[0].href !== undefined ){
+                            post.link = item.link[0].href;
+                        }
+
+                        if (options.show_media){
+
+                            if (item.group !== undefined) {
+                                post.attachment = '<img class="attachment" src="' + item.group.content.url + '" />';
+                            }
+                            else if (item.thumbnail !== undefined ) {
+                                post.attachment = '<img class="attachment" src="' + item.thumbnail.url + '" />';
+                            } else if (item.summary !== undefined || item.content !== undefined) {							
+
+                                var postHTML = '';
+                                if (item.content !== undefined){
+                                    if (item.content.content !== undefined){
+                                        postHTML = item.content.content;
+                                    } else if (item.content[0].content !== undefined){
+                                        postHTML = item.content[0].content;
+                                    }  
+                                } else if (item.summary !== undefined){
+                                    postHTML = item.summary.content;
+                                }
+
+                                if (postHTML) {
+                                    var imgurl = '';
+                                    imgurl = $(postHTML).find('img:first').attr('src');
+                                    if (imgurl !== '' && imgurl !== undefined) post.attachment = '<img class="attachment" src="' + imgurl + '" />';
+                                }
+                            }
+                        }
                         return post;
                     }
                 }
