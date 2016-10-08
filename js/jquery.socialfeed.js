@@ -16,7 +16,8 @@ if (typeof Object.create !== 'function') {
             show_media: false, // show images of attachments if available
             media_min_width: 300,
             length: 500, // maximum length of post message shown
-            date_format: 'll'
+            date_format: 'll',
+            date_locale: 'en'
         };
         //---------------------------------------------------------------------------------
         var options = $.extend(defaults, _options),
@@ -103,8 +104,8 @@ if (typeof Object.create !== 'function') {
             this.content = data;
             this.content.social_network = social_network;
             this.content.attachment = (this.content.attachment === undefined) ? '' : this.content.attachment;
-            this.content.time_ago = data.dt_create.fromNow();
-            this.content.date = data.dt_create.format(options.date_format);
+            this.content.time_ago = data.dt_create.locale(options.date_locale).fromNow();
+            this.content.date = data.dt_create.locale(options.date_locale).format(options.date_format);
             this.content.dt_create = this.content.dt_create.valueOf();
             this.content.text = Utility.wrapLinks(Utility.shorten(data.message + ' ' + data.description), data.social_network);
             this.content.moderation_passed = (options.moderation) ? options.moderation(this.content) : true;
