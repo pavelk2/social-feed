@@ -1,2 +1,5 @@
+.gitignore
 /sass/.sass-cache
 .idea/
+*example*
+bower_components
