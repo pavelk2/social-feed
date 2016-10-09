@@ -31,14 +31,15 @@ if (typeof Object.create !== 'function') {
         // This function performs consequent data loading from all of the sources by calling corresponding functions
         function calculatePostsToLoadCount() {
             social_networks.forEach(function(network) {
-                if (options[network]) {
-                    if (options[network].accounts) {
-                        posts_to_load_count += options[network].limit * options[network].accounts.length;
-                    } else if (options[network].urls ){
-                        posts_to_load_count += options[network].limit * options[network].urls.length;
-                    } else {
-                        posts_to_load_count += options[network].limit;
-                    }
+                if (!options[network]) {
+                    return;
+                }
+                if (options[network].accounts) {
+                    posts_to_load_count += options[network].limit * options[network].accounts.length;
+                } else if (options[network].urls ){
+                    posts_to_load_count += options[network].limit * options[network].urls.length;
+                } else {
+                    posts_to_load_count += options[network].limit;
                 }
             });
         }
@@ -178,20 +179,21 @@ if (typeof Object.create !== 'function') {
             init: function() {
                 Feed.getTemplate(function() {
                     social_networks.forEach(function(network) {
-                        if (options[network]) {
-                            if ( options[network].accounts ) {
-                                //loaded[network] = 0;
-                                options[network].accounts.forEach(function(account) {
-                                    //loaded[network]++;
-                                    Feed[network].getData(account);
-                                });
-                            } else if ( options[network].urls ) {
-                                options[network].urls.forEach(function(url) {
-                                    Feed[network].getData(url);
-                                });
-                            } else {
-                                Feed[network].getData();
-                            }
+                        if (!options[network]) {
+                            return;
+                        }
+                        if ( options[network].accounts ) {
+                            //loaded[network] = 0;
+                            options[network].accounts.forEach(function(account) {
+                                //loaded[network]++;
+                                Feed[network].getData(account);
+                            });
+                        } else if ( options[network].urls ) {
+                            options[network].urls.forEach(function(url) {
+                                Feed[network].getData(url);
+                            });
+                        } else {
+                            Feed[network].getData();
                         }
                     });
                 });
@@ -252,13 +254,14 @@ if (typeof Object.create !== 'function') {
                 },
                 utility: {
                     getPosts: function(json) {
-                        if (json) {
-                            $.each(json, function() {
-                                var element = this;
-                                var post = new SocialFeedPost('twitter', Feed.twitter.utility.unifyPostData(element));
-                                post.render();
-                            });
+                        if (!json) {
+                            return;
                         }
+                        $.each(json, function() {
+                            var element = this;
+                            var post = new SocialFeedPost('twitter', Feed.twitter.utility.unifyPostData(element));
+                            post.render();
+                        });
                     },
                     unifyPostData: function(element) {
                         var post = {};
@@ -274,12 +277,10 @@ if (typeof Object.create !== 'function') {
                             post.description = '';
                             post.link = 'http://twitter.com/' + element.user.screen_name + '/status/' + element.id_str;
 
-                            if (options.show_media === true) {
-                                if (element.entities.media && element.entities.media.length > 0) {
-                                    var image_url = element.entities.media[0].media_url_https;
-                                    if (image_url) {
-                                        post.attachment = '<img class="attachment" src="' + image_url + '" />';
-                                    }
+                            if (options.show_media === true && element.entities.media && element.entities.media.length > 0) {
+                                var image_url = element.entities.media[0].media_url_https;
+                                if (image_url) {
+                                    post.attachment = '<img class="attachment" src="' + image_url + '" />';
                                 }
                             }
                         }
@@ -368,12 +369,10 @@ if (typeof Object.create !== 'function') {
                         post.description = (element.description) ? element.description : '';
                         post.link = (element.link) ? element.link : 'http://facebook.com/' + element.from.id;
 
-                        if (options.show_media === true) {
-                            if (element.picture) {
-                                var attachment = Feed.facebook.utility.prepareAttachment(element);
-                                if (attachment) {
-                                    post.attachment = attachment;
-                                }
+                        if (options.show_media === true && element.picture) {
+                            var attachment = Feed.facebook.utility.prepareAttachment(element);
+                            if (attachment) {
+                                post.attachment = attachment;
                             }
                         }
                         return post;
@@ -420,24 +419,22 @@ if (typeof Object.create !== 'function') {
                         post.author_picture = element.actor.image.url;
                         post.author_name = element.actor.displayName;
 
-                        if (options.show_media === true) {
-                            if (element.object.attachments) {
-                                $.each(element.object.attachments, function() {
-                                    var image = '';
-                                    if (this.fullImage) {
-                                        image = this.fullImage.url;
-                                    } else {
-                                        if (this.objectType === 'album') {
-                                            if (this.thumbnails && this.thumbnails.length > 0) {
-                                                if (this.thumbnails[0].image) {
-                                                    image = this.thumbnails[0].image.url;
-                                                }
+                        if (options.show_media === true && element.object.attachments) {
+                            $.each(element.object.attachments, function() {
+                                var image = '';
+                                if (this.fullImage) {
+                                    image = this.fullImage.url;
+                                } else {
+                                    if (this.objectType === 'album') {
+                                        if (this.thumbnails && this.thumbnails.length > 0) {
+                                            if (this.thumbnails[0].image) {
+                                                image = this.thumbnails[0].image.url;
                                             }
                                         }
                                     }
-                                    post.attachment = '<img class="attachment" src="' + image + '"/>';
-                                });
-                            }
+                                }
+                                post.attachment = '<img class="attachment" src="' + image + '"/>';
+                            });
                         }
                         post.message = element.title;
                         post.link = element.url;
@@ -574,15 +571,13 @@ if (typeof Object.create !== 'function') {
                         post.dt_create = moment.unix(element.date);
                         post.description = ' ';
                         post.message = Utility.stripHTML(element.text);
-                        if (options.show_media) {
-                            if (element.attachment) {
-                                if (element.attachment.type === 'link'){
-                                    post.attachment = '<img class="attachment" src="' + element.attachment.link.image_src + '" />';
-                                }else if (element.attachment.type === 'video'){
-                                    post.attachment = '<img class="attachment" src="' + element.attachment.video.image_big + '" />';
-                                }else if (element.attachment.type === 'photo'){
-                                    post.attachment = '<img class="attachment" src="' + element.attachment.photo.src_big + '" />';
-                                }
+                        if (options.show_media && element.attachment) {
+                            if (element.attachment.type === 'link'){
+                                post.attachment = '<img class="attachment" src="' + element.attachment.link.image_src + '" />';
+                            }else if (element.attachment.type === 'video'){
+                                post.attachment = '<img class="attachment" src="' + element.attachment.video.image_big + '" />';
+                            }else if (element.attachment.type === 'photo'){
+                                post.attachment = '<img class="attachment" src="' + element.attachment.photo.src_big + '" />';
                             }
                         }
 
@@ -647,10 +642,8 @@ if (typeof Object.create !== 'function') {
                             post.description = '';
                             post.link = element.link.pop().href;
 
-                            if (options.show_media) {
-                                if (element.media$thumbnail) {
-                                    post.attachment = '<img class="attachment" src="' + element.media$thumbnail.url + '" />';
-                                }
+                            if (options.show_media && element.media$thumbnail) {
+                                post.attachment = '<img class="attachment" src="' + element.media$thumbnail.url + '" />';
                             }
 
                             post.render();
