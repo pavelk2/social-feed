@@ -6,7 +6,9 @@ The jQuery plugin which shows user feeds from the most popular social networks.
 
 ## Demo
 
-http://pavelk2.github.io/social-feed-example/
+Live demo: http://pavelk2.github.io/social-feed-example/
+Download Demo code: https://github.com/pavelk2/social-feed-example
+
 
 Social networks supported:
 - [x] Facebook
