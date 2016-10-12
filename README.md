@@ -97,7 +97,7 @@ $('.social-feed-container').socialfeed({
         accounts: ['@spacex'],                      //Array: Specify a list of accounts from which to pull tweets
         limit: 2,                                   //Integer: max number of tweets to load
         consumer_key: 'YOUR_CONSUMER_KEY',          //String: consumer key. make sure to have your app read-only
-        consumer_secret: 'YOUR_CONSUMER_SECRET_KEY',//String: consumer secret key. make sure to have your app read-only
+        consumer_secret: 'YOUR_CONSUMER_SECRET_KEY' //String: consumer secret key. make sure to have your app read-only
      },
 
     // VK
