@@ -732,7 +732,6 @@ if (typeof Object.create !== 'function') {
                 utility: {
 
                     getPosts: function(json) {
-                        console.log(json);
                         if (json.query.count > 0 ){
                             $.each(json.query.results.feed, function(index, element) {
                                 var post = new SocialFeedPost('rss', Feed.rss.utility.unifyPostData(index, element));
@@ -759,15 +758,41 @@ if (typeof Object.create !== 'function') {
                         if( item.creator !== undefined ){
                             post.author_name = item.creator;
                         }
-                        post.message = item.title;
+                        if ( item.title.content !== undefined ){
+                            post.message = item.title.content;
+                        } else if( item.title !== undefined ) { 
+                            post.message = item.title; 
+                        }
                         post.description = '';
-                        if( item.summary !== undefined ){
+                        HTMLcontent = '';
+                        if ( item.content !== undefined ){
+                            post.description = Utility.stripHTML(item.content.content);
+                            HTMLcontent = item.content.content;
+                        } else if( item.summary !== undefined && HTMLcontent == ""){
                             post.description = Utility.stripHTML(item.summary.content);
+                            HTMLcontent = item.summary.content;
                         }
                         post.social_network = 'rss';
-                        post.link = item.link.href;
-                        if (options.show_media && item.thumbnail !== undefined ) {
-                            post.attachment = '<img class="attachment" src="' + item.thumbnail.url + '" />';
+                        
+                        if ( item.link.href !== undefined ){
+                            post.link = item.link.href;
+                        } else if ( item.link[0].href !== undefined ){
+                            post.link = item.link[0].href;
+                        }
+                        
+                        if (options.show_media) { 
+                            if(item.thumbnail !== undefined && item.thumbnail.height !== "72") {
+                                post.attachment = '<img class="attachment" src="' + item.thumbnail.url + '" />';
+                            } else if (item.content[2] !== undefined) {
+                                // wordpress place for Image
+                                post.attachment = '<img class="attachment" src="' + item.content[2].url + '" />';
+                            } else if (HTMLcontent) {
+                                    var imgurl = '';
+                                    var regexp = /<img[^>]+src\s*=\s*['"]([^'"]+)['"][^>]*>/g;
+                                    var match = regexp.exec(HTMLcontent);
+                                    if (match !== null) imgurl = match[1];
+                                    if (imgurl !== '' && imgurl !== undefined) post.attachment = '<img class="attachment" src="' + imgurl + '" />';
+                            }
                         }
                         return post;
                     }
