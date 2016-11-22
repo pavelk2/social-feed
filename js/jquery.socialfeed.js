@@ -25,7 +25,8 @@ if (typeof Object.create !== 'function') {
             template,
             social_networks = ['facebook', 'instagram', 'vk', 'google', 'blogspot', 'twitter', 'pinterest', 'rss'],
             posts_to_load_count = 0,
-            loaded_post_count = 0;
+            loaded_post_count = 0,
+            render_array = [];
         // container.empty().css('display', 'block');
         //---------------------------------------------------------------------------------
 
@@ -55,6 +56,71 @@ if (typeof Object.create !== 'function') {
             });*/
             if (fire && options.callback) {
                 options.callback();
+            }
+        }
+
+        function renderAll() {
+            $.each(render_array, function(i, val) {
+                render(val);
+            });
+
+            fireCallback();
+        }
+
+        function render(data) {
+            var rendered_html = Feed.template(data);
+            // var data = this.content;
+
+            if ($(container).children('[social-feed-id=' + data.id + ']').length !== 0) {
+                return false;
+            }
+            if ($(container).children().length === 0) {
+                $(container).append(rendered_html);
+            } else {
+                var i = 0,
+                  insert_index = -1;
+                $.each($(container).children(), function() {
+                    if ($(this).attr('dt-create') < data.dt_create) {
+                        insert_index = i;
+                        return false;
+                    }
+                    i++;
+                });
+                $(container).append(rendered_html);
+                if (insert_index >= 0) {
+                    insert_index++;
+                    var before = $(container).children('div:nth-child(' + insert_index + ')'),
+                      current = $(container).children('div:last-child');
+                    $(current).insertBefore(before);
+                }
+
+            }
+            if (options.media_min_width) {
+
+                var query = '[social-feed-id=' + data.id + '] img.attachment';
+                var image = $(query);
+
+                // preload the image
+                var height, width = '';
+                var img = new Image();
+                var imgSrc = image.attr("src");
+
+                $(img).load(function() {
+
+                    if (img.width < options.media_min_width) {
+                        image.hide();
+                    }
+                    // garbage collect img
+                    delete img;
+
+                }).error(function() {
+                    // image couldnt be loaded
+                    image.hide();
+
+                }).attr({
+                    src: imgSrc
+                });
+
             }
         }
 
@@ -113,69 +179,20 @@ if (typeof Object.create !== 'function') {
             Feed[social_network].posts.push(this);
         }
         SocialFeedPost.prototype = {
-            render: function() {
-                var rendered_html = Feed.template(this.content);
-                var data = this.content;
-
-                if ($(container).children('[social-feed-id=' + data.id + ']').length !== 0) {
-                    return false;
-                }
-                if ($(container).children().length === 0) {
-                    $(container).append(rendered_html);
-                } else {
-                    var i = 0,
-                        insert_index = -1;
-                    $.each($(container).children(), function() {
-                        if ($(this).attr('dt-create') < data.dt_create) {
-                            insert_index = i;
-                            return false;
-                        }
-                        i++;
-                    });
-                    $(container).append(rendered_html);
-                    if (insert_index >= 0) {
-                        insert_index++;
-                        var before = $(container).children('div:nth-child(' + insert_index + ')'),
-                            current = $(container).children('div:last-child');
-                        $(current).insertBefore(before);
-                    }
-
-                }
-                if (options.media_min_width) {
-
-                    var query = '[social-feed-id=' + data.id + '] img.attachment';
-                    var image = $(query);
-
-                    // preload the image
-                    var height, width = '';
-                    var img = new Image();
-                    var imgSrc = image.attr("src");
-
-                    $(img).load(function() {
-
-                        if (img.width < options.media_min_width) {
-                            image.hide();
-                        }
-                        // garbage collect img
-                        delete img;
-
-                    }).error(function() {
-                        // image couldnt be loaded
-                        image.hide();
-
-                    }).attr({
-                        src: imgSrc
-                    });
-
-                }
+            pushData: function() {
+                render_array.push(this.content);
 
                 loaded_post_count++;
                 if (loaded_post_count == posts_to_load_count) {
-                    fireCallback();
+
+                    // sort array
+                    render_array.sort(function(a, b) {
+                        return b.dt_create - a.dt_create;
+                    });
+
+                    renderAll();
                 }
-
             }
-
         };
 
         var Feed = {
@@ -235,21 +252,21 @@ if (typeof Object.create !== 'function') {
                         case '@':
                             var userid = account.substr(1);
                             cb.__call(
-                                "statuses_userTimeline",
-                                "id=" + userid + "&count=" + options.twitter.limit,
-                                Feed.twitter.utility.getPosts,
-                                true // this parameter required
+                              "statuses_userTimeline",
+                              "id=" + userid + "&count=" + options.twitter.limit,
+                              Feed.twitter.utility.getPosts,
+                              true // this parameter required
                             );
                             break;
                         case '#':
                             var hashtag = account.substr(1);
                             cb.__call(
-                                "search_tweets",
-                                "q=" + hashtag + "&count=" + options.twitter.limit,
-                                function(reply) {
-                                    Feed.twitter.utility.getPosts(reply.statuses);
-                                },
-                                true // this parameter required
+                              "search_tweets",
+                              "q=" + hashtag + "&count=" + options.twitter.limit,
+                              function(reply) {
+                                  Feed.twitter.utility.getPosts(reply.statuses);
+                              },
+                              true // this parameter required
                             );
                             break;
                         default:
@@ -261,7 +278,7 @@ if (typeof Object.create !== 'function') {
                             $.each(json, function() {
                                 var element = this;
                                 var post = new SocialFeedPost('twitter', Feed.twitter.utility.unifyPostData(element));
-                                post.render();
+                                post.pushData();
                             });
                         }
                     },
@@ -301,9 +318,9 @@ if (typeof Object.create !== 'function') {
                         Utility.request(request_url, Feed.facebook.utility.getPosts);
                     };
                     var fields = '?fields=id,from,name,message,created_time,story,description,link';
-                       fields += (options.show_media === true)?',picture,object_id':'';
+                    fields += (options.show_media === true)?',picture,object_id':'';
                     var request_url, limit = '&limit=' + options.facebook.limit,
-                        query_extention = '&access_token=' + options.facebook.access_token + '&callback=?';
+                      query_extention = '&access_token=' + options.facebook.access_token + '&callback=?';
                     switch (account[0]) {
                         case '@':
                             var username = account.substr(1);
@@ -358,13 +375,13 @@ if (typeof Object.create !== 'function') {
                         if (json['data']) {
                             json['data'].forEach(function(element) {
                                 var post = new SocialFeedPost('facebook', Feed.facebook.utility.unifyPostData(element));
-                                post.render();
+                                post.pushData();
                             });
                         }
                     },
                     unifyPostData: function(element) {
                         var post = {},
-                            text = (element.message) ? element.message : element.story;
+                          text = (element.message) ? element.message : element.story;
 
                         post.id = element.id;
                         post.dt_create = moment(element.created_time);
@@ -413,7 +430,7 @@ if (typeof Object.create !== 'function') {
                         if (json.items) {
                             $.each(json.items, function(i) {
                                 var post = new SocialFeedPost('google', Feed.google.utility.unifyPostData(json.items[i]));
-                                post.render();
+                                post.pushData();
                             });
                         }
                     },
@@ -501,7 +518,7 @@ if (typeof Object.create !== 'function') {
                         if (json.data) {
                             json.data.forEach(function(element) {
                                 var post = new SocialFeedPost('instagram', Feed.instagram.utility.unifyPostData(element));
-                                post.render();
+                                post.pushData();
                             });
                         }
                     },
@@ -565,8 +582,8 @@ if (typeof Object.create !== 'function') {
                             $.each(json.response, function() {
                                 if (this != parseInt(this) && this.post_type === 'post') {
                                     var owner_id = (this.owner_id) ? this.owner_id : this.from_id,
-                                        vk_wall_owner_url = (owner_id > 0) ? (Feed.vk.user_json_template + owner_id + '&callback=?') : (Feed.vk.group_json_template + (-1) * owner_id + '&callback=?'),
-                                        element = this;
+                                      vk_wall_owner_url = (owner_id > 0) ? (Feed.vk.user_json_template + owner_id + '&callback=?') : (Feed.vk.group_json_template + (-1) * owner_id + '&callback=?'),
+                                      element = this;
                                     Utility.get_request(vk_wall_owner_url, function(wall_owner) {
                                         Feed.vk.utility.unifyPostData(wall_owner, element, json);
                                     });
@@ -596,14 +613,14 @@ if (typeof Object.create !== 'function') {
                             var vk_user_json = Feed.vk.user_json_template + element.from_id + '&callback=?';
                             Utility.get_request(vk_user_json, function(user_json) {
                                 var vk_post = new SocialFeedPost('vk', Feed.vk.utility.getUser(user_json, post, element, json));
-                                vk_post.render();
+                                vk_post.pushData();
                             });
 
                         } else {
                             var vk_group_json = Feed.vk.group_json_template + (-1) * element.from_id + '&callback=?';
                             Utility.get_request(vk_group_json, function(user_json) {
                                 var vk_post = new SocialFeedPost('vk', Feed.vk.utility.getGroup(user_json, post, element, json));
-                                vk_post.render();
+                                vk_post.pushData();
                             });
                         }
                     },
@@ -643,7 +660,7 @@ if (typeof Object.create !== 'function') {
                     getPosts: function(json) {
                         $.each(json.feed.entry, function() {
                             var post = {},
-                                element = this;
+                              element = this;
                             post.id = element.id['$t'].replace(/[^a-z0-9]/gi, '');
                             post.dt_create = moment((element.published['$t']));
                             post.author_link = element.author[0]['uri']['$t'];
@@ -659,7 +676,7 @@ if (typeof Object.create !== 'function') {
                                 }
                             }
 
-                            post.render();
+                            post.pushData();
 
                         });
                     }
@@ -693,7 +710,7 @@ if (typeof Object.create !== 'function') {
                     getPosts: function(json) {
                         json.data.forEach(function(element) {
                             var post = new SocialFeedPost('pinterest', Feed.pinterest.utility.unifyPostData(element));
-                            post.render();
+                            post.pushData();
                         });
                     },
 
@@ -736,7 +753,7 @@ if (typeof Object.create !== 'function') {
                         if (json.query.count > 0 ){
                             $.each(json.query.results.feed, function(index, element) {
                                 var post = new SocialFeedPost('rss', Feed.rss.utility.unifyPostData(index, element));
-                                post.render();
+                                post.pushData();
                             });
                         }
                     },
