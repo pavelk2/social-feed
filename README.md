@@ -142,6 +142,7 @@ $('.social-feed-container').socialfeed({
     // GENERAL SETTINGS
     length:400,                                     //Integer: For posts with text longer than this length, show an ellipsis.
     show_media:true,                                //Boolean: if false, doesn't display any post images
+    show_https_media_only: false,                   //Boolean: if true, remove any images that are not delivered over https, use to prevent insecure content warnings/errors
     media_min_width: 300,                           //Integer: Only get posts with images larger than this value
     update_period: 5000,                            //Integer: Number of seconds before social-feed will attempt to load new posts.
     template: "bower_components/social-feed/template.html",                         //String: Filename used to get the post template.

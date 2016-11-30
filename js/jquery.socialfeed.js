@@ -14,6 +14,7 @@ if (typeof Object.create !== 'function') {
             plugin_folder: '', // a folder in which the plugin is located (with a slash in the end)
             template: 'template.html', // a path to the template file
             show_media: false, // show images of attachments if available
+            show_https_media_only: false, //set to true to prevent insecure content warnings
             media_min_width: 300,
             length: 500, // maximum length of post message shown
             date_format: 'll',
@@ -141,6 +142,21 @@ if (typeof Object.create !== 'function') {
                     }
 
                 }
+                if (options.show_https_media_only) {
+                    var query = '[social-feed-id=' + data.id + '] img.attachment';
+                    var image = $(query);
+
+                    image.each (function (){
+                        var imgSrc = this.attributes.src.value;
+                        var protocol = imgSrc.split("/");
+
+                        if(protocol[0] !== "https:") {
+                            this.remove();
+                        }
+                    })
+
+                }
+
                 if (options.media_min_width) {
 
                     var query = '[social-feed-id=' + data.id + '] img.attachment';
