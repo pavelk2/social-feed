@@ -117,7 +117,7 @@ if (typeof Object.create !== 'function') {
             render: function() {
                 var rendered_html = Feed.template(this.content);
                 var data = this.content;
-
+                
                 if ($(container).children('[social-feed-id=' + data.id + ']').length !== 0) {
                     return false;
                 }
@@ -142,21 +142,7 @@ if (typeof Object.create !== 'function') {
                     }
 
                 }
-                if (options.show_https_media_only) {
-                    var query = '[social-feed-id=' + data.id + '] img.attachment';
-                    var image = $(query);
-
-                    image.each (function (){
-                        var imgSrc = this.attributes.src.value;
-                        var protocol = imgSrc.split("/");
-
-                        if(protocol[0] !== "https:") {
-                            this.remove();
-                        }
-                    })
-
-                }
-
+                
                 if (options.media_min_width) {
 
                     var query = '[social-feed-id=' + data.id + '] img.attachment';
@@ -165,7 +151,6 @@ if (typeof Object.create !== 'function') {
                     // preload the image
                     var height, width = '';
                     var img = new Image();
-                    var imgSrc = image.attr("src");
 
                     $(img).load(function() {
 
@@ -178,11 +163,7 @@ if (typeof Object.create !== 'function') {
                     }).error(function() {
                         // image couldnt be loaded
                         image.hide();
-
-                    }).attr({
-                        src: imgSrc
                     });
-
                 }
 
                 loaded_post_count++;
@@ -287,13 +268,13 @@ if (typeof Object.create !== 'function') {
                             post.id = element.id_str;
                             //prevent a moment.js console warning due to Twitter's poor date format.
                             post.dt_create = moment(element.created_at, 'dd MMM DD HH:mm:ss ZZ YYYY');
-                            post.author_link = 'http://twitter.com/' + element.user.screen_name;
+                            post.author_link = '//twitter.com/' + element.user.screen_name;
                             post.author_picture = element.user.profile_image_url_https;
                             post.post_url = post.author_link + '/status/' + element.id_str;
                             post.author_name = element.user.name;
                             post.message = element.text;
                             post.description = '';
-                            post.link = 'http://twitter.com/' + element.user.screen_name + '/status/' + element.id_str;
+                            post.link = '//twitter.com/' + element.user.screen_name + '/status/' + element.id_str;
 
                             if (options.show_media === true) {
                                 if (element.entities.media && element.entities.media.length > 0) {
@@ -359,10 +340,22 @@ if (typeof Object.create !== 'function') {
                         } else if (element.object_id) {
                             image_url = Feed.facebook.graph + element.object_id + '/picture/?type=normal';
                         }
+                        if (options.show_https_media_only && image_url) {
+                            var protocol = image_url.split("/");
+                            if(protocol[0] !== "https:") {
+                                return;
+                            }
+                        }
                         return '<img class="attachment" src="' + image_url + '" />';
                     },
                     getExternalImageURL: function(image_url, parameter) {
                         image_url = decodeURIComponent(image_url).split(parameter + '=')[1];
+                        if (options.show_https_media_only && image_url) {
+                            var protocol = image_url.split("/");
+                            if(protocol[0] !== "https:") {
+                                return;
+                            }
+                        }
                         if (image_url.indexOf('fbcdn-sphotos') === -1) {
                             return image_url.split('&')[0];
                         } else {
@@ -384,7 +377,7 @@ if (typeof Object.create !== 'function') {
 
                         post.id = element.id;
                         post.dt_create = moment(element.created_time);
-                        post.author_link = 'http://facebook.com/' + element.from.id;
+                        post.author_link = '//facebook.com/' + element.from.id;
                         post.author_picture = Feed.facebook.graph + element.from.id + '/picture';
                         post.author_name = element.from.name;
                         post.name = element.name || "";
@@ -458,8 +451,14 @@ if (typeof Object.create !== 'function') {
                                                 }
                                             }
                                         }
-                                    }
+                                    } 
                                     post.attachment = '<img class="attachment" src="' + image + '"/>';
+                                    if (options.show_https_media_only && image) {
+                                        var protocol = image.split("/");
+                                        if(protocol[0] !== "https:") {
+                                            post.attachment = undefined;
+                                        }
+                                    }
                                 });
                             }
                         }
@@ -538,7 +537,7 @@ if (typeof Object.create !== 'function') {
 
                         post.id = element.id;
                         post.dt_create = moment(element.created_time * 1000);
-                        post.author_link = 'http://instagram.com/' + element.user.username;
+                        post.author_link = '//instagram.com/' + element.user.username;
                         post.author_picture = element.user.profile_picture;
                         post.author_name = element.user.full_name || element.user.username;
                         post.message = (element.caption && element.caption) ? element.caption.text : '';
@@ -546,6 +545,12 @@ if (typeof Object.create !== 'function') {
                         post.link = element.link;
                         if (options.show_media) {
                             post.attachment = '<img class="attachment" src="' + element.images.standard_resolution.url + '' + '" />';
+                            if (options.show_https_media_only && element.images.standard_resolution.url) {
+                                var protocol =  element.images.standard_resolution.url.split("/");
+                                if(protocol[0] !== "https:") {
+                                    post.attachment = undefined;
+                                }
+                            }
                         }
                         return post;
                     }
@@ -649,7 +654,7 @@ if (typeof Object.create !== 'function') {
                     switch (account[0]) {
                         case '@':
                             var username = account.substr(1);
-                            url = 'http://' + username + '.blogspot.com/feeds/posts/default?alt=json-in-script&callback=?';
+                            url = '//' + username + '.blogspot.com/feeds/posts/default?alt=json-in-script&callback=?';
                             request(url, getPosts);
                             break;
                         default:
@@ -663,16 +668,23 @@ if (typeof Object.create !== 'function') {
                             post.id = element.id['$t'].replace(/[^a-z0-9]/gi, '');
                             post.dt_create = moment((element.published['$t']));
                             post.author_link = element.author[0]['uri']['$t'];
-                            post.author_picture = 'http:' + element.author[0]['gd$image']['src'];
+                            post.author_picture = element.author[0]['gd$image']['src'];
                             post.author_name = element.author[0]['name']['$t'];
                             post.message = element.title['$t'] + '</br></br>' + stripHTML(element.content['$t']);
                             post.description = '';
                             post.link = element.link.pop().href;
 
                             if (options.show_media) {
-                                if (element['media$thumbnail']) {
+                                if (element['media$thumbnail']) {                                    
                                     post.attachment = '<img class="attachment" src="' + element['media$thumbnail']['url'] + '" />';
+                                    if (options.show_https_media_only && element['media$thumbnail']['url']) {
+                                        var protocol =  element['media$thumbnail']['url'].split("/");
+                                        if(protocol[0] !== "https:") {
+                                            post.attachment = undefined;
+                                        }
+                                    }
                                 }
+                                
                             }
 
                             post.render();
@@ -727,6 +739,13 @@ if (typeof Object.create !== 'function') {
                         post.link = element.link ? element.link : 'https://www.pinterest.com/pin/' + element.id;
                         if (options.show_media) {
                             post.attachment = '<img class="attachment" src="' + element.image['original'].url + '" />';
+                            if (options.show_https_media_only && element.image['original'].url) {
+                                var protocol =  element.image['original'].url.split("/");
+                                if(protocol[0] !== "https:") {
+                                    post.attachment = undefined;
+                                }
+                            }
+                            
                         }
                         return post;
                     }
@@ -784,6 +803,12 @@ if (typeof Object.create !== 'function') {
                         post.link = item.link.href;
                         if (options.show_media && item.thumbnail !== undefined ) {
                             post.attachment = '<img class="attachment" src="' + item.thumbnail.url + '" />';
+                             if (options.show_https_media_only && item.thumbnail.url) {
+                                var protocol =  item.thumbnail.url.split("/");
+                                if(protocol[0] !== "https:") {
+                                    post.attachment = undefined;
+                                }
+                            }
                         }
                         return post;
                     }
