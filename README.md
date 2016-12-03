@@ -6,7 +6,7 @@ The jQuery plugin which shows user feeds from the most popular social networks.
 
 ## Demo
 
-http://pavelk2.github.io/social-feed/
+http://pavelk2.github.io/social-feed-example/
 
 Social networks supported:
 - [x] Facebook
@@ -64,7 +64,7 @@ Initialize the social-feed plugin:
             instagram:{
                 accounts: ['@teslamotors','#teslamotors'],  //Array: Specify a list of accounts from which to pull posts
                 limit: 2,                                    //Integer: max number of posts to load
-                client_id: 'YOUR_INSTAGRAM_CLIENT_ID'       //String: Instagram client id (optional if using access token)
+                client_id: 'YOUR_INSTAGRAM_CLIENT_ID',       //String: Instagram client id (optional if using access token)
                 access_token: 'YOUR_INSTAGRAM_ACCESS_TOKEN' //String: Instagram access token
             },
 
@@ -97,7 +97,7 @@ $('.social-feed-container').socialfeed({
         accounts: ['@spacex'],                      //Array: Specify a list of accounts from which to pull tweets
         limit: 2,                                   //Integer: max number of tweets to load
         consumer_key: 'YOUR_CONSUMER_KEY',          //String: consumer key. make sure to have your app read-only
-        consumer_secret: 'YOUR_CONSUMER_SECRET_KEY',//String: consumer secret key. make sure to have your app read-only
+        consumer_secret: 'YOUR_CONSUMER_SECRET_KEY' //String: consumer secret key. make sure to have your app read-only
      },
 
     // VK
@@ -118,7 +118,7 @@ $('.social-feed-container').socialfeed({
     instagram:{
         accounts: ['@teslamotors','#teslamotors'],  //Array: Specify a list of accounts from which to pull posts
         limit: 2,                                   //Integer: max number of posts to load
-        client_id: 'YOUR_INSTAGRAM_CLIENT_ID'       //String: Instagram client id (option if using access token)
+        client_id: 'YOUR_INSTAGRAM_CLIENT_ID',       //String: Instagram client id (option if using access token)
         access_token: 'YOUR_INSTAGRAM_ACCESS_TOKEN' //String: Instagram access token
     },
 
@@ -144,7 +144,7 @@ $('.social-feed-container').socialfeed({
     show_media:true,                                //Boolean: if false, doesn't display any post images
     media_min_width: 300,                           //Integer: Only get posts with images larger than this value
     update_period: 5000,                            //Integer: Number of seconds before social-feed will attempt to load new posts.
-    template: "tweet.html",                         //String: Filename used to get the post template.
+    template: "bower_components/social-feed/template.html",                         //String: Filename used to get the post template.
     template_html:                                  //String: HTML used for each post. This overrides the 'template' filename option
     '<article class="twitter-post"> \
     <h4>{{=it.author_name}}</h4><p>{{=it.text}}  \
@@ -152,6 +152,7 @@ $('.social-feed-container').socialfeed({
     </p> \
     </article>',
     date_format: "ll",                              //String: Display format of the date attribute (see http://momentjs.com/docs/#/displaying/format/)
+    date_locale: "en",                              //String: The locale of the date (see: http://momentjs.com/docs/#/i18n/changing-locale/)
     moderation: function(content) {                 //Function: if returns false, template will have class hidden
         return  (content.text) ? content.text.indexOf('fuck') == -1 : true;
     },
@@ -177,7 +178,7 @@ Please note, when using a custom template, that the ordering mechanism depends o
 Found a bug or want a feature to be implemented?
 Please report it here https://github.com/pavelk2/social-feed/issues
 
-Currently working on the server side: (https://github.com/pavelk2/social-feed-server)
+Currently we work on server side: (https://github.com/pavelk2/social-feed-server)
 ## Let us know
 
 If you use this plugin, please <a href="https://gitter.im/pavelk2/social-feed" target="_blank">write us a short message</a> with a link to the project where you embed the plugin, and some features you want to have implemented here. It helps us to stay focused on the important issues. *It is not mandatory, but we really appreciate it!*

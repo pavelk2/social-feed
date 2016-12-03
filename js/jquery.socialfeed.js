@@ -16,7 +16,8 @@ if (typeof Object.create !== 'function') {
             show_media: false, // show images of attachments if available
             media_min_width: 300,
             length: 500, // maximum length of post message shown
-            date_format: 'll'
+            date_format: 'll',
+            date_locale: 'en'
         };
         //---------------------------------------------------------------------------------
         var options = $.extend(defaults, _options),
@@ -103,8 +104,8 @@ if (typeof Object.create !== 'function') {
             this.content = data;
             this.content.social_network = social_network;
             this.content.attachment = (this.content.attachment === undefined) ? '' : this.content.attachment;
-            this.content.time_ago = data.dt_create.fromNow();
-            this.content.date = data.dt_create.format(options.date_format);
+            this.content.time_ago = data.dt_create.locale(options.date_locale).fromNow();
+            this.content.date = data.dt_create.locale(options.date_locale).format(options.date_format);
             this.content.dt_create = this.content.dt_create.valueOf();
             this.content.text = Utility.wrapLinks(Utility.shorten(data.message + ' ' + data.description), data.social_network);
             this.content.moderation_passed = (options.moderation) ? options.moderation(this.content) : true;
@@ -267,11 +268,11 @@ if (typeof Object.create !== 'function') {
                     unifyPostData: function(element) {
                         var post = {};
                         if (element.id) {
-                            post.id = element.id;
+                            post.id = element.id_str;
                             //prevent a moment.js console warning due to Twitter's poor date format.
-                            post.dt_create = moment(new Date(element.created_at));
+                            post.dt_create = moment(element.created_at, 'dd MMM DD HH:mm:ss ZZ YYYY');
                             post.author_link = 'http://twitter.com/' + element.user.screen_name;
-                            post.author_picture = element.user.profile_image_url;
+                            post.author_picture = element.user.profile_image_url_https;
                             post.post_url = post.author_link + '/status/' + element.id_str;
                             post.author_name = element.user.name;
                             post.message = element.text;
@@ -280,7 +281,7 @@ if (typeof Object.create !== 'function') {
 
                             if (options.show_media === true) {
                                 if (element.entities.media && element.entities.media.length > 0) {
-                                    var image_url = element.entities.media[0].media_url;
+                                    var image_url = element.entities.media[0].media_url_https;
                                     if (image_url) {
                                         post.attachment = '<img class="attachment" src="' + image_url + '" />';
                                     }
