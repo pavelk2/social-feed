@@ -283,7 +283,9 @@ if (typeof Object.create !== 'function') {
                             post.author_picture = element.user.profile_image_url_https;
                             post.post_url = post.author_link + '/status/' + element.id_str;
                             post.author_name = element.user.name;
-                            post.message = element.full_text.substr(element.display_text_range[0], element.display_text_range[1]);
+                            post.message = typeof element.text === "undefined"
+                                ? element.full_text.substr(element.display_text_range[0], element.display_text_range[1])
+                                : element.text;
                             post.description = '';
                             post.link = 'http://twitter.com/' + element.user.screen_name + '/status/' + element.id_str;
 
