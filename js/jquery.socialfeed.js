@@ -239,7 +239,7 @@ if (typeof Object.create !== 'function') {
                                 {
                                     "id": userid,
                                     "count": options.twitter.limit,
-                                    "tweet_mode": "extended"
+                                    "tweet_mode": typeof options.twitter.tweet_mode === "undefined" ? "compatibility" : options.twitter.tweet_mode
                                 },
                                 Feed.twitter.utility.getPosts,
                                 true // this parameter required
@@ -252,7 +252,7 @@ if (typeof Object.create !== 'function') {
                                 {
                                     "q": hashtag,
                                     "count": options.twitter.limit,
-                                    "tweet_mode": "extended"
+                                    "tweet_mode": typeof options.twitter.tweet_mode === "undefined" ? "compatibility" : options.twitter.tweet_mode
                                 },
                                 function(reply) {
                                     Feed.twitter.utility.getPosts(reply.statuses);
