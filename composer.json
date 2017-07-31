@@ -1,0 +1,20 @@
+{
+  "name": "pavelk2/social-feed",
+  "description": "JavaScript plugin that shows a user feed from the most popular social networks",
+  "keywords": ["javascript","jquery","plugin","social","feed"],
+  "homepage":"http://pavelk2.github.io/social-feed-example/",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Pavel Kucherbaev",
+      "email": "pavel@kucherbaev.com",
+      "homepage": "http://kucherbaev.com/",
+      "role": "Developer"
+    }
+  ],
+  "support": {
+    "issues": "https://github.com/pavelk2/social-feed/issues",
+    "source": "https://github.com/pavelk2/social-feed"
+  },
+  "minimum-stability": "dev"
+}
