@@ -756,7 +756,7 @@ if (typeof Object.create !== 'function') {
                             post.dt_create = moment(element.created_at);
                             post.author_link = element.account.url;
                             post.author_picture = element.account.avatar;
-                            post.author_name = element.account.display_name;
+                            post.author_name = element.account.display_name || element.account.username;
                             post.message = Utility.stripHTML(element.content);
                             post.description = '';
                             post.link = element.url;
