@@ -233,7 +233,11 @@ if (typeof Object.create !== 'function') {
                             var userid = account.substr(1);
                             cb.__call(
                                 "statuses_userTimeline",
-                                "id=" + userid + "&count=" + options.twitter.limit,
+                                {
+                                    "id": userid,
+                                    "count": options.twitter.limit,
+                                    "tweet_mode": typeof options.twitter.tweet_mode === "undefined" ? "compatibility" : options.twitter.tweet_mode
+                                },
                                 Feed.twitter.utility.getPosts,
                                 true // this parameter required
                             );
@@ -242,7 +246,11 @@ if (typeof Object.create !== 'function') {
                             var hashtag = account.substr(1);
                             cb.__call(
                                 "search_tweets",
-                                "q=" + hashtag + "&count=" + options.twitter.limit,
+                                {
+                                    "q": hashtag,
+                                    "count": options.twitter.limit,
+                                    "tweet_mode": typeof options.twitter.tweet_mode === "undefined" ? "compatibility" : options.twitter.tweet_mode
+                                },
                                 function(reply) {
                                     Feed.twitter.utility.getPosts(reply.statuses);
                                 },
@@ -272,7 +280,9 @@ if (typeof Object.create !== 'function') {
                             post.author_picture = element.user.profile_image_url_https;
                             post.post_url = post.author_link + '/status/' + element.id_str;
                             post.author_name = element.user.name;
-                            post.message = element.text;
+                            post.message = typeof element.text === "undefined"
+                                ? element.full_text.substr(element.display_text_range[0], element.display_text_range[1])
+                                : element.text;
                             post.description = '';
                             post.link = 'http://twitter.com/' + element.user.screen_name + '/status/' + element.id_str;
 
