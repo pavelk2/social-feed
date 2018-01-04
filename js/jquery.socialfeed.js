@@ -151,22 +151,19 @@ if (typeof Object.create !== 'function') {
                     var img = new Image();
                     var imgSrc = image.attr("src");
 
-                    $(img).load(function() {
-
+                    $(img).on('load',function() {
                         if (img.width < options.media_min_width) {
                             image.hide();
                         }
                         // garbage collect img
                         delete img;
-
-                    }).error(function() {
+                    }).on('error', function() {
                         // image couldnt be loaded
                         image.hide();
 
                     }).attr({
                         src: imgSrc
                     });
-
                 }
 
                 loaded_post_count++;
