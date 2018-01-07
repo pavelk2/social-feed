@@ -23,7 +23,7 @@ if (typeof Object.create !== 'function') {
         var options = $.extend(defaults, _options),
             container = $(this),
             template,
-            social_networks = ['facebook', 'instagram', 'vk', 'google', 'blogspot', 'twitter', 'pinterest', 'rss'],
+            social_networks = ['facebook', 'instagram', 'vk', 'google', 'blogspot', 'twitter', 'pinterest', 'rss', 'youtube'],
             posts_to_load_count = 0,
             loaded_post_count = 0;
         // container.empty().css('display', 'block');
@@ -721,6 +721,44 @@ if (typeof Object.create !== 'function') {
                         }
                         return post;
                     }
+                }
+            },
+            youtube: {
+                posts: [],
+                api: 'https://www.googleapis.com/youtube/v3/search',
+                loaded: false,
+                accessType: function () {
+                  if (typeof options.youtube.key === 'undefined') {
+                      console.log('You need to define a key to authenticate with Youtube\'s API.');
+                      return undefined;
+                  }
+                },
+                getData: function(account) {
+                    var url = Feed.youtube.api + '?key=' + options.youtube.key + '&channelId=' + options.youtube.channelId + '&part=snippet,id&order=date&maxResults=' + options.youtube.limit;
+                    Utility.get_request(url, Feed.youtube.utility.getVideo);
+                },
+                utility: {
+                  getVideo: function (json) {
+                    if (json.items) {
+                        json.items.forEach(function(element) {
+                            var post = new SocialFeedPost('youtube', Feed.youtube.utility.unifyPostData(element));
+                            post.render();
+                        });
+                    }
+                  },
+                  unifyPostData: function (element) {
+                    var post = {};
+                    post.id = element.id.videoId;
+                    post.dt_create = moment(element.snippet.publishedAt);
+                    post.author_link = 'https://www.youtube.com/channel/' + element.snippet.channelId;
+                    post.author_picture = '';
+                    post.author_name = element.snippet.channelTitle;
+                    post.message = element.snippet.title;
+                    post.description = element.snippet.description;
+                    post.link = 'https://www.youtube.com/watch?v=' + element.id.videoId;
+                    post.attachment = '<img class="attachment" src="' + element.snippet.thumbnails.high.url + '' + '" />';
+                    return post;
+                  }
                 }
             },
             rss : {
