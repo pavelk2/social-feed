@@ -98,6 +98,7 @@ $('.social-feed-container').socialfeed({
         limit: 2,                                   //Integer: max number of tweets to load
         consumer_key: 'YOUR_CONSUMER_KEY',          //String: consumer key. make sure to have your app read-only
         consumer_secret: 'YOUR_CONSUMER_SECRET_KEY' //String: consumer secret key. make sure to have your app read-only
+        tweet_mode: 'compatibility'                 //String: change to "extended" to show the whole tweet
      },
 
     // VK
