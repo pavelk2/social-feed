@@ -308,7 +308,7 @@ if (typeof Object.create !== 'function') {
                         Utility.request(request_url, Feed.facebook.utility.getPosts);
                     };
                     var fields = '?fields=id,from,name,message,created_time,story,description,link';
-                       fields += (options.show_media === true)?',picture,object_id':'';
+                       fields += (options.show_media === true)?',full_picture,object_id':'';
                     var request_url, limit = '&limit=' + options.facebook.limit,
                         query_extention = '&access_token=' + options.facebook.access_token + '&callback=?';
                     switch (account[0]) {
@@ -316,14 +316,14 @@ if (typeof Object.create !== 'function') {
                             var username = account.substr(1);
                             Feed.facebook.utility.getUserId(username, function(userdata) {
                                 if (userdata.id !== '') {
-                                    request_url = Feed.facebook.graph + 'v2.4/' + userdata.id + '/posts'+ fields + limit + query_extention;
+                                    request_url = Feed.facebook.graph + 'v2.11/' + userdata.id + '/posts'+ fields + limit + query_extention;
                                     proceed(request_url);
                                 }
                             });
                             break;
                         case '!':
                             var page = account.substr(1);
-                            request_url = Feed.facebook.graph + 'v2.4/' + page + '/feed'+ fields + limit + query_extention;
+                            request_url = Feed.facebook.graph + 'v2.11/' + page + '/feed'+ fields + limit + query_extention;
                             proceed(request_url);
                             break;
                         default:
@@ -338,28 +338,7 @@ if (typeof Object.create !== 'function') {
                         $.get(url, callback, 'json');
                     },
                     prepareAttachment: function(element) {
-                        var image_url = element.picture;
-                        if (image_url.indexOf('_b.') !== -1) {
-                            //do nothing it is already big
-                        } else if (image_url.indexOf('safe_image.php') !== -1) {
-                            image_url = Feed.facebook.utility.getExternalImageURL(image_url, 'url');
-
-                        } else if (image_url.indexOf('app_full_proxy.php') !== -1) {
-                            image_url = Feed.facebook.utility.getExternalImageURL(image_url, 'src');
-
-                        } else if (element.object_id) {
-                            image_url = Feed.facebook.graph + element.object_id + '/picture/?type=normal';
-                        }
-                        return '<img class="attachment" src="' + image_url + '" />';
-                    },
-                    getExternalImageURL: function(image_url, parameter) {
-                        image_url = decodeURIComponent(image_url).split(parameter + '=')[1];
-                        if (image_url.indexOf('fbcdn-sphotos') === -1) {
-                            return image_url.split('&')[0];
-                        } else {
-                            return image_url;
-                        }
-
+                        return '<img class="attachment" src="' + element.full_picture + '" />';
                     },
                     getPosts: function(json) {
                         if (json['data']) {
@@ -384,7 +363,7 @@ if (typeof Object.create !== 'function') {
                         post.link = (element.link) ? element.link : 'http://facebook.com/' + element.from.id;
 
                         if (options.show_media === true) {
-                            if (element.picture) {
+                            if (element.full_picture) {
                                 var attachment = Feed.facebook.utility.prepareAttachment(element);
                                 if (attachment) {
                                     post.attachment = attachment;
