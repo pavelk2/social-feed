@@ -117,7 +117,7 @@ $('.social-feed-container').socialfeed({
 
     // INSTAGRAM
     instagram:{
-        accounts: ['@teslamotors','#teslamotors'],  //Array: Specify a list of accounts from which to pull posts
+        accounts: ['@ACCOUNTID'],                   //New Instagram Api limits - Get your ACCOUNTID from: https://codeofaninja.com/tools/find-instagram-user-id
         limit: 2,                                   //Integer: max number of posts to load
         client_id: 'YOUR_INSTAGRAM_CLIENT_ID',       //String: Instagram client id (option if using access token)
         access_token: 'YOUR_INSTAGRAM_ACCESS_TOKEN' //String: Instagram access token
