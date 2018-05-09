@@ -308,7 +308,7 @@ if (typeof Object.create !== 'function') {
                         Utility.request(request_url, Feed.facebook.utility.getPosts);
                     };
                     var fields = '?fields=id,from,name,message,created_time,story,description,link';
-                       fields += (options.show_media === true)?',picture,object_id':'';
+                        fields += (options.show_media === true)?',picture,full_picture,object_id':''
                     var request_url, limit = '&limit=' + options.facebook.limit,
                         query_extention = '&access_token=' + options.facebook.access_token + '&callback=?';
                     switch (account[0]) {
@@ -338,7 +338,7 @@ if (typeof Object.create !== 'function') {
                         $.get(url, callback, 'json');
                     },
                     prepareAttachment: function(element) {
-                        var image_url = element.picture;
+                        var image_url = element.full_picture || element.picture;
                         if (image_url.indexOf('_b.') !== -1) {
                             //do nothing it is already big
                         } else if (image_url.indexOf('safe_image.php') !== -1) {
