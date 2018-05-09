@@ -263,6 +263,8 @@ if (typeof Object.create !== 'function') {
                 utility: {
                     getPosts: function(json) {
                         if (json) {
+                            if(json.length<options.twitter.limit)
+                                posts_to_load_count -= options.twitter.limit - json.length;
                             $.each(json, function() {
                                 var element = this;
                                 var post = new SocialFeedPost('twitter', Feed.twitter.utility.unifyPostData(element));
@@ -363,6 +365,8 @@ if (typeof Object.create !== 'function') {
                     },
                     getPosts: function(json) {
                         if (json['data']) {
+                            if(json['data'].length<options.facebook.limit)
+                                posts_to_load_count -= options.facebook.limit - json['data'].length;
                             json['data'].forEach(function(element) {
                                 var post = new SocialFeedPost('facebook', Feed.facebook.utility.unifyPostData(element));
                                 post.render();
@@ -418,6 +422,8 @@ if (typeof Object.create !== 'function') {
                 utility: {
                     getPosts: function(json) {
                         if (json.items) {
+                            if(json.items.length<options.google.limit)
+                                posts_to_load_count -= options.google.limit - json.items.length;
                             $.each(json.items, function(i) {
                                 var post = new SocialFeedPost('google', Feed.google.utility.unifyPostData(json.items[i]));
                                 post.render();
@@ -506,6 +512,8 @@ if (typeof Object.create !== 'function') {
                 utility: {
                     getImages: function(json) {
                         if (json.data) {
+                            if(json.data.length<options.instagram.limit)
+                                posts_to_load_count -= options.instagram.limit - json.data.length;
                             json.data.forEach(function(element) {
                                 var post = new SocialFeedPost('instagram', Feed.instagram.utility.unifyPostData(element));
                                 post.render();
@@ -569,6 +577,8 @@ if (typeof Object.create !== 'function') {
                 utility: {
                     getPosts: function(json) {
                         if (json.response) {
+                            if(json.response.length<options.vk.limit)
+                                posts_to_load_count -= options.vk.limit - json.response.length;
                             $.each(json.response, function() {
                                 if (this != parseInt(this) && this.post_type === 'post') {
                                     var owner_id = (this.owner_id) ? this.owner_id : this.from_id,
@@ -698,10 +708,14 @@ if (typeof Object.create !== 'function') {
                 utility: {
 
                     getPosts: function(json) {
-                        json.data.forEach(function(element) {
-                            var post = new SocialFeedPost('pinterest', Feed.pinterest.utility.unifyPostData(element));
-                            post.render();
-                        });
+                        if(json.data) {
+                            if(json.data.length<options.pinterest.limit)
+                                posts_to_load_count -= options.pinterest.limit - json.data.length;
+                            json.data.forEach(function(element) {
+                                var post = new SocialFeedPost('pinterest', Feed.pinterest.utility.unifyPostData(element));
+                                post.render();
+                            });
+                        }
                     },
 
                     unifyPostData: function(element){
@@ -740,6 +754,8 @@ if (typeof Object.create !== 'function') {
 
                     getPosts: function(json) {
                         console.log(json);
+                        if(json.query.count < options.rss.limit)
+                            posts_to_load_count -= options.rss.limit - json.query.count;
                         if (json.query.count > 0 ){
                             $.each(json.query.results.feed, function(index, element) {
                                 var post = new SocialFeedPost('rss', Feed.rss.utility.unifyPostData(index, element));
