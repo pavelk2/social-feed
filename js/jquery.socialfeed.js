@@ -316,14 +316,14 @@ if (typeof Object.create !== 'function') {
                             var username = account.substr(1);
                             Feed.facebook.utility.getUserId(username, function(userdata) {
                                 if (userdata.id !== '') {
-                                    request_url = Feed.facebook.graph + 'v2.4/' + userdata.id + '/posts'+ fields + limit + query_extention;
+                                    request_url = Feed.facebook.graph + 'v2.12/' + userdata.id + '/posts'+ fields + limit + query_extention;
                                     proceed(request_url);
                                 }
                             });
                             break;
                         case '!':
                             var page = account.substr(1);
-                            request_url = Feed.facebook.graph + 'v2.4/' + page + '/feed'+ fields + limit + query_extention;
+                            request_url = Feed.facebook.graph + 'v2.12/' + page + '/feed'+ fields + limit + query_extention;
                             proceed(request_url);
                             break;
                         default:
