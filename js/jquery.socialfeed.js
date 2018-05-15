@@ -103,6 +103,7 @@ if (typeof Object.create !== 'function') {
         function SocialFeedPost(social_network, data) {
             this.content = data;
             this.content.social_network = social_network;
+            if(this.content.social_network=='google'){this.content.social_network='google-plus'}
             this.content.attachment = (this.content.attachment === undefined) ? '' : this.content.attachment;
             this.content.time_ago = data.dt_create.locale(options.date_locale).fromNow();
             this.content.date = data.dt_create.locale(options.date_locale).format(options.date_format);
