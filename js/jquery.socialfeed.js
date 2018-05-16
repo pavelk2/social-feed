@@ -290,6 +290,7 @@ if (typeof Object.create !== 'function') {
                                 if (element.entities.media && element.entities.media.length > 0) {
                                     var image_url = element.entities.media[0].media_url_https;
                                     if (image_url) {
+                                        post.attachment_url = image_url;
                                         post.attachment = '<img class="attachment" src="' + image_url + '" />';
                                     }
                                 }
@@ -308,7 +309,7 @@ if (typeof Object.create !== 'function') {
                         Utility.request(request_url, Feed.facebook.utility.getPosts);
                     };
                     var fields = '?fields=id,from,name,message,created_time,story,description,link';
-                       fields += (options.show_media === true)?',picture,object_id':'';
+                    fields += (options.show_media === true)?',picture,object_id':'';
                     var request_url, limit = '&limit=' + options.facebook.limit,
                         query_extention = '&access_token=' + options.facebook.access_token + '&callback=?';
                     switch (account[0]) {
@@ -337,7 +338,7 @@ if (typeof Object.create !== 'function') {
                         var result = '';
                         $.get(url, callback, 'json');
                     },
-                    prepareAttachment: function(element) {
+                    prepareAttachment: function(element, geturl = false) {
                         var image_url = element.picture;
                         if (image_url.indexOf('_b.') !== -1) {
                             //do nothing it is already big
@@ -350,7 +351,11 @@ if (typeof Object.create !== 'function') {
                         } else if (element.object_id) {
                             image_url = Feed.facebook.graph + element.object_id + '/picture/?type=normal';
                         }
-                        return '<img class="attachment" src="' + image_url + '" />';
+                        if(geturl){
+                            return image_url;
+                        }else {
+                            return '<img class="attachment" src="' + image_url + '" />';
+                        }
                     },
                     getExternalImageURL: function(image_url, parameter) {
                         image_url = decodeURIComponent(image_url).split(parameter + '=')[1];
@@ -385,7 +390,11 @@ if (typeof Object.create !== 'function') {
 
                         if (options.show_media === true) {
                             if (element.picture) {
-                                var attachment = Feed.facebook.utility.prepareAttachment(element);
+                                var attachment_url = Feed.facebook.utility.prepareAttachment(element, true);
+                                if(attachment_url){
+                                    post.attachment_url = attachment_url;
+                                }
+                                var attachment = Feed.facebook.utility.prepareAttachment(element, false);
                                 if (attachment) {
                                     post.attachment = attachment;
                                 }
@@ -450,6 +459,7 @@ if (typeof Object.create !== 'function') {
                                             }
                                         }
                                     }
+                                    post.attachment_url = image;
                                     post.attachment = '<img class="attachment" src="' + image + '"/>';
                                 });
                             }
@@ -536,6 +546,7 @@ if (typeof Object.create !== 'function') {
                         post.description = '';
                         post.link = element.link;
                         if (options.show_media) {
+                            post.attachment_url = element.images.standard_resolution.url;
                             post.attachment = '<img class="attachment" src="' + element.images.standard_resolution.url + '' + '" />';
                         }
                         return post;
@@ -590,12 +601,18 @@ if (typeof Object.create !== 'function') {
                         post.message = Utility.stripHTML(element.text);
                         if (options.show_media) {
                             if (element.attachment) {
-                                if (element.attachment.type === 'link')
+                                if (element.attachment.type === 'link'){
+                                    post.attachment_url = element.attachment.link.image_src;
                                     post.attachment = '<img class="attachment" src="' + element.attachment.link.image_src + '" />';
-                                if (element.attachment.type === 'video')
+                                }
+                                if (element.attachment.type === 'video'){
+                                    post.attachment_url = element.attachment.video.image_big;
                                     post.attachment = '<img class="attachment" src="' + element.attachment.video.image_big + '" />';
-                                if (element.attachment.type === 'photo')
+                                }
+                                if (element.attachment.type === 'photo'){
+                                    post.attachment_url = element.attachment.photo.src_big;
                                     post.attachment = '<img class="attachment" src="' + element.attachment.photo.src_big + '" />';
+                                }
                             }
                         }
 
@@ -662,6 +679,7 @@ if (typeof Object.create !== 'function') {
 
                             if (options.show_media) {
                                 if (element['media$thumbnail']) {
+                                    post.attachment_url = element['media$thumbnail']['url'];
                                     post.attachment = '<img class="attachment" src="' + element['media$thumbnail']['url'] + '" />';
                                 }
                             }
@@ -679,9 +697,9 @@ if (typeof Object.create !== 'function') {
 
                 getData: function(account) {
                     var request_url,
-                      limit = 'limit=' + options.pinterest.limit,
-                      fields = 'fields=id,created_at,link,note,creator(url,first_name,last_name,image),image',
-                      query_extention = fields + '&access_token=' + options.pinterest.access_token + '&' + limit + '&callback=?';
+                        limit = 'limit=' + options.pinterest.limit,
+                        fields = 'fields=id,created_at,link,note,creator(url,first_name,last_name,image),image',
+                        query_extention = fields + '&access_token=' + options.pinterest.access_token + '&' + limit + '&callback=?';
                     switch (account[0]) {
                         case '@':
                             var username = account.substr(1);
@@ -717,6 +735,7 @@ if (typeof Object.create !== 'function') {
                         post.social_network = 'pinterest';
                         post.link = element.link ? element.link : 'https://www.pinterest.com/pin/' + element.id;
                         if (options.show_media) {
+                            post.attachment_url = element.image['original'].url;
                             post.attachment = '<img class="attachment" src="' + element.image['original'].url + '" />';
                         }
                         return post;
@@ -731,8 +750,8 @@ if (typeof Object.create !== 'function') {
 
                 getData: function(url) {
                     var limit = options.rss.limit,
-                      yql = encodeURIComponent('select entry FROM feednormalizer where url=\'' + url + '\' AND output=\'atom_1.0\' | truncate(count=' + limit + ')' ),
-                      request_url = Feed.rss.api + yql + '&format=json&callback=?';
+                        yql = encodeURIComponent('select entry FROM feednormalizer where url=\'' + url + '\' AND output=\'atom_1.0\' | truncate(count=' + limit + ')' ),
+                        request_url = Feed.rss.api + yql + '&format=json&callback=?';
 
                     Utility.request(request_url, Feed.rss.utility.getPosts, Feed.rss.datatype);
                 },
@@ -774,6 +793,7 @@ if (typeof Object.create !== 'function') {
                         post.social_network = 'rss';
                         post.link = item.link.href;
                         if (options.show_media && item.thumbnail !== undefined ) {
+                            post.attachment_url = item.thumbnail.url;
                             post.attachment = '<img class="attachment" src="' + item.thumbnail.url + '" />';
                         }
                         return post;
