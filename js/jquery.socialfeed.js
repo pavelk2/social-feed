@@ -156,7 +156,7 @@ if (typeof Object.create !== 'function') {
                             image.hide();
                         }
                         // garbage collect img
-                        delete img;
+                        img = undefined;
                     }).on('error', function() {
                         // image couldnt be loaded
                         image.hide();
