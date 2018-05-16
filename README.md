@@ -138,7 +138,14 @@ $('.social-feed-container').socialfeed({
     rss:{
         urls: ['http://teslapodcast.libsyn.com/rss'], //Array: Specifiy a list of rss feed from which to pull posts
         limit: 2                                      //Integer: max number of posts to load for each url
-    }
+    },
+
+    // YOUTUBE
+    youtube:{
+        key: 'YOUR_KEY',
+	    channelId: 'UCu6jBjrQPl7uV6Tfgqs16Tg',
+	    limit: 5
+    },
 
     // GENERAL SETTINGS
     length:400,                                     //Integer: For posts with text longer than this length, show an ellipsis.
