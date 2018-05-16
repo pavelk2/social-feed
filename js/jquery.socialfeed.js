@@ -290,6 +290,7 @@ if (typeof Object.create !== 'function') {
                                 if (element.entities.media && element.entities.media.length > 0) {
                                     var image_url = element.entities.media[0].media_url_https;
                                     if (image_url) {
+                                        post.attachment_url = image_url;
                                         post.attachment = '<img class="attachment" src="' + image_url + '" />';
                                     }
                                 }
