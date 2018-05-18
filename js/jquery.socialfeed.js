@@ -776,6 +776,9 @@ if (typeof Object.create !== 'function') {
                         if (options.show_media && item.thumbnail !== undefined ) {
                             post.attachment = '<img class="attachment" src="' + item.thumbnail.url + '" />';
                         }
+                        if (options.show_media && item.group && item.group.thumbnail !== "undefined" ) {
+                            post.attachment_thumbnail = item.group.thumbnail.url;
+                        }
                         return post;
                     }
                 }
