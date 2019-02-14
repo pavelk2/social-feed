@@ -23,7 +23,7 @@ if (typeof Object.create !== 'function') {
         var options = $.extend(defaults, _options),
             container = $(this),
             template,
-            social_networks = ['facebook', 'instagram', 'vk', 'google', 'blogspot', 'twitter', 'pinterest', 'rss'],
+            social_networks = ['facebook', 'instagram', 'vk', 'google', 'blogspot', 'twitter', 'pinterest', 'mastodon', 'rss'],
             posts_to_load_count = 0,
             loaded_post_count = 0;
         // container.empty().css('display', 'block');
@@ -718,6 +718,64 @@ if (typeof Object.create !== 'function') {
                         post.link = element.link ? element.link : 'https://www.pinterest.com/pin/' + element.id;
                         if (options.show_media) {
                             post.attachment = '<img class="attachment" src="' + element.image['original'].url + '" />';
+                        }
+                        return post;
+                    }
+                }
+            },
+            mastodon: {
+                posts: [],
+                loaded: false,
+                api: 'https://pawoo.net/api/v1/',
+
+                getData: function(account) {
+                    var request_url;
+                    var api_url = Feed.mastodon.api;
+
+                    if (options.mastodon.server) {
+                      api_url = options.mastodon.server + '/api/v1/';
+                    }
+
+                    switch (account[0]) {
+                        case '#':
+                            var hashtag = account.substr(1);
+                            request_url = api_url + 'timelines/tag/' + hashtag;
+                            Utility.get_request(request_url, Feed.mastodon.utility.getPosts);
+                            break;
+                        default:
+                    }
+                },
+                utility: {
+                    getPosts: function(json) {
+                        if (json) {
+                            $.each(json, function() {
+                                var element = this;
+                                var post = new SocialFeedPost('mastodon', Feed.mastodon.utility.unifyPostData(element));
+                                post.render();
+                            });
+                        }
+                    },
+                    unifyPostData: function(element) {
+                        var post = {};
+                        if (element.id) {
+                            post.id = element.id;
+                            //prevent a moment.js console warning due to Twitter's poor date format.
+                            post.dt_create = moment(element.created_at);
+                            post.author_link = element.account.url;
+                            post.author_picture = element.account.avatar;
+                            post.author_name = element.account.display_name || element.account.username;
+                            post.message = Utility.stripHTML(element.content);
+                            post.description = '';
+                            post.link = element.url;
+
+                            if (options.show_media === true) {
+                                if (element.media_attachments && element.media_attachments.length > 0) {
+                                    var image_url = element.media_attachments[0].url;
+                                    if (image_url) {
+                                        post.attachment = '<img class="attachment" src="' + image_url + '" />';
+                                    }
+                                }
+                            }
                         }
                         return post;
                     }
